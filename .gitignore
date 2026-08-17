@@ -1,0 +1,9 @@
+# Obsidian workspace temporary state files
+_Vault - Algoritmos/.obsidian/workspace.json
+_Vault - Algoritmos/.obsidian/workspace-mobile.json
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
