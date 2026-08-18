@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Apresentação LeetCode 3 - IFSP São Carlos</title>
+    <title>Apresentação LeetCode 3 - Tema Claro Editorial</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
@@ -21,8 +21,8 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #080b12;
-            color: #f1f5f9;
+            background-color: #f8fafc;
+            color: #0f172a;
         }
 
         .slide {
@@ -31,9 +31,7 @@
             page-break-after: always;
             position: relative;
             overflow: hidden;
-            background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.08), transparent 45%),
-                        radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.08), transparent 45%),
-                        #080b12;
+            background-color: #f8fafc;
             display: flex;
             flex-direction: column;
             padding: 70px 90px;
@@ -43,8 +41,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 15px;
         }
 
@@ -53,37 +51,33 @@
             align-items: center;
             gap: 8px;
             padding: 6px 16px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
             border-radius: 9999px;
-            color: #34d399;
-            font-size: 15px;
+            color: #059669;
+            font-size: 14px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .header-sub {
-            color: #94a3b8;
-            font-size: 17px;
+            color: #64748b;
+            font-size: 16px;
             font-weight: 600;
         }
 
         .slide-title {
-            font-size: 46px;
+            font-size: 44px;
             font-weight: 800;
-            color: #ffffff;
+            color: #0f172a;
             line-height: 1.15;
             margin-bottom: 25px;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .slide-title span {
-            background: linear-gradient(135deg, #34d399 0%, #06b6d4 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #059669;
         }
 
         .content-grid-2 {
@@ -102,40 +96,43 @@
         }
 
         .card {
-            background: rgba(17, 24, 39, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
             padding: 30px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         .card-emerald {
-            border-color: rgba(16, 185, 129, 0.3);
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(17, 24, 39, 0.85));
+            border-color: #a7f3d0;
+            background: #ffffff;
+            border-top: 5px solid #059669;
         }
 
         .card-cyan {
-            border-color: rgba(6, 182, 212, 0.3);
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.06), rgba(17, 24, 39, 0.85));
+            border-color: #bae6fd;
+            background: #ffffff;
+            border-top: 5px solid #0284c7;
         }
 
         .card-amber {
-            border-color: rgba(245, 158, 11, 0.3);
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(17, 24, 39, 0.85));
+            border-color: #fde68a;
+            background: #ffffff;
+            border-top: 5px solid #d97706;
         }
 
         .card-rose {
-            border-color: rgba(244, 63, 94, 0.3);
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.06), rgba(17, 24, 39, 0.85));
+            border-color: #fecdd3;
+            background: #ffffff;
+            border-top: 5px solid #e11d48;
         }
 
         .card-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            color: #ffffff;
+            color: #0f172a;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -143,9 +140,9 @@
         }
 
         .card-text {
-            font-size: 18px;
-            line-height: 1.55;
-            color: #cbd5e1;
+            font-size: 17px;
+            line-height: 1.6;
+            color: #334155;
             margin-bottom: 12px;
         }
 
@@ -153,41 +150,41 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .badge {
             padding: 6px 14px;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: 700;
-            background: #1e293b;
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
         }
 
         .badge-company {
-            background: rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.4);
-            color: #60a5fa;
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
         }
 
         .badge-danger {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.4);
-            color: #f87171;
+            background: #fff1f2;
+            border-color: #fecdd3;
+            color: #be123c;
         }
 
         .badge-warning {
-            background: rgba(245, 158, 11, 0.15);
-            border-color: rgba(245, 158, 11, 0.4);
-            color: #fbbf24;
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #b45309;
         }
 
         .badge-success {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: rgba(16, 185, 129, 0.4);
-            color: #34d399;
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #047857;
         }
 
         pre, code {
@@ -195,52 +192,52 @@
         }
 
         .code-box {
-            background: #020617;
+            background: #0f172a;
             border: 1px solid #1e293b;
-            border-radius: 16px;
+            border-radius: 14px;
             padding: 20px;
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.45;
-            color: #e2e8f0;
+            color: #f8fafc;
             flex: 1;
             overflow: hidden;
         }
 
-        .kw { color: #f43f5e; font-weight: 700; }
+        .kw { color: #fb7185; font-weight: 700; }
         .fn { color: #38bdf8; font-weight: 700; }
-        .str { color: #a3e635; }
-        .com { color: #64748b; font-style: italic; }
+        .str { color: #4ade80; }
+        .com { color: #94a3b8; font-style: italic; }
         .num { color: #fbbf24; }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         th, td {
             padding: 12px 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 17px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 16px;
         }
 
         th {
-            background: rgba(255, 255, 255, 0.04);
-            color: #94a3b8;
+            background: #f1f5f9;
+            color: #475569;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
+            font-size: 13px;
+            letter-spacing: 0.8px;
         }
 
         td {
-            color: #f1f5f9;
+            color: #0f172a;
         }
 
         .trace-table th, .trace-table td {
-            padding: 10px 14px;
-            font-size: 15px;
+            padding: 9px 12px;
+            font-size: 14px;
         }
 
         .footer-bar {
@@ -249,9 +246,9 @@
             align-items: center;
             margin-top: 25px;
             padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid #e2e8f0;
             color: #64748b;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
         }
 
@@ -260,77 +257,80 @@
             align-items: center;
             text-align: center;
             padding: 0 160px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         }
 
         .cover-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #10b981, #06b6d4);
-            border-radius: 22px;
+            width: 72px;
+            height: 72px;
+            background: #059669;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 38px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+            font-size: 34px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.25);
         }
 
         .cover-title {
-            font-size: 60px;
+            font-size: 56px;
             font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 18px;
+            color: #0f172a;
+            margin-bottom: 16px;
             line-height: 1.15;
+            letter-spacing: -1px;
         }
 
         .cover-subtitle {
-            font-size: 26px;
-            color: #94a3b8;
+            font-size: 24px;
+            color: #475569;
             max-width: 1050px;
             line-height: 1.45;
-            margin-bottom: 45px;
+            margin-bottom: 40px;
         }
 
         .team-box {
             display: flex;
             gap: 25px;
-            background: rgba(17, 24, 39, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 18px 35px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 16px 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         .team-member {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .team-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #0f172a;
         }
 
         .team-role {
-            font-size: 15px;
-            color: #34d399;
+            font-size: 14px;
+            color: #059669;
             font-weight: 600;
         }
 
         .img-container {
             width: 100%;
             height: 100%;
-            border-radius: 18px;
+            border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #020617;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
         .img-container img {
@@ -340,7 +340,7 @@
         }
 
         .highlight-val {
-            color: #38bdf8;
+            color: #0284c7;
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
         }
@@ -348,7 +348,7 @@
 </head>
 <body>
 
-    <!-- SLIDE 1: CAPA -->
+    <!-- SLIDE 1: CAPA CLARA -->
     <div class="slide cover-slide">
         <div class="cover-logo">⚡</div>
         <div class="header-tag" style="margin-bottom: 15px;">IFSP São Carlos · Engenharia de Software</div>
@@ -359,18 +359,18 @@
                 <span class="team-name">Rafael Feltrim</span>
                 <span class="team-role">Desenvolvedor & Apresentador</span>
             </div>
-            <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+            <div style="width: 1px; background: #e2e8f0;"></div>
             <div class="team-member">
                 <span class="team-name">Ian</span>
                 <span class="team-role">Pesquisa & Algoritmos</span>
             </div>
-            <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+            <div style="width: 1px; background: #e2e8f0;"></div>
             <div class="team-member">
                 <span class="team-name">Gustavo (Gub)</span>
                 <span class="team-role">Análise de Complexidade</span>
             </div>
         </div>
-        <div class="footer-bar" style="width: 100%; justify-content: center; margin-top: 45px;">
+        <div class="footer-bar" style="width: 100%; justify-content: center; margin-top: 40px;">
             Prof. Dr. Rodrigo Elias Bianchi · Tópicos em Algoritmos e Estruturas de Dados · 2026
         </div>
     </div>
@@ -434,12 +434,12 @@
         <div class="content-grid-2">
             <div class="card card-emerald">
                 <div class="card-title">📋 Descrição do Problema</div>
-                <p class="card-text" style="font-size: 22px; font-weight: 600; color: #ffffff; margin-bottom: 20px;">
+                <p class="card-text" style="font-size: 21px; font-weight: 600; color: #0f172a; margin-bottom: 20px;">
                     "Dada uma string <code>s</code>, encontre o comprimento da <u>maior substring contígua</u> que não contenha caracteres repetidos."
                 </p>
-                <div class="card" style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: 14px;">
-                    <div style="color: #fbbf24; font-weight: 700; font-size: 18px; margin-bottom: 8px;">⚠️ Distinção Crítica de Conceito:</div>
-                    <p class="card-text" style="font-size: 16px; margin: 0;">
+                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 18px; border-radius: 12px;">
+                    <div style="color: #b45309; font-weight: 700; font-size: 17px; margin-bottom: 6px;">⚠️ Distinção Crítica de Conceito:</div>
+                    <p class="card-text" style="font-size: 15px; margin: 0; color: #78350f;">
                         <b>Substring:</b> Sequência contínua de caracteres (ex: <code>"abc"</code> em <code>"abcde"</code>).<br>
                         <b>Subsequência:</b> Mantém a ordem mas não é contínua (ex: <code>"ace"</code> em <code>"abcde"</code>).
                     </p>
@@ -449,19 +449,19 @@
             <div class="card card-cyan">
                 <div class="card-title">🧪 Exemplos de Teste</div>
                 
-                <div style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 12px 18px; border-radius: 12px;">
-                    <div style="color: #38bdf8; font-weight: 700;">Exemplo 1:</div>
-                    <code style="font-size: 20px;">s = "abcabcbb"</code> → <b>Resposta: 3</b> (substring: <code>"abc"</code>)
+                <div style="margin-bottom: 14px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 12px;">
+                    <div style="color: #0284c7; font-weight: 700;">Exemplo 1:</div>
+                    <code style="font-size: 18px; color: #0f172a;">s = "abcabcbb"</code> → <b>Resposta: 3</b> (substring: <code>"abc"</code>)
                 </div>
 
-                <div style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 12px 18px; border-radius: 12px;">
-                    <div style="color: #38bdf8; font-weight: 700;">Exemplo 2:</div>
-                    <code style="font-size: 20px;">s = "bbbbb"</code> → <b>Resposta: 1</b> (substring: <code>"b"</code>)
+                <div style="margin-bottom: 14px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 12px;">
+                    <div style="color: #0284c7; font-weight: 700;">Exemplo 2:</div>
+                    <code style="font-size: 18px; color: #0f172a;">s = "bbbbb"</code> → <b>Resposta: 1</b> (substring: <code>"b"</code>)
                 </div>
 
-                <div style="background: rgba(0,0,0,0.3); padding: 12px 18px; border-radius: 12px;">
-                    <div style="color: #38bdf8; font-weight: 700;">Exemplo 3:</div>
-                    <code style="font-size: 20px;">s = "pwwkew"</code> → <b>Resposta: 3</b> (substring: <code>"wke"</code>)
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 12px;">
+                    <div style="color: #0284c7; font-weight: 700;">Exemplo 3:</div>
+                    <code style="font-size: 18px; color: #0f172a;">s = "pwwkew"</code> → <b>Resposta: 3</b> (substring: <code>"wke"</code>)
                 </div>
             </div>
         </div>
@@ -482,7 +482,7 @@
 
         <div class="content-grid-3">
             <div class="card card-rose">
-                <div class="card-title" style="color: #f87171; font-size: 20px;">1. Força Bruta O(N³)</div>
+                <div class="card-title" style="color: #e11d48; font-size: 19px;">1. Força Bruta O(N³)</div>
                 <div class="code-box" style="font-size: 13px;">
 <span class="kw">def</span> <span class="fn">brute_force</span>(s):
     n = <span class="fn">len</span>(s)
@@ -502,7 +502,7 @@
             </div>
 
             <div class="card card-amber">
-                <div class="card-title" style="color: #fbbf24; font-size: 20px;">2. Sliding Window (Set)</div>
+                <div class="card-title" style="color: #d97706; font-size: 19px;">2. Sliding Window (Set)</div>
                 <div class="code-box" style="font-size: 13px;">
 <span class="kw">def</span> <span class="fn">sliding_window_set</span>(s):
     char_set = <span class="fn">set</span>()
@@ -524,7 +524,7 @@
             </div>
 
             <div class="card card-emerald">
-                <div class="card-title" style="color: #34d399; font-size: 20px;">3. Sliding Window (Map O(1))</div>
+                <div class="card-title" style="color: #059669; font-size: 19px;">3. Sliding Window (Map O(1))</div>
                 <div class="code-box" style="font-size: 13px;">
 <span class="kw">def</span> <span class="fn">sliding_window_map</span>(s):
     char_map = {} <span class="com"># char -> último índice</span>
@@ -582,7 +582,7 @@
                         <td><code>"a"</code></td>
                         <td>Primeira vez visto</td>
                         <td><code>{'a': 0}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">1</td>
+                        <td style="color: #059669; font-weight: 700;">1</td>
                     </tr>
                     <tr>
                         <td><b>2</b></td>
@@ -592,7 +592,7 @@
                         <td><code>"ab"</code></td>
                         <td>Primeira vez visto</td>
                         <td><code>{'a': 0, 'b': 1}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">2</td>
+                        <td style="color: #059669; font-weight: 700;">2</td>
                     </tr>
                     <tr>
                         <td><b>3</b></td>
@@ -602,57 +602,57 @@
                         <td><code>"abc"</code></td>
                         <td>Primeira vez visto (Pico Máximo)</td>
                         <td><code>{'a': 0, 'b': 1, 'c': 2}</code></td>
-                        <td style="color: #34d399; font-weight: 800; font-size: 18px;">3 🏆</td>
+                        <td style="color: #059669; font-weight: 800; font-size: 17px;">3 🏆</td>
                     </tr>
-                    <tr style="background: rgba(245, 158, 11, 0.08);">
+                    <tr style="background: #fffbeb;">
                         <td><b>4</b></td>
-                        <td><span class="highlight-val" style="color: #fbbf24;">'a'</span></td>
+                        <td><span class="highlight-val" style="color: #b45309;">'a'</span></td>
                         <td>3</td>
-                        <td style="color: #fbbf24; font-weight: 700;">0 → 1</td>
+                        <td style="color: #b45309; font-weight: 700;">0 → 1</td>
                         <td><code>"bca"</code></td>
                         <td><b>'a' repetido!</b> L salta para <code>0+1=1</code></td>
                         <td><code>{'a': 3, 'b': 1, 'c': 2}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">3</td>
+                        <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
-                    <tr style="background: rgba(245, 158, 11, 0.08);">
+                    <tr style="background: #fffbeb;">
                         <td><b>5</b></td>
-                        <td><span class="highlight-val" style="color: #fbbf24;">'b'</span></td>
+                        <td><span class="highlight-val" style="color: #b45309;">'b'</span></td>
                         <td>4</td>
-                        <td style="color: #fbbf24; font-weight: 700;">1 → 2</td>
+                        <td style="color: #b45309; font-weight: 700;">1 → 2</td>
                         <td><code>"cab"</code></td>
                         <td><b>'b' repetido!</b> L salta para <code>1+1=2</code></td>
                         <td><code>{'a': 3, 'b': 4, 'c': 2}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">3</td>
+                        <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
-                    <tr style="background: rgba(245, 158, 11, 0.08);">
+                    <tr style="background: #fffbeb;">
                         <td><b>6</b></td>
-                        <td><span class="highlight-val" style="color: #fbbf24;">'c'</span></td>
+                        <td><span class="highlight-val" style="color: #b45309;">'c'</span></td>
                         <td>5</td>
-                        <td style="color: #fbbf24; font-weight: 700;">2 → 3</td>
+                        <td style="color: #b45309; font-weight: 700;">2 → 3</td>
                         <td><code>"abc"</code></td>
                         <td><b>'c' repetido!</b> L salta para <code>2+1=3</code></td>
                         <td><code>{'a': 3, 'b': 4, 'c': 5}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">3</td>
+                        <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
-                    <tr style="background: rgba(244, 63, 94, 0.08);">
+                    <tr style="background: #fff1f2;">
                         <td><b>7</b></td>
-                        <td><span class="highlight-val" style="color: #f87171;">'b'</span></td>
+                        <td><span class="highlight-val" style="color: #be123c;">'b'</span></td>
                         <td>6</td>
-                        <td style="color: #f87171; font-weight: 700;">3 → 5</td>
+                        <td style="color: #be123c; font-weight: 700;">3 → 5</td>
                         <td><code>"cb"</code></td>
                         <td><b>'b' repetido!</b> L salta para <code>4+1=5</code></td>
                         <td><code>{'a': 3, 'b': 6, 'c': 5}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">3</td>
+                        <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
-                    <tr style="background: rgba(244, 63, 94, 0.08);">
+                    <tr style="background: #fff1f2;">
                         <td><b>8</b></td>
-                        <td><span class="highlight-val" style="color: #f87171;">'b'</span></td>
+                        <td><span class="highlight-val" style="color: #be123c;">'b'</span></td>
                         <td>7</td>
-                        <td style="color: #f87171; font-weight: 700;">5 → 7</td>
+                        <td style="color: #be123c; font-weight: 700;">5 → 7</td>
                         <td><code>"b"</code></td>
                         <td><b>'b' repetido!</b> L salta para <code>6+1=7</code></td>
                         <td><code>{'a': 3, 'b': 7, 'c': 5}</code></td>
-                        <td style="color: #34d399; font-weight: 700;">3</td>
+                        <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
                 </tbody>
             </table>
@@ -686,31 +686,31 @@
                 <tbody>
                     <tr>
                         <td><b>N = 100</b></td>
-                        <td style="color: #f87171;">4.85 ms (171.700 ops)</td>
+                        <td style="color: #be123c;">4.85 ms (171.700 ops)</td>
                         <td>0.039 ms (197 ops)</td>
-                        <td style="color: #34d399; font-weight: 700;">0.032 ms (100 ops)</td>
+                        <td style="color: #059669; font-weight: 700;">0.032 ms (100 ops)</td>
                         <td><span class="badge badge-success">99.94% menor</span></td>
                     </tr>
                     <tr>
                         <td><b>N = 1.000</b></td>
-                        <td style="color: #f87171; font-weight: 700;">1.953,3 ms (~2.0 s)</td>
+                        <td style="color: #be123c; font-weight: 700;">1.953,3 ms (~2.0 s)</td>
                         <td>0.353 ms (1.995 ops)</td>
-                        <td style="color: #34d399; font-weight: 700;">0.232 ms (1.000 ops)</td>
+                        <td style="color: #059669; font-weight: 700;">0.232 ms (1.000 ops)</td>
                         <td><span class="badge badge-success">99.99% menor</span></td>
                     </tr>
                     <tr>
                         <td><b>N = 5.000</b></td>
-                        <td style="color: #f87171; font-weight: 700;">~15.0 s (20.8 bi ops)</td>
+                        <td style="color: #be123c; font-weight: 700;">~15.0 s (20.8 bi ops)</td>
                         <td>1.735 ms (9.994 ops)</td>
-                        <td style="color: #34d399; font-weight: 700;">1.113 ms (5.000 ops)</td>
+                        <td style="color: #059669; font-weight: 700;">1.113 ms (5.000 ops)</td>
                         <td><span class="badge badge-success">99.999% menor</span></td>
                     </tr>
-                    <tr style="background: rgba(16, 185, 129, 0.08);">
+                    <tr style="background: #ecfdf5;">
                         <td><b>N = 50.000 (LeetCode)</b></td>
-                        <td style="color: #f87171; font-weight: 800; font-size: 19px;">~250 min (> 4 HORAS)</td>
-                        <td style="color: #fbbf24;">15.5 ms (99.992 ops)</td>
-                        <td style="color: #34d399; font-weight: 800; font-size: 19px;">11.1 ms (50.000 ops)</td>
-                        <td><span class="badge badge-success" style="font-size: 16px;">⚡ > 99.99999%</span></td>
+                        <td style="color: #be123c; font-weight: 800; font-size: 18px;">~250 min (> 4 HORAS)</td>
+                        <td style="color: #b45309;">15.5 ms (99.992 ops)</td>
+                        <td style="color: #059669; font-weight: 800; font-size: 18px;">11.1 ms (50.000 ops)</td>
+                        <td><span class="badge badge-success" style="font-size: 15px;">⚡ > 99.99999%</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -718,11 +718,11 @@
 
         <div class="content-grid-2">
             <div class="card card-rose">
-                <div class="card-title" style="color: #f87171;">💥 O Colapso da Força Bruta</div>
+                <div class="card-title" style="color: #e11d48;">💥 O Colapso da Força Bruta</div>
                 <p class="card-text">Com $N = 50.000$, a Força Bruta precisa processar <b>mais de 20 trilhões de comparações</b>, tornando o sistema inoperante.</p>
             </div>
             <div class="card card-emerald">
-                <div class="card-title" style="color: #34d399;">⚡ A Mágica do Tempo Linear O(N)</div>
+                <div class="card-title" style="color: #059669;">⚡ A Mágica do Tempo Linear O(N)</div>
                 <p class="card-text">A solução com Hash Map processa a string em <b>exatamente 50.000 operações</b>, respondendo em <b>0,011 segundos</b>.</p>
             </div>
         </div>
@@ -749,18 +749,18 @@
             <div class="card card-cyan">
                 <div class="card-title">🔑 A Mecânica da Otimização</div>
                 
-                <div style="margin-bottom: 20px;">
-                    <b style="color: #38bdf8; font-size: 22px;">1. Ponteiro Direita (right):</b>
+                <div style="margin-bottom: 18px;">
+                    <b style="color: #0284c7; font-size: 20px;">1. Ponteiro Direita (right):</b>
                     <p class="card-text">Percorre a string da esquerda para a direita inserindo novos caracteres na janela.</p>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <b style="color: #34d399; font-size: 22px;">2. Tabela Hash (char_map):</b>
+                <div style="margin-bottom: 18px;">
+                    <b style="color: #059669; font-size: 20px;">2. Tabela Hash (char_map):</b>
                     <p class="card-text">Armazena a relação <code>map[caractere] = ultimo_indice</code> em tempo constante O(1).</p>
                 </div>
 
                 <div>
-                    <b style="color: #fbbf24; font-size: 22px;">3. Salto do Ponteiro Esquerda (left):</b>
+                    <b style="color: #d97706; font-size: 20px;">3. Salto do Ponteiro Esquerda (left):</b>
                     <p class="card-text">Ao achar caractere já visto na janela, salta direto para <code>map[char] + 1</code> sem varredura intermediária!</p>
                 </div>
             </div>
@@ -782,8 +782,8 @@
 
         <div class="content-grid-2">
             <div class="card">
-                <div class="card-title" style="color: #a855f7;">⚡ Código em C com Vetor ASCII Fixo</div>
-                <div class="code-box" style="font-size: 15px;">
+                <div class="card-title" style="color: #7c3aed;">⚡ Código em C com Vetor ASCII Fixo</div>
+                <div class="code-box" style="font-size: 14px;">
 <span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
 
 <span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(<span class="kw">char</span>* s) {
@@ -845,19 +845,19 @@
                 <tbody>
                     <tr>
                         <td><b>1. Força Bruta (Loops Aninhados)</b></td>
-                        <td style="color: #f87171; font-weight: 700;">O(N³)</td>
+                        <td style="color: #be123c; font-weight: 700;">O(N³)</td>
                         <td>O(min(N, Σ))</td>
                         <td><span class="badge badge-danger">Rejeitado (Red Flag)</span></td>
                     </tr>
                     <tr>
                         <td><b>2. Sliding Window com Set (Remoção Passo a Passo)</b></td>
-                        <td style="color: #fbbf24; font-weight: 700;">O(2N) = O(N)</td>
+                        <td style="color: #b45309; font-weight: 700;">O(2N) = O(N)</td>
                         <td>O(min(N, Σ))</td>
                         <td><span class="badge badge-warning">Contratado (Hire)</span></td>
                     </tr>
                     <tr>
                         <td><b>3. Sliding Window com Hash Map (Pulo O(1))</b></td>
-                        <td style="color: #34d399; font-weight: 700;">O(N) Estrito</td>
+                        <td style="color: #059669; font-weight: 700;">O(N) Estrito</td>
                         <td>O(min(N, Σ))</td>
                         <td><span class="badge badge-success">Forte Candidato (Strong Hire)</span></td>
                     </tr>
@@ -900,12 +900,12 @@
             </div>
 
             <div class="card card-emerald" style="justify-content: center; align-items: center; text-align: center;">
-                <div style="font-size: 60px; margin-bottom: 20px;">🎓</div>
-                <div class="card-title" style="font-size: 34px; justify-content: center;">Obrigado a Todos!</div>
-                <p class="card-text" style="font-size: 22px; color: #94a3b8; margin-top: 10px;">
+                <div style="font-size: 55px; margin-bottom: 15px;">🎓</div>
+                <div class="card-title" style="font-size: 32px; justify-content: center;">Obrigado a Todos!</div>
+                <p class="card-text" style="font-size: 20px; color: #64748b; margin-top: 8px;">
                     Abrimos agora para dúvidas do professor e da turma.
                 </p>
-                <div class="badge-list" style="justify-content: center; margin-top: 25px;">
+                <div class="badge-list" style="justify-content: center; margin-top: 20px;">
                     <span class="badge badge-success">Código no GitHub</span>
                     <span class="badge badge-success">Vault Obsidian Integrado</span>
                 </div>
