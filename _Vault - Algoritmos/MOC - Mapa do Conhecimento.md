@@ -48,13 +48,13 @@ criado: 2026-07-27
 
 ## 📚 Módulos do Vault
 
-### 📊 Diagnóstico e Plano
-
-- [[00 - Diagnóstico e Plano/Diagnóstico Técnico]]
-- [[00 - Diagnóstico e Plano/Plano de Mentoria Estratégico]]
-- [[00 - Diagnóstico e Plano/Ata_Aula_01_Introducao_e_Ementa]]
-- [[00 - Diagnóstico e Plano/Ata_Aula_02_Revisao_C_Memoria_Ponteiros_Listas]]
-- [[00 - Diagnóstico e Plano/Ata_Aula_03_Arvores_Binarias_ABB_AVL]]
+### 🗺️ Diagnóstico, Planejamento & Design de Apresentações
+* [[00 - Diagnóstico e Plano/Ata_Aula_01_Introducao_e_Ementa|Ata da Aula 01 - Introdução e Ementa]]
+* [[00 - Diagnóstico e Plano/Ata_Aula_02_Revisao_C_Memoria_Ponteiros_Listas|Ata da Aula 02 - Revisão de C, Memória e Listas]]
+* [[00 - Diagnóstico e Plano/Ata_Aula_03_Arvores_Binarias_ABB_AVL|Ata da Aula 03 - Árvores Binárias (ABB e AVL)]]
+* [[00 - Diagnóstico e Plano/Guia_Apresentacao_Equipe_LeetCode3|Guia de Apresentação da Equipe - LeetCode #3]]
+* [[00 - Diagnóstico e Plano/Engenharia_de_Prompts_e_Design_Editorial_de_Apresentacoes|Relatório: Engenharia de Prompts & Design Editorial Anti-IA]]
+* [[00 - Diagnóstico e Plano/Avaliacao_Diagnostica_Gabarito_Comentado|Gabarito Comentado da Avaliação Diagnóstica]]
 
 ### 📈 Base Teórica
 
