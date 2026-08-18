@@ -3,153 +3,6 @@ import subprocess
 import time
 
 def build_presentation():
-    # SVG Vector Diagram in 100% Portuguese, perfectly framed, zero overflow, modern pill border-radius
-    svg_diagram = """
-    <svg viewBox="0 0 740 370" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-        <!-- Fundo do Diagrama -->
-        <rect width="740" height="370" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
-
-        <!-- Título do Diagrama -->
-        <text x="28" y="32" font-size="13" font-weight="800" fill="#090d16" letter-spacing="0.5">ESTADO DA MEMÓRIA NO PASSO 4: s = "abcabcbb"</text>
-        <text x="28" y="48" font-size="11.5" fill="#64748b">O ponteiro direito (R) encontra 'a' repetido no índice 3. O ponteiro esquerdo (L) salta direto de 0 para 1.</text>
-
-        <!-- Array / String Cells -->
-        <g transform="translate(28, 68)">
-            <!-- Header do Vetor -->
-            <text x="0" y="12" font-size="10" font-weight="700" fill="#64748b" text-transform="uppercase" letter-spacing="0.8">Vetor de Caracteres na Memória</text>
-            
-            <!-- Células da String (0 a 7) -->
-            <!-- 0: 'a' -->
-            <rect x="0" y="24" width="48" height="48" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            <text x="24" y="54" font-size="18" font-weight="700" fill="#64748b" text-anchor="middle" font-family="'JetBrains Mono', monospace;">a</text>
-            <text x="24" y="86" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">0</text>
-
-            <!-- 1: 'b' -->
-            <rect x="54" y="24" width="48" height="48" rx="6" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
-            <text x="78" y="54" font-size="18" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
-            <text x="78" y="86" font-size="11" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">1</text>
-
-            <!-- 2: 'c' -->
-            <rect x="108" y="24" width="48" height="48" rx="6" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
-            <text x="132" y="54" font-size="18" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">c</text>
-            <text x="132" y="86" font-size="11" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">2</text>
-
-            <!-- 3: 'a' -->
-            <rect x="162" y="24" width="48" height="48" rx="6" fill="#eff6ff" stroke="#0284c7" stroke-width="2"/>
-            <text x="186" y="54" font-size="18" font-weight="700" fill="#0284c7" text-anchor="middle" font-family="'JetBrains Mono', monospace;">a</text>
-            <text x="186" y="86" font-size="11" font-weight="700" fill="#0284c7" text-anchor="middle" font-family="'JetBrains Mono', monospace;">3</text>
-
-            <!-- 4: 'b' -->
-            <rect x="216" y="24" width="48" height="48" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            <text x="240" y="54" font-size="18" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
-            <text x="240" y="86" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">4</text>
-
-            <!-- 5: 'c' -->
-            <rect x="270" y="24" width="48" height="48" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            <text x="294" y="54" font-size="18" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">c</text>
-            <text x="294" y="86" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">5</text>
-
-            <!-- 6: 'b' -->
-            <rect x="324" y="24" width="48" height="48" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            <text x="348" y="54" font-size="18" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
-            <text x="348" y="86" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">6</text>
-
-            <!-- 7: 'b' -->
-            <rect x="378" y="24" width="48" height="48" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            <text x="402" y="54" font-size="18" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
-            <text x="402" y="86" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">7</text>
-
-            <!-- Caixa da Janela Deslizante Ativa (Bordas Perfeitas com rx=10) -->
-            <rect x="50" y="18" width="164" height="60" rx="10" fill="none" stroke="#047857" stroke-width="2.5" stroke-dasharray="6,4"/>
-            
-            <!-- Etiqueta da Janela Deslizante (Pill Shape Moderno rx=10) -->
-            <rect x="57" y="2" width="150" height="20" rx="10" fill="#047857"/>
-            <text x="132" y="15" font-size="9.5" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="0.4">JANELA ATIVA: "bca" (tam = 3)</text>
-        </g>
-
-        <!-- Ponteiros (Setas e Anotações) -->
-        <g transform="translate(28, 178)">
-            <!-- Ponteiro Esquerdo (L) -->
-            <path d="M 78,30 L 78,8" stroke="#047857" stroke-width="2.5" marker-end="url(#arrow-green)" fill="none"/>
-            <rect x="33" y="34" width="90" height="22" rx="6" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
-            <text x="78" y="49" font-size="10.5" font-weight="800" fill="#047857" text-anchor="middle">L (left) = 1</text>
-
-            <!-- Curva de Salto de L -->
-            <path d="M 24,35 Q 50,4 74,34" fill="none" stroke="#b45309" stroke-width="1.8" stroke-dasharray="3,3"/>
-            <text x="36" y="6" font-size="9.5" font-weight="700" fill="#b45309">Salto O(1): 0 → 1</text>
-
-            <!-- Ponteiro Direito (R) -->
-            <path d="M 186,30 L 186,8" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrow-blue)" fill="none"/>
-            <rect x="141" y="34" width="90" height="22" rx="6" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
-            <text x="186" y="49" font-size="10.5" font-weight="800" fill="#0284c7" text-anchor="middle">R (right) = 3</text>
-        </g>
-
-        <!-- Painel Lateral: Tabela Hash (char_map) -->
-        <g transform="translate(485, 68)">
-            <rect width="225" height="205" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-            
-            <!-- Cabeçalho da Tabela Hash -->
-            <path d="M 0,8 Q 0,0 8,0 L 217,0 Q 225,0 225,8 L 225,30 L 0,30 Z" fill="#0f172a"/>
-            <text x="112" y="19" font-size="10.5" font-weight="800" fill="#f8fafc" text-anchor="middle" letter-spacing="0.6">TABELA HASH (char_map)</text>
-
-            <!-- Linhas da Tabela Hash -->
-            <!-- Chave 'a' -->
-            <g transform="translate(12, 40)">
-                <rect width="201" height="30" rx="5" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
-                <text x="12" y="20" font-size="12" font-weight="700" fill="#0284c7" font-family="'JetBrains Mono', monospace;">'a'</text>
-                <text x="50" y="20" font-size="11" fill="#64748b">→</text>
-                <text x="75" y="20" font-size="12" font-weight="800" fill="#0284c7" font-family="'JetBrains Mono', monospace;">índice 3</text>
-                <text x="150" y="19" font-size="9" font-weight="700" fill="#0284c7">(atualizado)</text>
-            </g>
-
-            <!-- Chave 'b' -->
-            <g transform="translate(12, 76)">
-                <rect width="201" height="30" rx="5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-                <text x="12" y="20" font-size="12" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">'b'</text>
-                <text x="50" y="20" fill="#64748b">→</text>
-                <text x="75" y="20" font-size="12" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">índice 1</text>
-            </g>
-
-            <!-- Chave 'c' -->
-            <g transform="translate(12, 112)">
-                <rect width="201" height="30" rx="5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-                <text x="12" y="20" font-size="12" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">'c'</text>
-                <text x="50" y="20" fill="#64748b">→</text>
-                <text x="75" y="20" font-size="12" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">índice 2</text>
-            </g>
-
-            <!-- Nota de Complexidade no Rodapé da Tabela -->
-            <g transform="translate(12, 152)">
-                <rect width="201" height="40" rx="5" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
-                <text x="100" y="17" font-size="9.5" font-weight="800" fill="#047857" text-anchor="middle">BUSCA & ATUALIZAÇÃO EM O(1)</text>
-                <text x="100" y="30" font-size="8.5" font-weight="600" fill="#047857" text-anchor="middle">Sem retroceder o cursor de leitura</text>
-            </g>
-        </g>
-
-        <!-- Linha Inferior: Resumo Matemático (Posicionado Perfeitamente sem Overflow) -->
-        <g transform="translate(28, 290)">
-            <rect width="682" height="60" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
-            <text x="20" y="25" font-size="11" font-weight="800" fill="#090d16">CÁLCULO ATUAL DA JANELA:</text>
-            <text x="20" y="44" font-size="12" font-weight="700" fill="#047857" font-family="'JetBrains Mono', monospace;">tamanho = right - left + 1  →  3 - 1 + 1 = 3</text>
-            
-            <line x1="370" y1="10" x2="370" y2="50" stroke="#cbd5e1" stroke-width="1"/>
-            
-            <text x="390" y="25" font-size="11" font-weight="800" fill="#090d16">REGISTRO DO MAIOR COMPRIMENTO:</text>
-            <text x="390" y="44" font-size="12" font-weight="800" fill="#090d16" font-family="'JetBrains Mono', monospace;">max_len = max(3, 3) = 3</text>
-        </g>
-
-        <!-- Definições de Marcadores de Setas -->
-        <defs>
-            <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#047857"/>
-            </marker>
-            <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
-            </marker>
-        </defs>
-    </svg>
-    """
-
     html_content = f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -189,7 +42,7 @@ def build_presentation():
             background-color: #f8fafc;
             display: flex;
             flex-direction: column;
-            padding: 38px 55px;
+            padding: 36px 50px;
         }}
 
         /* Header Editorial */
@@ -197,7 +50,7 @@ def build_presentation():
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             border-bottom: 1.5px solid #e2e8f0;
             padding-bottom: 8px;
         }}
@@ -218,11 +71,11 @@ def build_presentation():
 
         /* Tipografia de Destaque */
         .slide-title {{
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 800;
             color: #090d16;
             line-height: 1.15;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             letter-spacing: -0.8px;
         }}
 
@@ -307,7 +160,7 @@ def build_presentation():
 
         /* Pull Quotes Editoriais */
         .pull-quote {{
-            font-size: 14.5px;
+            font-size: 14px;
             font-weight: 600;
             line-height: 1.5;
             color: #090d16;
@@ -391,7 +244,7 @@ def build_presentation():
             color: #b45309;
         }}
 
-        /* Blocos de Código em Dark Slate Elegante - FORMATADO SEM VAZIO */
+        /* Blocos de Código em Dark Slate Elegante */
         pre {{
             font-family: 'JetBrains Mono', monospace;
             background: #0f172a;
@@ -417,7 +270,6 @@ def build_presentation():
         .com {{ color: #94a3b8; font-style: italic; }}
         .num {{ color: #fbbf24; }}
 
-        /* Listas de Anotações Técnicas dentro dos Cards */
         .code-details {{
             font-size: 12px;
             color: #475569;
@@ -457,12 +309,346 @@ def build_presentation():
             font-size: 11px;
         }}
 
+        /* =========================================================
+           ESTILOS ESPECÍFICOS DO DIAGRAMA SLIDE 7 EM HTML/CSS PURO
+           ========================================================= */
+        .diagram-canvas {{
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            justify-content: space-between;
+        }}
+
+        .diag-header {{
+            margin-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 8px;
+        }}
+
+        .diag-step-title {{
+            font-size: 13px;
+            font-weight: 800;
+            color: #090d16;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }}
+
+        .diag-step-title code {{
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #047857;
+        }}
+
+        .diag-step-desc {{
+            font-size: 12px;
+            color: #64748b;
+        }}
+
+        .diag-body-grid {{
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 12px;
+        }}
+
+        .diag-memory-col {{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }}
+
+        .diag-section-label {{
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }}
+
+        .memory-array-container {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }}
+
+        .array-cell-wrapper {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }}
+
+        .array-cell {{
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }}
+
+        .cell-inactive {{
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            color: #64748b;
+        }}
+
+        .cell-active {{
+            background: #ecfdf5;
+            border: 1.5px solid #047857;
+            color: #047857;
+        }}
+
+        .cell-current {{
+            background: #eff6ff;
+            border: 2px solid #0284c7;
+            color: #0284c7;
+        }}
+
+        .cell-idx {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: #94a3b8;
+        }}
+
+        .cell-idx-active {{
+            color: #047857;
+            font-weight: 700;
+        }}
+
+        .cell-idx-current {{
+            color: #0284c7;
+            font-weight: 700;
+        }}
+
+        /* Grupo da Janela Ativa */
+        .active-window-group {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px dashed #047857;
+            border-radius: 10px;
+            padding: 8px 6px 4px 6px;
+            background: rgba(4, 120, 87, 0.03);
+            position: relative;
+        }}
+
+        .active-window-badge {{
+            background: #047857;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }}
+
+        .window-cells-row {{
+            display: flex;
+            gap: 6px;
+        }}
+
+        /* Linha de Ponteiros */
+        .pointers-row {{
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-top: 4px;
+            padding-left: 50px;
+        }}
+
+        .pointer-box {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }}
+
+        .pointer-arrow {{
+            color: #047857;
+            font-size: 12px;
+            line-height: 1;
+        }}
+
+        .pointer-arrow.arrow-blue {{
+            color: #0284c7;
+        }}
+
+        .pointer-label {{
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }}
+
+        .pointer-label.label-blue {{
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #0284c7;
+        }}
+
+        .jump-indicator {{
+            font-size: 9px;
+            font-weight: 700;
+            color: #b45309;
+            background: #fffbeb;
+            border: 1px dashed #fde68a;
+            padding: 1px 6px;
+            border-radius: 3px;
+            margin-bottom: 2px;
+        }}
+
+        /* Tabela Hash Visual Card */
+        .diag-hash-card {{
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+
+        .hash-card-header {{
+            background: #0f172a;
+            color: #f8fafc;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-align: center;
+            padding: 6px 10px;
+        }}
+
+        .hash-card-body {{
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }}
+
+        .hash-row {{
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+        }}
+
+        .hash-row-updated {{
+            border: 1.5px solid #bfdbfe;
+            background: #eff6ff;
+        }}
+
+        .hash-key {{
+            font-weight: 700;
+            color: #0284c7;
+            width: 25px;
+        }}
+
+        .hash-arrow {{
+            color: #64748b;
+            margin: 0 8px;
+            font-size: 10px;
+        }}
+
+        .hash-val {{
+            font-weight: 800;
+            color: #0f172a;
+        }}
+
+        .hash-tag-updated {{
+            font-size: 8.5px;
+            font-weight: 700;
+            color: #0284c7;
+            margin-left: auto;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }}
+
+        .hash-footer-badge {{
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 5px;
+            padding: 5px 8px;
+            text-align: center;
+            margin-top: 4px;
+        }}
+
+        .hash-footer-title {{
+            font-size: 9.5px;
+            font-weight: 800;
+            color: #047857;
+        }}
+
+        .hash-footer-sub {{
+            font-size: 8.5px;
+            font-weight: 600;
+            color: #047857;
+        }}
+
+        /* Resumo Matemático Inferior */
+        .diag-footer-summary {{
+            background: #f8fafc;
+            border: 1.2px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+
+        .summary-col {{
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }}
+
+        .summary-label {{
+            font-size: 10px;
+            font-weight: 800;
+            color: #090d16;
+            letter-spacing: 0.4px;
+        }}
+
+        .summary-val {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #047857;
+        }}
+
+        .summary-val-highlight {{
+            color: #090d16;
+            font-weight: 800;
+        }}
+
+        .summary-divider {{
+            width: 1px;
+            height: 30px;
+            background: #cbd5e1;
+        }}
+
         /* Rodapé Editorial */
         .footer-bar {{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
+            margin-top: 12px;
             padding-top: 8px;
             border-top: 1px solid #e2e8f0;
             color: #64748b;
@@ -685,7 +871,7 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 4: 3 ABORDAGENS EM CÓDIGO (FORMATAÇÃO EQUILIBRADA SEM VAZIOS) -->
+    <!-- SLIDE 4: 3 ABORDAGENS EM CÓDIGO -->
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">03 · Soluções Comparadas</div>
@@ -962,7 +1148,7 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 7: ARQUITETURA VISUAL DA JANELA DESLIZANTE (DIAGRAMA VETORIAL REENQUADRADO PERFEITO) -->
+    <!-- SLIDE 7: ARQUITETURA VISUAL DA JANELA DESLIZANTE (HTML/CSS PURO ROBUSTO E PERFEITO) -->
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">06 · Arquitetura Visual</div>
@@ -970,8 +1156,131 @@ def build_presentation():
         </div>
         <h2 class="slide-title">Dinâmica dos <span>Dois Ponteiros & Hash Map</span></h2>
 
-        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-            {svg_diagram}
+        <!-- Canvas do Diagrama em HTML/CSS Puro (Sem sobreposições e com alinhamento perfeito) -->
+        <div class="diagram-canvas">
+            <!-- Cabeçalho do Diagrama -->
+            <div class="diag-header">
+                <div class="diag-step-title">ESTADO DA MEMÓRIA NO PASSO 4: <code>s = "abcabcbb"</code></div>
+                <div class="diag-step-desc">O ponteiro direito (R) encontra <b>'a'</b> repetido no índice 3. O ponteiro esquerdo (L) salta diretamente de <b>0 para 1</b>.</div>
+            </div>
+
+            <!-- Corpo: Vetor à esquerda + Tabela Hash à direita -->
+            <div class="diag-body-grid">
+                <!-- Coluna da Memória / Vetor -->
+                <div class="diag-memory-col">
+                    <div class="diag-section-label">Vetor de Caracteres na Memória Contígua:</div>
+                    
+                    <!-- Container dos 8 Caracteres -->
+                    <div class="memory-array-container">
+                        <!-- Célula 0: 'a' -->
+                        <div class="array-cell-wrapper">
+                            <div class="array-cell cell-inactive">a</div>
+                            <div class="cell-idx">0</div>
+                        </div>
+
+                        <!-- Grupo da Janela Ativa (Índices 1 a 3: "bca") -->
+                        <div class="active-window-group">
+                            <div class="active-window-badge">JANELA ATIVA: "bca" (tam = 3)</div>
+                            <div class="window-cells-row">
+                                <!-- Célula 1: 'b' -->
+                                <div class="array-cell-wrapper">
+                                    <div class="array-cell cell-active">b</div>
+                                    <div class="cell-idx cell-idx-active">1</div>
+                                </div>
+                                <!-- Célula 2: 'c' -->
+                                <div class="array-cell-wrapper">
+                                    <div class="array-cell cell-active">c</div>
+                                    <div class="cell-idx cell-idx-active">2</div>
+                                </div>
+                                <!-- Célula 3: 'a' -->
+                                <div class="array-cell-wrapper">
+                                    <div class="array-cell cell-current">a</div>
+                                    <div class="cell-idx cell-idx-current">3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Célula 4: 'b' -->
+                        <div class="array-cell-wrapper">
+                            <div class="array-cell cell-inactive">b</div>
+                            <div class="cell-idx">4</div>
+                        </div>
+                        <!-- Célula 5: 'c' -->
+                        <div class="array-cell-wrapper">
+                            <div class="array-cell cell-inactive">c</div>
+                            <div class="cell-idx">5</div>
+                        </div>
+                        <!-- Célula 6: 'b' -->
+                        <div class="array-cell-wrapper">
+                            <div class="array-cell cell-inactive">b</div>
+                            <div class="cell-idx">6</div>
+                        </div>
+                        <!-- Célula 7: 'b' -->
+                        <div class="array-cell-wrapper">
+                            <div class="array-cell cell-inactive">b</div>
+                            <div class="cell-idx">7</div>
+                        </div>
+                    </div>
+
+                    <!-- Linha dos Ponteiros L e R -->
+                    <div class="pointers-row">
+                        <!-- Ponteiro L -->
+                        <div class="pointer-box">
+                            <div class="jump-indicator">Salto O(1): 0 → 1</div>
+                            <div class="pointer-arrow">▲</div>
+                            <div class="pointer-label">L (left) = 1</div>
+                        </div>
+                        <!-- Espaçamento -->
+                        <div style="width: 35px;"></div>
+                        <!-- Ponteiro R -->
+                        <div class="pointer-box">
+                            <div style="height: 14px;"></div>
+                            <div class="pointer-arrow arrow-blue">▲</div>
+                            <div class="pointer-label label-blue">R (right) = 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna da Tabela Hash -->
+                <div class="diag-hash-card">
+                    <div class="hash-card-header">TABELA HASH (char_map)</div>
+                    <div class="hash-card-body">
+                        <div class="hash-row hash-row-updated">
+                            <span class="hash-key">'a'</span>
+                            <span class="hash-arrow">→</span>
+                            <span class="hash-val">índice 3</span>
+                            <span class="hash-tag-updated">(atualizado)</span>
+                        </div>
+                        <div class="hash-row">
+                            <span class="hash-key">'b'</span>
+                            <span class="hash-arrow">→</span>
+                            <span class="hash-val">índice 1</span>
+                        </div>
+                        <div class="hash-row">
+                            <span class="hash-key">'c'</span>
+                            <span class="hash-arrow">→</span>
+                            <span class="hash-val">índice 2</span>
+                        </div>
+                        <div class="hash-footer-badge">
+                            <div class="hash-footer-title">BUSCA & ATUALIZAÇÃO EM O(1)</div>
+                            <div class="hash-footer-sub">Sem retroceder o cursor de leitura</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rodapé Matemático do Diagrama -->
+            <div class="diag-footer-summary">
+                <div class="summary-col">
+                    <span class="summary-label">CÁLCULO ATUAL DA JANELA:</span>
+                    <span class="summary-val">tamanho = right - left + 1  →  3 - 1 + 1 = 3</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-col">
+                    <span class="summary-label">REGISTRO DO MAIOR COMPRIMENTO:</span>
+                    <span class="summary-val summary-val-highlight">max_len = max(3, 3) = 3</span>
+                </div>
+            </div>
         </div>
 
         <div class="footer-bar">
@@ -1133,7 +1442,7 @@ def build_presentation():
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("HTML dos 10 slides (Frontend Refinado) gerado com sucesso!")
+    print("HTML dos 10 slides (Slide 7 em HTML/CSS Puro e Perfeito) gerado com sucesso!")
 
     # Invoke Chrome to print to PDF
     chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
