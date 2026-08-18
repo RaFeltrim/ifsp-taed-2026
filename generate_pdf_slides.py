@@ -953,51 +953,52 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 8: IMPLEMENTAÇÃO EM C (BAIXO NÍVEL) -->
+    <!-- SLIDE 8: IMPLEMENTAÇÃO EM C (ARITMÉTICA DE PONTEIROS - GUB) -->
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">07 · Implementação de Baixo Nível</div>
-            <div class="header-sub">Conexão com a Aula 2 de Revisão em C</div>
+            <div class="header-sub">Conexão com a Aula 2 de Revisão em C · Implementação do Gub</div>
         </div>
-        <h2 class="slide-title">Implementação em C: <span>Tabela Direta ASCII</span></h2>
+        <h2 class="slide-title">Implementação em C: <span>Aritmética de Ponteiros</span></h2>
 
         <div class="grid-50-50">
             <div class="card">
-                <div class="card-title" style="color: #6d28d9; font-size: 14px;">Código em C com Vetor ASCII Fixo</div>
-                <pre><code><span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
+                <div class="card-title" style="color: #6d28d9; font-size: 14px;">lswrc_solucao2_janela_deslizante.c (Trecho Central)</div>
+                <pre><code><span class="kw">int</span> ultima_pos[<span class="num">256</span>];
+<span class="kw">for</span> (<span class="kw">int</span> k = <span class="num">0</span>; k &lt; <span class="num">256</span>; k++) ultima_pos[k] = -<span class="num">1</span>;
 
-<span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(<span class="kw">char</span>* s) {{
-    <span class="kw">int</span> last_index[<span class="num">256</span>];
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">256</span>; i++) last_index[i] = -<span class="num">1</span>;
-    
-    <span class="kw">int</span> max_len = <span class="num">0</span>, left = <span class="num">0</span>;
-    <span class="kw">int</span> n = <span class="fn">strlen</span>(s);
-    
-    <span class="kw">for</span> (<span class="kw">int</span> right = <span class="num">0</span>; right < n; right++) {{
-        <span class="kw">unsigned char</span> c = (<span class="kw">unsigned char</span>)s[right];
-        
-        <span class="kw">if</span> (last_index[c] >= left) {{
-            left = last_index[c] + <span class="num">1</span>;
-        }}
-        
-        last_index[c] = right;
-        <span class="kw">int</span> cur_len = right - left + <span class="num">1</span>;
-        <span class="kw">if</span> (cur_len > max_len) max_len = cur_len;
+<span class="kw">char</span> *esquerda = s;
+<span class="kw">int</span> melhor_tam = <span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">char</span> *direita = s; *direita != <span class="str">'\\0'</span>; direita++) {{
+    <span class="kw">unsigned char</span> c = (<span class="kw">unsigned char</span>)*direita;
+    <span class="kw">int</span> idx_dir = (<span class="kw">int</span>)(direita - s);
+
+    <span class="com">// Colisão: se o caractere está DENTRO da janela ativa</span>
+    <span class="kw">if</span> (ultima_pos[c] != -<span class="num">1</span> &amp;&amp; ultima_pos[c] &gt;= (<span class="kw">int</span>)(esquerda - s)) {{
+        esquerda = s + ultima_pos[c] + <span class="num">1</span>; <span class="com">// Pulo direto O(1)</span>
     }}
-    <span class="kw">return</span> max_len;
+
+    ultima_pos[c] = idx_dir;
+    <span class="kw">int</span> tam_atual = (<span class="kw">int</span>)(direita - esquerda) + <span class="num">1</span>;
+    <span class="kw">if</span> (tam_atual &gt; melhor_tam) melhor_tam = tam_atual;
 }}</code></pre>
             </div>
 
             <div class="card card-emerald">
-                <div class="card-title">Vantagens da Implementação em C</div>
-                <p class="card-text"><b>1. Ausência de Colisões:</b> Acesso direto por índice do byte ASCII elimina qualquer necessidade de encadeamento ou tratamento de colisão.</p>
-                <p class="card-text"><b>2. Memória Estática e Restrita:</b> <code>256 * sizeof(int) = 1.024 bytes (1 KB)</code> alocados diretamente na Stack $\rightarrow$ <b>espaço O(1) estrito</b>.</p>
-                <p class="card-text"><b>3. Eficiência de Cache L1:</b> Disposição sequencial contígua na memória, sem dispersão de ponteiros na Heap.</p>
+                <div class="card-title">Engenharia de Memória & Conexão com Aula 2</div>
+                <p class="card-text"><b>1. Aritmética de Ponteiros Pura:</b> O índice é obtido diretamente por <code>(direita - s)</code> e <code>(esquerda - s)</code>, sem custo de busca.</p>
+                <p class="card-text"><b>2. Pulo de Ponteiro em O(1):</b> <code>esquerda = s + ultima_pos[c] + 1</code> desloca o endereço base instantaneamente na memória contígua.</p>
+                <p class="card-text"><b>3. Memória Estática na Stack:</b> <code>int ultima_pos[256]</code> consome apenas 1.024 bytes (1 KB) na Pilha, sem chamadas a <code>malloc()</code> ou risco de <i>memory leak</i>.</p>
+                <div class="badge-list" style="margin-top: 8px;">
+                    <span class="badge badge-success">Arquivo: lswrc_solucao2_janela_deslizante.c</span>
+                    <span class="badge badge-success">Modo Interativo Didático</span>
+                </div>
             </div>
         </div>
 
         <div class="footer-bar">
-            <span>Engenharia de Baixo Nível · Alinhado com a Aula 2</span>
+            <span>Engenharia de Baixo Nível · Código em C da Equipe</span>
             <span>IFSP São Carlos</span>
         </div>
     </div>
