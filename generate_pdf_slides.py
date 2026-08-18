@@ -14,9 +14,9 @@ def build_presentation():
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Apresentação LeetCode 3 - Otimizado para Projetor (720p / HD)</title>
+    <title>Apresentação LeetCode 3 - Padrão Acadêmico e Técnico</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
         * {{
             margin: 0;
@@ -63,11 +63,10 @@ def build_presentation():
         .header-tag {{
             display: inline-flex;
             align-items: center;
-            gap: 6px;
             padding: 4px 12px;
             background: #ecfdf5;
             border: 1px solid #a7f3d0;
-            border-radius: 9999px;
+            border-radius: 6px;
             color: #059669;
             font-size: 12px;
             font-weight: 700;
@@ -82,11 +81,11 @@ def build_presentation():
         }}
 
         .slide-title {{
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
             color: #0f172a;
             line-height: 1.15;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             letter-spacing: -0.5px;
         }}
 
@@ -97,7 +96,7 @@ def build_presentation():
         .content-grid-2 {{
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 22px;
+            gap: 20px;
             flex: 1;
             align-items: stretch;
         }}
@@ -105,18 +104,18 @@ def build_presentation():
         .content-grid-3 {{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            gap: 16px;
             flex: 1;
         }}
 
         .card {{
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }}
 
         .card-emerald {{
@@ -140,18 +139,18 @@ def build_presentation():
         }}
 
         .card-title {{
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: #0f172a;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }}
 
         .card-text {{
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            line-height: 1.55;
             color: #334155;
             margin-bottom: 8px;
         }}
@@ -159,14 +158,14 @@ def build_presentation():
         .badge-list {{
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             margin-top: 8px;
         }}
 
         .badge {{
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 4px 9px;
+            border-radius: 4px;
+            font-size: 11.5px;
             font-weight: 700;
             background: #f1f5f9;
             color: #334155;
@@ -197,20 +196,23 @@ def build_presentation():
             color: #047857;
         }}
 
-        pre, code {{
+        pre {{
             font-family: 'JetBrains Mono', monospace;
-        }}
-
-        .code-box {{
             background: #0f172a;
             border: 1px solid #1e293b;
-            border-radius: 10px;
-            padding: 14px;
+            border-radius: 8px;
+            padding: 12px 14px;
             font-size: 12px;
-            line-height: 1.4;
+            line-height: 1.45;
             color: #f8fafc;
+            white-space: pre;
+            overflow-x: auto;
             flex: 1;
-            overflow: hidden;
+        }}
+
+        code {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: inherit;
         }}
 
         .kw {{ color: #fb7185; font-weight: 700; }}
@@ -246,7 +248,7 @@ def build_presentation():
         }}
 
         .trace-table th, .trace-table td {{
-            padding: 6px 9px;
+            padding: 6px 8px;
             font-size: 12px;
         }}
 
@@ -270,22 +272,8 @@ def build_presentation():
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         }}
 
-        .cover-logo {{
-            width: 58px;
-            height: 58px;
-            background: #059669;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: #ffffff;
-            margin-bottom: 15px;
-            box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25);
-        }}
-
         .cover-title {{
-            font-size: 40px;
+            font-size: 38px;
             font-weight: 800;
             color: #0f172a;
             margin-bottom: 12px;
@@ -294,11 +282,11 @@ def build_presentation():
         }}
 
         .cover-subtitle {{
-            font-size: 18px;
+            font-size: 17px;
             color: #475569;
             max-width: 900px;
-            line-height: 1.4;
-            margin-bottom: 28px;
+            line-height: 1.45;
+            margin-bottom: 25px;
         }}
 
         .team-box {{
@@ -307,25 +295,25 @@ def build_presentation():
             background: #ffffff;
             border: 1px solid #cbd5e1;
             padding: 12px 25px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }}
 
         .team-member {{
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
         }}
 
         .team-name {{
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: #0f172a;
         }}
 
         .team-role {{
-            font-size: 12px;
+            font-size: 11.5px;
             color: #059669;
             font-weight: 600;
         }}
@@ -333,14 +321,14 @@ def build_presentation():
         .img-container {{
             width: 100%;
             height: 100%;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             border: 1px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #020617;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }}
 
         .img-container img {{
@@ -358,16 +346,15 @@ def build_presentation():
 </head>
 <body>
 
-    <!-- SLIDE 1: CAPA CLARA (720p) -->
+    <!-- SLIDE 1: CAPA CLARA (SEM EMOJIS) -->
     <div class="slide cover-slide">
-        <div class="cover-logo">⚡</div>
-        <div class="header-tag" style="margin-bottom: 10px;">IFSP São Carlos · Engenharia de Software</div>
+        <div class="header-tag" style="margin-bottom: 12px;">IFSP São Carlos · Engenharia de Software</div>
         <h1 class="cover-title">Longest Substring Without Repeating Characters</h1>
-        <p class="cover-subtitle">Desafio Real de Processo Seletivo em Big Techs (LeetCode #3) — Otimização Assintótica, Benchmark de Economia & Janela Deslizante</p>
+        <p class="cover-subtitle">Desafio Técnico de Processo Seletivo (LeetCode #3) — Otimização Assintótica, Benchmark Experimental & Janela Deslizante</p>
         <div class="team-box">
             <div class="team-member">
                 <span class="team-name">Rafael Feltrim</span>
-                <span class="team-role">Desenvolvedor & Apresentador</span>
+                <span class="team-role">Desenvolvimento & Apresentação</span>
             </div>
             <div style="width: 1px; background: #e2e8f0;"></div>
             <div class="team-member">
@@ -389,18 +376,18 @@ def build_presentation():
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">01 · Relevância de Mercado</div>
-            <div class="header-sub">Por que as Big Techs cobram este desafio?</div>
+            <div class="header-sub">Mapeamento em Processos Seletivos Reais</div>
         </div>
-        <h2 class="slide-title">Onipresença nos <span>Processos Seletivos</span></h2>
+        <h2 class="slide-title">Aplicação em <span>Empresas de Tecnologia</span></h2>
         
         <div class="content-grid-3">
             <div class="card card-emerald">
-                <div class="card-title">🏢 Onde é Aplicado?</div>
-                <p class="card-text">Problema clássico no topo do ranking de entrevistas de alta escala:</p>
+                <div class="card-title">1. Empresas Recorrentes</div>
+                <p class="card-text">Problema de alta frequência em entrevistas técnicas de escala global:</p>
                 <div class="badge-list">
                     <span class="badge badge-company">Amazon (Top 10 SDE)</span>
                     <span class="badge badge-company">Meta (Triagem 45m)</span>
-                    <span class="badge badge-company">Google (L3/L4)</span>
+                    <span class="badge badge-company">Google (L3 / L4)</span>
                     <span class="badge badge-company">Microsoft</span>
                     <span class="badge badge-company">Apple</span>
                     <span class="badge badge-company">Bloomberg</span>
@@ -408,17 +395,17 @@ def build_presentation():
             </div>
 
             <div class="card card-cyan">
-                <div class="card-title">🎯 O Que é Avaliado?</div>
-                <p class="card-text"><b>1. Otimização:</b> Sair de O(N³) para O(N).</p>
-                <p class="card-text"><b>2. Estruturas:</b> Uso de Hash Map para busca O(1).</p>
-                <p class="card-text"><b>3. Memória:</b> Tabela de acesso direto ASCII.</p>
-                <p class="card-text"><b>4. Edge Cases:</b> Strings vazias, únicas e repetidas.</p>
+                <div class="card-title">2. Competências Avaliadas</div>
+                <p class="card-text"><b>Otimização:</b> Transição de O(N³) para O(N).</p>
+                <p class="card-text"><b>Estruturas:</b> Uso de Hash Map para busca O(1).</p>
+                <p class="card-text"><b>Memória:</b> Tabela de acesso direto ASCII.</p>
+                <p class="card-text"><b>Edge Cases:</b> Strings vazias, unitárias e repetidas.</p>
             </div>
 
             <div class="card card-amber">
-                <div class="card-title">📊 Peso na Contratação</div>
-                <p class="card-text">Em entrevistas técnicas, <b>o código é apenas 30% da nota</b>.</p>
-                <p class="card-text">Os outros <b>70%</b> medem:</p>
+                <div class="card-title">3. Critérios de Avaliação</div>
+                <p class="card-text">A resolução do código representa aproximadamente <b>30%</b> da avaliação técnica.</p>
+                <p class="card-text">Os outros <b>70%</b> cobrem:</p>
                 <div class="badge-list">
                     <span class="badge badge-success">Decomposição Lógica</span>
                     <span class="badge badge-success">Comunicação Clara</span>
@@ -439,39 +426,39 @@ def build_presentation():
             <div class="header-tag">02 · Definição Formal</div>
             <div class="header-sub">Compreendendo o Problema Computacional</div>
         </div>
-        <h2 class="slide-title">O Enunciado: <span>Substring sem Duplicatas</span></h2>
+        <h2 class="slide-title">Enunciado: <span>Substring sem Duplicatas</span></h2>
 
         <div class="content-grid-2">
             <div class="card card-emerald">
-                <div class="card-title">📋 Descrição do Problema</div>
-                <p class="card-text" style="font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px;">
+                <div class="card-title">1. Descrição do Problema</div>
+                <p class="card-text" style="font-size: 15.5px; font-weight: 600; color: #0f172a; margin-bottom: 12px;">
                     "Dada uma string <code>s</code>, encontre o comprimento da <u>maior substring contígua</u> que não contenha caracteres repetidos."
                 </p>
-                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 10px;">
-                    <div style="color: #b45309; font-weight: 700; font-size: 13px; margin-bottom: 4px;">⚠️ Distinção Crítica de Conceito:</div>
+                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 8px;">
+                    <div style="color: #b45309; font-weight: 700; font-size: 12.5px; margin-bottom: 4px;">Distinção Conceitual Obrigatória:</div>
                     <p class="card-text" style="font-size: 12px; margin: 0; color: #78350f;">
-                        <b>Substring:</b> Sequência contínua (ex: <code>"abc"</code> em <code>"abcde"</code>).<br>
-                        <b>Subsequência:</b> Mantém a ordem sem continuidade (ex: <code>"ace"</code>).
+                        <b>Substring:</b> Sequência de caracteres contíguos na memória (ex: <code>"abc"</code> em <code>"abcde"</code>).<br>
+                        <b>Subsequência:</b> Mantém a ordem relativa, mas sem continuidade obrigatória (ex: <code>"ace"</code>).
                     </p>
                 </div>
             </div>
 
             <div class="card card-cyan">
-                <div class="card-title">🧪 Exemplos de Teste</div>
+                <div class="card-title">2. Casos de Teste Padronizados</div>
                 
-                <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 14px; border-radius: 8px;">
-                    <div style="color: #0284c7; font-weight: 700; font-size: 12px;">Exemplo 1:</div>
-                    <code style="font-size: 14px; color: #0f172a;">s = "abcabcbb"</code> → <b>Resposta: 3</b> (<code>"abc"</code>)
+                <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
+                    <div style="color: #0284c7; font-weight: 700; font-size: 11.5px;">Exemplo 1:</div>
+                    <code style="font-size: 13px; color: #0f172a;">s = "abcabcbb"</code> → <b>Resposta: 3</b> (substring: <code>"abc"</code>)
                 </div>
 
-                <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 14px; border-radius: 8px;">
-                    <div style="color: #0284c7; font-weight: 700; font-size: 12px;">Exemplo 2:</div>
-                    <code style="font-size: 14px; color: #0f172a;">s = "bbbbb"</code> → <b>Resposta: 1</b> (<code>"b"</code>)
+                <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
+                    <div style="color: #0284c7; font-weight: 700; font-size: 11.5px;">Exemplo 2:</div>
+                    <code style="font-size: 13px; color: #0f172a;">s = "bbbbb"</code> → <b>Resposta: 1</b> (substring: <code>"b"</code>)
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 14px; border-radius: 8px;">
-                    <div style="color: #0284c7; font-weight: 700; font-size: 12px;">Exemplo 3:</div>
-                    <code style="font-size: 14px; color: #0f172a;">s = "pwwkew"</code> → <b>Resposta: 3</b> (<code>"wke"</code>)
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
+                    <div style="color: #0284c7; font-weight: 700; font-size: 11.5px;">Exemplo 3:</div>
+                    <code style="font-size: 13px; color: #0f172a;">s = "pwwkew"</code> → <b>Resposta: 3</b> (substring: <code>"wke"</code>)
                 </div>
             </div>
         </div>
@@ -482,7 +469,7 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 4: AS DIFERENTES SOLUÇÕES -->
+    <!-- SLIDE 4: AS DIFERENTES SOLUÇÕES COM FORMATAÇÃO CORRETA -->
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">03 · Soluções Comparadas</div>
@@ -492,9 +479,8 @@ def build_presentation():
 
         <div class="content-grid-3">
             <div class="card card-rose">
-                <div class="card-title" style="color: #e11d48; font-size: 16px;">1. Força Bruta O(N³)</div>
-                <div class="code-box" style="font-size: 11px;">
-<span class="kw">def</span> <span class="fn">brute_force</span>(s):
+                <div class="card-title" style="color: #e11d48; font-size: 15px;">1. Força Bruta O(N³)</div>
+                <pre><code><span class="kw">def</span> <span class="fn">brute_force</span>(s):
     n = <span class="fn">len</span>(s)
     max_len = <span class="num">0</span>
     <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):
@@ -502,18 +488,16 @@ def build_presentation():
             sub = s[i:j]
             <span class="kw">if</span> <span class="fn">len</span>(<span class="fn">set</span>(sub)) == <span class="fn">len</span>(sub):
                 max_len = <span class="fn">max</span>(max_len, <span class="fn">len</span>(sub))
-    <span class="kw">return</span> max_len
-                </div>
+    <span class="kw">return</span> max_len</code></pre>
                 <div class="badge-list" style="margin-top: 8px;">
-                    <span class="badge badge-danger">O(N³)</span>
+                    <span class="badge badge-danger">Tempo: O(N³)</span>
                     <span class="badge badge-danger">Rejeitado</span>
                 </div>
             </div>
 
             <div class="card card-amber">
-                <div class="card-title" style="color: #d97706; font-size: 16px;">2. Sliding Window (Set)</div>
-                <div class="code-box" style="font-size: 11px;">
-<span class="kw">def</span> <span class="fn">sliding_window_set</span>(s):
+                <div class="card-title" style="color: #d97706; font-size: 15px;">2. Sliding Window (Set)</div>
+                <pre><code><span class="kw">def</span> <span class="fn">sliding_window_set</span>(s):
     char_set = <span class="fn">set</span>()
     left = max_len = <span class="num">0</span>
     <span class="kw">for</span> right <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(s)):
@@ -522,30 +506,27 @@ def build_presentation():
             left += <span class="num">1</span>
         char_set.add(s[right])
         max_len = <span class="fn">max</span>(max_len, right - left + <span class="num">1</span>)
-    <span class="kw">return</span> max_len
-                </div>
+    <span class="kw">return</span> max_len</code></pre>
                 <div class="badge-list" style="margin-top: 8px;">
-                    <span class="badge badge-warning">O(2N)</span>
+                    <span class="badge badge-warning">Tempo: O(2N)</span>
                     <span class="badge badge-warning">Contratado</span>
                 </div>
             </div>
 
             <div class="card card-emerald">
-                <div class="card-title" style="color: #059669; font-size: 16px;">3. Sliding Window (Map O(1))</div>
-                <div class="code-box" style="font-size: 11px;">
-<span class="kw">def</span> <span class="fn">sliding_window_map</span>(s):
-    char_map = {{}} <span class="com"># char -> último índice</span>
+                <div class="card-title" style="color: #059669; font-size: 15px;">3. Sliding Window (Map O(1))</div>
+                <pre><code><span class="kw">def</span> <span class="fn">sliding_window_map</span>(s):
+    char_map = {{}}
     left = max_len = <span class="num">0</span>
     <span class="kw">for</span> right, char <span class="kw">in</span> <span class="fn">enumerate</span>(s):
         <span class="kw">if</span> char <span class="kw">in</span> char_map <span class="kw">and</span> char_map[char] >= left:
-            left = char_map[char] + <span class="num">1</span> <span class="com"># Pulo O(1)</span>
+            left = char_map[char] + <span class="num">1</span>
         char_map[char] = right
         max_len = <span class="fn">max</span>(max_len, right - left + <span class="num">1</span>)
-    <span class="kw">return</span> max_len
-                </div>
+    <span class="kw">return</span> max_len</code></pre>
                 <div class="badge-list" style="margin-top: 8px;">
-                    <span class="badge badge-success">O(N) Estrito</span>
-                    <span class="badge badge-success">Strong Hire</span>
+                    <span class="badge badge-success">Tempo: O(N) Estrito</span>
+                    <span class="badge badge-success">Forte Candidato</span>
                 </div>
             </div>
         </div>
@@ -570,8 +551,8 @@ def build_presentation():
                     <tr>
                         <th>Passo</th>
                         <th>Char</th>
-                        <th>R</th>
-                        <th>L</th>
+                        <th>R (right)</th>
+                        <th>L (left)</th>
                         <th>Janela</th>
                         <th>Evento / Ação da Tabela Hash</th>
                         <th>char_map Atual</th>
@@ -585,7 +566,7 @@ def build_presentation():
                         <td>0</td>
                         <td>0</td>
                         <td><code>"a"</code></td>
-                        <td>Primeira vez visto</td>
+                        <td>Primeira ocorrência</td>
                         <td><code>{{'a': 0}}</code></td>
                         <td style="color: #059669; font-weight: 700;">1</td>
                     </tr>
@@ -595,7 +576,7 @@ def build_presentation():
                         <td>1</td>
                         <td>0</td>
                         <td><code>"ab"</code></td>
-                        <td>Primeira vez visto</td>
+                        <td>Primeira ocorrência</td>
                         <td><code>{{'a': 0, 'b': 1}}</code></td>
                         <td style="color: #059669; font-weight: 700;">2</td>
                     </tr>
@@ -605,9 +586,9 @@ def build_presentation():
                         <td>2</td>
                         <td>0</td>
                         <td><code>"abc"</code></td>
-                        <td>Primeira vez visto (Pico Máximo)</td>
+                        <td>Primeira ocorrência</td>
                         <td><code>{{'a': 0, 'b': 1, 'c': 2}}</code></td>
-                        <td style="color: #059669; font-weight: 800;">3 🏆</td>
+                        <td style="color: #059669; font-weight: 800; font-size: 14px;">3 (Pico)</td>
                     </tr>
                     <tr style="background: #fffbeb;">
                         <td><b>4</b></td>
@@ -615,7 +596,7 @@ def build_presentation():
                         <td>3</td>
                         <td style="color: #b45309; font-weight: 700;">0 → 1</td>
                         <td><code>"bca"</code></td>
-                        <td><b>'a' repetido!</b> L salta para <code>0+1=1</code></td>
+                        <td>'a' repetido: L salta para <code>0+1=1</code></td>
                         <td><code>{{'a': 3, 'b': 1, 'c': 2}}</code></td>
                         <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
@@ -625,7 +606,7 @@ def build_presentation():
                         <td>4</td>
                         <td style="color: #b45309; font-weight: 700;">1 → 2</td>
                         <td><code>"cab"</code></td>
-                        <td><b>'b' repetido!</b> L salta para <code>1+1=2</code></td>
+                        <td>'b' repetido: L salta para <code>1+1=2</code></td>
                         <td><code>{{'a': 3, 'b': 4, 'c': 2}}</code></td>
                         <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
@@ -635,7 +616,7 @@ def build_presentation():
                         <td>5</td>
                         <td style="color: #b45309; font-weight: 700;">2 → 3</td>
                         <td><code>"abc"</code></td>
-                        <td><b>'c' repetido!</b> L salta para <code>2+1=3</code></td>
+                        <td>'c' repetido: L salta para <code>2+1=3</code></td>
                         <td><code>{{'a': 3, 'b': 4, 'c': 5}}</code></td>
                         <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
@@ -645,7 +626,7 @@ def build_presentation():
                         <td>6</td>
                         <td style="color: #be123c; font-weight: 700;">3 → 5</td>
                         <td><code>"cb"</code></td>
-                        <td><b>'b' repetido!</b> L salta para <code>4+1=5</code></td>
+                        <td>'b' repetido: L salta para <code>4+1=5</code></td>
                         <td><code>{{'a': 3, 'b': 6, 'c': 5}}</code></td>
                         <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
@@ -655,7 +636,7 @@ def build_presentation():
                         <td>7</td>
                         <td style="color: #be123c; font-weight: 700;">5 → 7</td>
                         <td><code>"b"</code></td>
-                        <td><b>'b' repetido!</b> L salta para <code>6+1=7</code></td>
+                        <td>'b' repetido: L salta para <code>6+1=7</code></td>
                         <td><code>{{'a': 3, 'b': 7, 'c': 5}}</code></td>
                         <td style="color: #059669; font-weight: 700;">3</td>
                     </tr>
@@ -677,7 +658,7 @@ def build_presentation():
         </div>
         <h2 class="slide-title">Economia de Tempo: <span>Dois Mundos Diferentes</span></h2>
 
-        <div class="card card-emerald" style="margin-bottom: 15px;">
+        <div class="card card-emerald" style="margin-bottom: 12px;">
             <table>
                 <thead>
                     <tr>
@@ -685,7 +666,7 @@ def build_presentation():
                         <th>Força Bruta O(N³)</th>
                         <th>Sliding Window (Set)</th>
                         <th>Sliding Window (Map O(1))</th>
-                        <th>Economia</th>
+                        <th>Economia de Operações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -715,7 +696,7 @@ def build_presentation():
                         <td style="color: #be123c; font-weight: 800;">~250 min (> 4 HORAS)</td>
                         <td style="color: #b45309;">15.5 ms (99.992 ops)</td>
                         <td style="color: #059669; font-weight: 800;">11.1 ms (50.000 ops)</td>
-                        <td><span class="badge badge-success">⚡ > 99.99999%</span></td>
+                        <td><span class="badge badge-success">> 99.99999%</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -723,18 +704,18 @@ def build_presentation():
 
         <div class="content-grid-2">
             <div class="card card-rose">
-                <div class="card-title" style="color: #e11d48; font-size: 16px;">💥 Colapso da Força Bruta</div>
-                <p class="card-text" style="font-size: 13px;">Com $N = 50.000$, a Força Bruta precisa de <b>mais de 20 trilhões de operações</b>, travando o sistema.</p>
+                <div class="card-title" style="color: #e11d48; font-size: 15px;">1. Colapso da Força Bruta</div>
+                <p class="card-text" style="font-size: 12.5px;">Com $N = 50.000$, a Força Bruta precisa de <b>mais de 20 trilhões de operações</b>, tornando a execução computacionalmente inviável.</p>
             </div>
             <div class="card card-emerald">
-                <div class="card-title" style="color: #059669; font-size: 16px;">⚡ Mágica do Tempo Linear O(N)</div>
-                <p class="card-text" style="font-size: 13px;">A solução com Hash Map resolve em <b>exatamente 50.000 operações</b> em apenas <b>0,011 segundos</b>.</p>
+                <div class="card-title" style="color: #059669; font-size: 15px;">2. Eficiência do Tempo Linear O(N)</div>
+                <p class="card-text" style="font-size: 12.5px;">A solução com Hash Map resolve em <b>exatamente 50.000 operações</b> em apenas <b>0,011 segundos</b>.</p>
             </div>
         </div>
 
         <div class="footer-bar">
-            <span>Benchmark Real em Python 3.12</span>
-            <span>Economia de Mais de 4 Horas de CPU</span>
+            <span>Benchmark Experimental em Python 3.12</span>
+            <span>Redução Superior a 4 Horas de Processamento</span>
         </div>
     </div>
 
@@ -752,21 +733,21 @@ def build_presentation():
             </div>
 
             <div class="card card-cyan">
-                <div class="card-title">🔑 A Mecânica da Otimização</div>
+                <div class="card-title">Mecânica da Otimização</div>
                 
                 <div style="margin-bottom: 12px;">
-                    <b style="color: #0284c7; font-size: 16px;">1. Ponteiro Direita (right):</b>
-                    <p class="card-text" style="font-size: 13px;">Percorre a string inserindo novos caracteres na janela.</p>
+                    <b style="color: #0284c7; font-size: 15px;">1. Ponteiro Direito (right):</b>
+                    <p class="card-text" style="font-size: 12.5px;">Avança sequencialmente expandindo a janela e lendo novos caracteres.</p>
                 </div>
 
                 <div style="margin-bottom: 12px;">
-                    <b style="color: #059669; font-size: 16px;">2. Tabela Hash (char_map):</b>
-                    <p class="card-text" style="font-size: 13px;">Guarda <code>map[char] = ultimo_indice</code> em tempo constante O(1).</p>
+                    <b style="color: #059669; font-size: 15px;">2. Tabela Hash (char_map):</b>
+                    <p class="card-text" style="font-size: 12.5px;">Armazena o mapeamento <code>map[char] = ultimo_indice</code> em tempo O(1).</p>
                 </div>
 
                 <div>
-                    <b style="color: #d97706; font-size: 16px;">3. Salto do Ponteiro Esquerda (left):</b>
-                    <p class="card-text" style="font-size: 13px;">Ao achar duplicata, salta para <code>map[char] + 1</code> sem varredura!</p>
+                    <b style="color: #d97706; font-size: 15px;">3. Salto do Ponteiro Esquerdo (left):</b>
+                    <p class="card-text" style="font-size: 12.5px;">Ao identificar duplicata, salta diretamente para <code>map[char] + 1</code> sem recálculos intermediários.</p>
                 </div>
             </div>
         </div>
@@ -777,22 +758,21 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 8: CÓDIGO C BAIXO NÍVEL -->
+    <!-- SLIDE 8: CÓDIGO C BAIXO NÍVEL COM FORMATAÇÃO CORRETA -->
     <div class="slide">
         <div class="header-bar">
-            <div class="header-tag">07 · Implementação de Alta Performance</div>
+            <div class="header-tag">07 · Implementação de Baixo Nível</div>
             <div class="header-sub">Conexão com a Aula 2 de Revisão em C</div>
         </div>
         <h2 class="slide-title">Implementação em C: <span>Tabela Direta ASCII</span></h2>
 
         <div class="content-grid-2">
             <div class="card">
-                <div class="card-title" style="color: #7c3aed; font-size: 16px;">⚡ Código em C com Vetor ASCII Fixo</div>
-                <div class="code-box" style="font-size: 11px;">
-<span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
+                <div class="card-title" style="color: #7c3aed; font-size: 15px;">Código em C com Vetor ASCII Fixo</div>
+                <pre><code><span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
 
 <span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(<span class="kw">char</span>* s) {{
-    <span class="kw">int</span> last_index[<span class="num">256</span>]; <span class="com">// Tabela direta de 256 bytes (ASCII)</span>
+    <span class="kw">int</span> last_index[<span class="num">256</span>];
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">256</span>; i++) last_index[i] = -<span class="num">1</span>;
     
     <span class="kw">int</span> max_len = <span class="num">0</span>, left = <span class="num">0</span>;
@@ -802,7 +782,7 @@ def build_presentation():
         <span class="kw">unsigned char</span> c = (<span class="kw">unsigned char</span>)s[right];
         
         <span class="kw">if</span> (last_index[c] >= left) {{
-            left = last_index[c] + <span class="num">1</span>; <span class="com">// Salto direto em O(1)</span>
+            left = last_index[c] + <span class="num">1</span>;
         }}
         
         last_index[c] = right;
@@ -810,15 +790,14 @@ def build_presentation():
         <span class="kw">if</span> (cur_len > max_len) max_len = cur_len;
     }}
     <span class="kw">return</span> max_len;
-}}
-                </div>
+}}</code></pre>
             </div>
 
             <div class="card card-emerald">
-                <div class="card-title">💡 Vantagens da Implementação em C</div>
-                <p class="card-text"><b>1. Zero Overhead de Colisão:</b> Tabela de acesso direto sem colisões nem encadeamento na memória.</p>
-                <p class="card-text"><b>2. Memória Estrita:</b> <code>256 * sizeof(int) = 1.024 bytes (1 KB)</code> fixo na Stack $\rightarrow$ <b>espaço O(1) puro</b>.</p>
-                <p class="card-text"><b>3. Cache L1 Friendly:</b> Memória 100% contígua com acesso instantâneo via deslocamento.</p>
+                <div class="card-title">Vantagens da Implementação em C</div>
+                <p class="card-text"><b>1. Ausência de Colisões:</b> Acesso direto por índice do byte ASCII elimina qualquer necessidade de tratamento de colisão.</p>
+                <p class="card-text"><b>2. Memória Estática e Restrita:</b> <code>256 * sizeof(int) = 1.024 bytes (1 KB)</code> alocados na Stack, garantindo <b>espaço O(1) puro</b>.</p>
+                <p class="card-text"><b>3. Eficiência de Cache L1:</b> Disposição sequencial contígua sem ponteiros dispersos na Heap.</p>
             </div>
         </div>
 
@@ -841,9 +820,9 @@ def build_presentation():
                 <thead>
                     <tr>
                         <th>Abordagem</th>
-                        <th>Tempo</th>
-                        <th>Espaço</th>
-                        <th>Classificação em Entrevista</th>
+                        <th>Complexidade de Tempo</th>
+                        <th>Complexidade de Espaço</th>
+                        <th>Classificação Técnica</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -851,19 +830,19 @@ def build_presentation():
                         <td><b>1. Força Bruta (Loops Aninhados)</b></td>
                         <td style="color: #be123c; font-weight: 700;">O(N³)</td>
                         <td>O(min(N, Σ))</td>
-                        <td><span class="badge badge-danger">Rejeitado (Red Flag)</span></td>
+                        <td><span class="badge badge-danger">Rejeitado</span></td>
                     </tr>
                     <tr>
                         <td><b>2. Sliding Window (Set - Passo a Passo)</b></td>
                         <td style="color: #b45309; font-weight: 700;">O(2N) = O(N)</td>
                         <td>O(min(N, Σ))</td>
-                        <td><span class="badge badge-warning">Contratado (Hire)</span></td>
+                        <td><span class="badge badge-warning">Contratado</span></td>
                     </tr>
                     <tr>
                         <td><b>3. Sliding Window (Hash Map - Pulo O(1))</b></td>
                         <td style="color: #059669; font-weight: 700;">O(N) Estrito</td>
                         <td>O(min(N, Σ))</td>
-                        <td><span class="badge badge-success">Strong Hire</span></td>
+                        <td><span class="badge badge-success">Forte Candidato</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -871,12 +850,12 @@ def build_presentation():
 
         <div class="content-grid-2">
             <div class="card card-cyan">
-                <div class="card-title" style="font-size: 16px;">⏱️ Justificativa de Tempo: O(N)</div>
-                <p class="card-text" style="font-size: 13px;">O ponteiro <code>direita</code> avança de 0 até N-1 exatamente uma vez. Consultas e inserções levam <b>O(1)</b>.</p>
+                <div class="card-title">Justificativa de Tempo: O(N)</div>
+                <p class="card-text" style="font-size: 12.5px;">O ponteiro direito avança de 0 até N-1 exatamente uma vez. Todas as consultas e atribuições na tabela hash executam em tempo constante <b>O(1)</b>.</p>
             </div>
             <div class="card card-cyan">
-                <div class="card-title" style="font-size: 16px;">💾 Justificativa de Espaço: O(min(N, Σ))</div>
-                <p class="card-text" style="font-size: 13px;">Espaço limitado pelo menor valor entre o tamanho da string <code>N</code> e o alfabeto <code>Σ</code> (ASCII = 256).</p>
+                <div class="card-title">Justificativa de Espaço: O(min(N, Σ))</div>
+                <p class="card-text" style="font-size: 12.5px;">O consumo de memória é limitado pelo menor valor entre o comprimento da string <code>N</code> e a cardinalidade do alfabeto <code>Σ</code> (ASCII = 256).</p>
             </div>
         </div>
 
@@ -896,21 +875,21 @@ def build_presentation():
 
         <div class="content-grid-2">
             <div class="card card-amber">
-                <div class="card-title" style="font-size: 16px;">🛡️ Casos de Borda Validados</div>
-                <p class="card-text" style="font-size: 13px;"><b>1. String Vazia <code>""</code>:</b> Retorna <code>0</code> imediatamente.</p>
-                <p class="card-text" style="font-size: 13px;"><b>2. Caracteres Idênticos <code>"bbbbbb"</code>:</b> A janela se mantém em tamanho <code>1</code>.</p>
-                <p class="card-text" style="font-size: 13px;"><b>3. Todos Distintos <code>"abcdef"</code>:</b> A janela expande até o tamanho total <code>N</code>.</p>
-                <p class="card-text" style="font-size: 13px;"><b>4. Espaços e Símbolos <code>"a b c!"</code>:</b> Tratados nativamente pela tabela ASCII.</p>
+                <div class="card-title">1. Casos de Borda Validados</div>
+                <p class="card-text" style="font-size: 12.5px;"><b>String Vazia <code>""</code>:</b> Retorna <code>0</code> imediatamente.</p>
+                <p class="card-text" style="font-size: 12.5px;"><b>Caracteres Idênticos <code>"bbbbbb"</code>:</b> A janela se mantém em comprimento <code>1</code>.</p>
+                <p class="card-text" style="font-size: 12.5px;"><b>Todos Distintos <code>"abcdef"</code>:</b> A janela expande linearmente até o comprimento total <code>N</code>.</p>
+                <p class="card-text" style="font-size: 12.5px;"><b>Espaços e Símbolos <code>"a b c!"</code>:</b> Indexados nativamente pela tabela ASCII.</p>
             </div>
 
             <div class="card card-emerald" style="justify-content: center; align-items: center; text-align: center;">
-                <div style="font-size: 40px; margin-bottom: 10px;">🎓</div>
-                <div class="card-title" style="font-size: 24px; justify-content: center;">Obrigado a Todos!</div>
-                <p class="card-text" style="font-size: 15px; color: #64748b; margin-top: 4px;">
-                    Abrimos agora para dúvidas do professor e da turma.
+                <div class="card-title" style="font-size: 24px; justify-content: center;">Conclusão</div>
+                <p class="card-text" style="font-size: 14px; color: #64748b; margin-top: 6px;">
+                    Agradecemos a atenção do professor e dos colegas.<br>
+                    Abrimos para perguntas e considerações.
                 </p>
                 <div class="badge-list" style="justify-content: center; margin-top: 14px;">
-                    <span class="badge badge-success">Código no GitHub</span>
+                    <span class="badge badge-success">Repositório no GitHub</span>
                     <span class="badge badge-success">Vault Obsidian Integrado</span>
                 </div>
             </div>
@@ -931,7 +910,7 @@ def build_presentation():
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("HTML dos 10 slides (Otimizado para Projetor 1280x720) gerado com sucesso!")
+    print("HTML dos 10 slides (Formatado e Sem Emojis) gerado com sucesso!")
 
     # Invoke Chrome to print to PDF
     chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
@@ -948,13 +927,13 @@ def build_presentation():
         in_html
     ]
 
-    print("Gerando PDF Otimizado para Projetor com Chrome Headless...")
+    print("Gerando PDF Otimizado sem Emojis com Chrome Headless...")
     subprocess.run(cmd, check=True)
     time.sleep(2)
 
     if os.path.exists(pdf_file):
         size_kb = os.path.getsize(pdf_file) / 1024
-        print(f"PDF para Projetor Gerado com Sucesso: {pdf_file} ({size_kb:.1f} KB)")
+        print(f"PDF Final Gerado com Sucesso: {pdf_file} ({size_kb:.1f} KB)")
     else:
         print("Erro ao gerar PDF.")
 
