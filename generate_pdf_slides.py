@@ -1,14 +1,155 @@
 import os
-import base64
 import subprocess
 import time
 
 def build_presentation():
-    img_path = os.path.join("_Vault - Algoritmos", "assets", "sliding_window_leetcode3.jpg")
-    img_b64 = ""
-    if os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            img_b64 = f"data:image/jpeg;base64,{base64.b64encode(f.read()).decode('utf-8')}"
+    # SVG Vector Diagram in 100% Portuguese, perfectly framed for Swiss Editorial Design
+    svg_diagram = """
+    <svg viewBox="0 0 740 440" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+        <!-- Fundo do Diagrama -->
+        <rect width="740" height="440" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+        <!-- Título do Diagrama -->
+        <text x="30" y="38" font-size="14" font-weight="800" fill="#090d16" letter-spacing="0.5">ESTADO DA MEMÓRIA NO PASSO 4: s = "abcabcbb"</text>
+        <text x="30" y="58" font-size="12" fill="#64748b">O ponteiro direito (R) encontra 'a' repetido no índice 3. O ponteiro esquerdo (L) salta de 0 para 1.</text>
+
+        <!-- Array / String Cells -->
+        <!-- Índices da String -->
+        <g transform="translate(30, 85)">
+            <!-- Header do Vetor -->
+            <text x="0" y="15" font-size="11" font-weight="700" fill="#64748b" text-transform="uppercase" letter-spacing="0.8">Vetor de Caracteres na Memória</text>
+            
+            <!-- Células da String -->
+            <!-- 0: 'a' -->
+            <rect x="0" y="30" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="26" y="63" font-size="20" font-weight="700" fill="#64748b" text-anchor="middle" font-family="'JetBrains Mono', monospace;">a</text>
+            <text x="26" y="98" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">0</text>
+
+            <!-- 1: 'b' -->
+            <rect x="58" y="30" width="52" height="52" rx="6" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
+            <text x="84" y="63" font-size="20" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
+            <text x="84" y="98" font-size="12" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">1</text>
+
+            <!-- 2: 'c' -->
+            <rect x="116" y="30" width="52" height="52" rx="6" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
+            <text x="142" y="63" font-size="20" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">c</text>
+            <text x="142" y="98" font-size="12" font-weight="700" fill="#047857" text-anchor="middle" font-family="'JetBrains Mono', monospace;">2</text>
+
+            <!-- 3: 'a' -->
+            <rect x="174" y="30" width="52" height="52" rx="6" fill="#eff6ff" stroke="#0284c7" stroke-width="2"/>
+            <text x="200" y="63" font-size="20" font-weight="700" fill="#0284c7" text-anchor="middle" font-family="'JetBrains Mono', monospace;">a</text>
+            <text x="200" y="98" font-size="12" font-weight="700" fill="#0284c7" text-anchor="middle" font-family="'JetBrains Mono', monospace;">3</text>
+
+            <!-- 4: 'b' -->
+            <rect x="232" y="30" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="258" y="63" font-size="20" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
+            <text x="258" y="98" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">4</text>
+
+            <!-- 5: 'c' -->
+            <rect x="290" y="30" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="316" y="63" font-size="20" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">c</text>
+            <text x="316" y="98" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">5</text>
+
+            <!-- 6: 'b' -->
+            <rect x="348" y="30" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="374" y="63" font-size="20" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
+            <text x="374" y="98" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">6</text>
+
+            <!-- 7: 'b' -->
+            <rect x="406" y="30" width="52" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="432" y="63" font-size="20" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">b</text>
+            <text x="432" y="98" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle" font-family="'JetBrains Mono', monospace;">7</text>
+
+            <!-- Caixa da Janela Deslizante Ativa (Indices 1 a 3: "bca") -->
+            <rect x="54" y="24" width="176" height="64" rx="8" fill="none" stroke="#047857" stroke-width="2.5" stroke-dasharray="6,4"/>
+            
+            <!-- Etiqueta da Janela Deslizante -->
+            <rect x="64" y="4" width="156" height="18" rx="4" fill="#047857"/>
+            <text x="142" y="17" font-size="10" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">JANELA ATIVA: "bca" (tam = 3)</text>
+        </g>
+
+        <!-- Ponteiros (Setas e Anotações) -->
+        <g transform="translate(30, 205)">
+            <!-- Ponteiro Esquerdo (L) -->
+            <path d="M 84,35 L 84,10" stroke="#047857" stroke-width="2.5" marker-end="url(#arrow-green)" fill="none"/>
+            <rect x="35" y="40" width="98" height="24" rx="4" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+            <text x="84" y="56" font-size="11" font-weight="800" fill="#047857" text-anchor="middle">L (left) = 1</text>
+
+            <!-- Curva de Salto de L -->
+            <path d="M 26,40 Q 55,5 80,38" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="40" y="8" font-size="10" font-weight="700" fill="#b45309">Salto O(1): 0 → 1</text>
+
+            <!-- Ponteiro Direito (R) -->
+            <path d="M 200,35 L 200,10" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrow-blue)" fill="none"/>
+            <rect x="151" y="40" width="98" height="24" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+            <text x="200" y="56" font-size="11" font-weight="800" fill="#0284c7" text-anchor="middle">R (right) = 3</text>
+        </g>
+
+        <!-- Painel Lateral: Tabela Hash (char_map) -->
+        <g transform="translate(515, 80)">
+            <rect width="195" height="235" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            
+            <!-- Cabeçalho da Tabela Hash -->
+            <path d="M 0,8 Q 0,0 8,0 L 187,0 Q 195,0 195,8 L 195,34 L 0,34 Z" fill="#0f172a"/>
+            <text x="97" y="22" font-size="11.5" font-weight="800" fill="#f8fafc" text-anchor="middle" letter-spacing="0.6">TABELA HASH (char_map)</text>
+
+            <!-- Linhas da Tabela Hash -->
+            <!-- Chave 'a' -->
+            <g transform="translate(14, 48)">
+                <rect width="167" height="34" rx="4" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+                <text x="12" y="22" font-size="13" font-weight="700" fill="#0284c7" font-family="'JetBrains Mono', monospace;">'a'</text>
+                <text x="45" y="22" font-size="12" fill="#64748b">→</text>
+                <text x="65" y="22" font-size="13" font-weight="800" fill="#0284c7" font-family="'JetBrains Mono', monospace;">idx 3</text>
+                <text x="125" y="22" font-size="9.5" font-weight="700" fill="#0284c7">(atual)</text>
+            </g>
+
+            <!-- Chave 'b' -->
+            <g transform="translate(14, 90)">
+                <rect width="167" height="34" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="12" y="22" font-size="13" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">'b'</text>
+                <text x="45" y="22" fill="#64748b">→</text>
+                <text x="65" y="22" font-size="13" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">idx 1</text>
+            </g>
+
+            <!-- Chave 'c' -->
+            <g transform="translate(14, 132)">
+                <rect width="167" height="34" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="12" y="22" font-size="13" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">'c'</text>
+                <text x="45" y="22" fill="#64748b">→</text>
+                <text x="65" y="22" font-size="13" font-weight="700" fill="#334155" font-family="'JetBrains Mono', monospace;">idx 2</text>
+            </g>
+
+            <!-- Nota de Complexidade no Rodapé da Tabela -->
+            <g transform="translate(14, 178)">
+                <rect width="167" height="42" rx="4" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+                <text x="83" y="18" font-size="10" font-weight="800" fill="#047857" text-anchor="middle">BUSCA & SALTO EM O(1)</text>
+                <text x="83" y="32" font-size="9" font-weight="600" fill="#047857" text-anchor="middle">Sem retroceder o cursor</text>
+            </g>
+        </g>
+
+        <!-- Linha Inferior: Resumo Matemático -->
+        <g transform="translate(30, 345)">
+            <rect width="680" height="70" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+            <text x="20" y="28" font-size="12" font-weight="800" fill="#090d16">CÁLCULO ATUAL DA JANELA:</text>
+            <text x="20" y="48" font-size="13" font-weight="700" fill="#047857" font-family="'JetBrains Mono', monospace;">tamanho = right - left + 1  →  3 - 1 + 1 = 3</text>
+            
+            <line x1="370" y1="12" x2="370" y2="58" stroke="#cbd5e1" stroke-width="1"/>
+            
+            <text x="390" y="28" font-size="12" font-weight="800" fill="#090d16">REGISTRO DE MÁXIMO:</text>
+            <text x="390" y="48" font-size="13" font-weight="800" fill="#090d16" font-family="'JetBrains Mono', monospace;">max_len = max(3, 3) = 3</text>
+        </g>
+
+        <!-- Definições de Marcadores de Setas -->
+        <defs>
+            <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#047857"/>
+            </marker>
+            <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+            </marker>
+        </defs>
+    </svg>
+    """
 
     html_content = f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -57,7 +198,7 @@ def build_presentation():
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             border-bottom: 1.5px solid #e2e8f0;
             padding-bottom: 10px;
         }}
@@ -82,7 +223,7 @@ def build_presentation():
             font-weight: 800;
             color: #090d16;
             line-height: 1.15;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             letter-spacing: -0.8px;
         }}
 
@@ -94,7 +235,7 @@ def build_presentation():
         .grid-60-40 {{
             display: grid;
             grid-template-columns: 1.4fr 1fr;
-            gap: 24px;
+            gap: 22px;
             flex: 1;
             align-items: stretch;
         }}
@@ -102,7 +243,7 @@ def build_presentation():
         .grid-40-60 {{
             display: grid;
             grid-template-columns: 1fr 1.4fr;
-            gap: 24px;
+            gap: 22px;
             flex: 1;
             align-items: stretch;
         }}
@@ -110,7 +251,7 @@ def build_presentation():
         .grid-50-50 {{
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 22px;
             flex: 1;
             align-items: stretch;
         }}
@@ -118,7 +259,7 @@ def build_presentation():
         .grid-3-col {{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            gap: 16px;
             flex: 1;
         }}
 
@@ -127,7 +268,7 @@ def build_presentation():
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
-            padding: 22px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -150,31 +291,30 @@ def build_presentation():
         }}
 
         .card-title {{
-            font-size: 16px;
+            font-size: 15.5px;
             font-weight: 700;
             color: #090d16;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: -0.3px;
         }}
 
         .card-text {{
-            font-size: 13.5px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.55;
             color: #334155;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }}
 
         /* Pull Quotes Editoriais */
         .pull-quote {{
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             line-height: 1.5;
             color: #090d16;
             border-left: 3px solid #047857;
-            padding-left: 14px;
-            margin: 12px 0;
+            padding: 10px 14px;
+            margin: 10px 0;
             background: #f0fdf4;
-            padding: 12px 16px;
             border-radius: 0 8px 8px 0;
         }}
 
@@ -188,11 +328,11 @@ def build_presentation():
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
-            padding: 20px;
+            padding: 18px;
         }}
 
         .metric-big {{
-            font-size: 42px;
+            font-size: 40px;
             font-weight: 800;
             line-height: 1;
             font-family: 'JetBrains Mono', monospace;
@@ -201,7 +341,7 @@ def build_presentation():
         }}
 
         .metric-label {{
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
@@ -213,7 +353,7 @@ def build_presentation():
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 6px;
         }}
 
         .badge {{
@@ -224,6 +364,12 @@ def build_presentation():
             background: #f1f5f9;
             color: #334155;
             border: 1px solid #cbd5e1;
+        }}
+
+        .badge-company {{
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
         }}
 
         .badge-success {{
@@ -250,7 +396,7 @@ def build_presentation():
             background: #0f172a;
             border: 1px solid #1e293b;
             border-radius: 6px;
-            padding: 12px 14px;
+            padding: 10px 12px;
             font-size: 11.5px;
             line-height: 1.45;
             color: #f8fafc;
@@ -274,14 +420,14 @@ def build_presentation():
         table {{
             width: 100%;
             border-collapse: collapse;
-            margin-top: 6px;
+            margin-top: 4px;
         }}
 
         th, td {{
-            padding: 8px 12px;
+            padding: 7px 10px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 12.5px;
+            font-size: 12px;
         }}
 
         th {{
@@ -298,8 +444,8 @@ def build_presentation():
         }}
 
         .trace-table th, .trace-table td {{
-            padding: 6px 8px;
-            font-size: 11.5px;
+            padding: 5px 7px;
+            font-size: 11px;
         }}
 
         /* Rodapé Editorial */
@@ -307,7 +453,7 @@ def build_presentation():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            margin-top: 14px;
             padding-top: 8px;
             border-top: 1px solid #e2e8f0;
             color: #64748b;
@@ -392,24 +538,6 @@ def build_presentation():
             line-height: 1.4;
         }}
 
-        .img-container {{
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #020617;
-        }}
-
-        .img-container img {{
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }}
-
         .highlight-val {{
             color: #0284c7;
             font-weight: 700;
@@ -466,12 +594,12 @@ def build_presentation():
                 <div class="pull-quote">
                     "Em entrevistas técnicas globais, o código representa apenas 30% da avaliação. Os outros 70% medem clareza de decomposição lógica, comunicação e justificativa de Big-O."
                 </div>
-                <p class="card-text" style="margin-top: 6px;">
+                <p class="card-text" style="margin-top: 4px;">
                     O avaliador busca testar se o candidato percebe a redundância da força bruta e consegue implementar a janela deslizante com consulta em tempo constante O(1).
                 </p>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
                 <div class="card card-blue" style="flex: 1;">
                     <div class="card-title">Empresas com Aplicação Recorrente</div>
                     <div class="badge-list" style="margin-top: 4px;">
@@ -486,7 +614,7 @@ def build_presentation():
 
                 <div class="card card-amber" style="flex: 1;">
                     <div class="card-title">Competências Verificadas</div>
-                    <p class="card-text" style="font-size: 12.5px; margin: 0;">
+                    <p class="card-text" style="font-size: 12px; margin: 0;">
                         • Redução assintótica de O(N³) para O(N)<br>
                         • Escolha de Hash Map vs. Vetor ASCII estático<br>
                         • Tratamento de casos de borda e memória de pilha
@@ -512,7 +640,7 @@ def build_presentation():
         <div class="grid-50-50">
             <div class="card card-emerald">
                 <div class="card-title">Definição do Problema</div>
-                <p class="card-text" style="font-size: 15.5px; font-weight: 600; color: #090d16; margin-bottom: 14px;">
+                <p class="card-text" style="font-size: 15px; font-weight: 600; color: #090d16; margin-bottom: 12px;">
                     "Dada uma string <code>s</code>, encontre o comprimento da <u>maior substring contígua</u> que não contenha caracteres repetidos."
                 </p>
                 <div class="pull-quote" style="background: #fffbeb; border-color: #b45309;">
@@ -527,17 +655,17 @@ def build_presentation():
                 
                 <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
                     <div style="color: #0369a1; font-weight: 700; font-size: 11px; text-transform: uppercase;">Exemplo 1 (Geral)</div>
-                    <code style="font-size: 13.5px; color: #090d16;">s = "abcabcbb"</code> → <b>Comprimento: 3</b> (substring: <code>"abc"</code>)
+                    <code style="font-size: 13px; color: #090d16;">s = "abcabcbb"</code> → <b>Comprimento: 3</b> (substring: <code>"abc"</code>)
                 </div>
 
                 <div style="margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
                     <div style="color: #0369a1; font-weight: 700; font-size: 11px; text-transform: uppercase;">Exemplo 2 (Homogêneo)</div>
-                    <code style="font-size: 13.5px; color: #090d16;">s = "bbbbb"</code> → <b>Comprimento: 1</b> (substring: <code>"b"</code>)
+                    <code style="font-size: 13px; color: #090d16;">s = "bbbbb"</code> → <b>Comprimento: 1</b> (substring: <code>"b"</code>)
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 6px;">
                     <div style="color: #0369a1; font-weight: 700; font-size: 11px; text-transform: uppercase;">Exemplo 3 (Composto)</div>
-                    <code style="font-size: 13.5px; color: #090d16;">s = "pwwkew"</code> → <b>Comprimento: 3</b> (substring: <code>"wke"</code>)
+                    <code style="font-size: 13px; color: #090d16;">s = "pwwkew"</code> → <b>Comprimento: 3</b> (substring: <code>"wke"</code>)
                 </div>
             </div>
         </div>
@@ -558,7 +686,7 @@ def build_presentation():
 
         <div class="grid-3-col">
             <div class="card card-rose">
-                <div class="card-title" style="color: #be123c; font-size: 14.5px;">1. Força Bruta O(N³)</div>
+                <div class="card-title" style="color: #be123c; font-size: 14px;">1. Força Bruta O(N³)</div>
                 <pre><code><span class="kw">def</span> <span class="fn">brute_force</span>(s):
     n = <span class="fn">len</span>(s)
     max_len = <span class="num">0</span>
@@ -575,7 +703,7 @@ def build_presentation():
             </div>
 
             <div class="card card-amber">
-                <div class="card-title" style="color: #b45309; font-size: 14.5px;">2. Sliding Window (Set)</div>
+                <div class="card-title" style="color: #b45309; font-size: 14px;">2. Sliding Window (Set)</div>
                 <pre><code><span class="kw">def</span> <span class="fn">sliding_window_set</span>(s):
     char_set = <span class="fn">set</span>()
     left = max_len = <span class="num">0</span>
@@ -593,7 +721,7 @@ def build_presentation():
             </div>
 
             <div class="card card-emerald">
-                <div class="card-title" style="color: #047857; font-size: 14.5px;">3. Sliding Window (Map O(1))</div>
+                <div class="card-title" style="color: #047857; font-size: 14px;">3. Sliding Window (Map O(1))</div>
                 <pre><code><span class="kw">def</span> <span class="fn">sliding_window_map</span>(s):
     char_map = {{}}
     left = max_len = <span class="num">0</span>
@@ -667,7 +795,7 @@ def build_presentation():
                         <td><code>"abc"</code></td>
                         <td>Primeira ocorrência registrada</td>
                         <td><code>{{'a': 0, 'b': 1, 'c': 2}}</code></td>
-                        <td style="color: #047857; font-weight: 800; font-size: 13.5px;">3 (Pico Máximo)</td>
+                        <td style="color: #047857; font-weight: 800; font-size: 13px;">3 (Pico Máximo)</td>
                     </tr>
                     <tr style="background: #fffbeb;">
                         <td><b>4</b></td>
@@ -737,16 +865,16 @@ def build_presentation():
         </div>
         <h2 class="slide-title">Economia de CPU: <span>De 4 Horas para 11 Milissegundos</span></h2>
 
-        <div class="grid-40-60" style="margin-bottom: 14px;">
+        <div class="grid-40-60" style="margin-bottom: 12px;">
             <div class="metric-container" style="border-left: 4px solid #047857;">
                 <div class="metric-big" style="color: #047857;">-99,99999%</div>
                 <div class="metric-label">Redução no Tempo de Execução ($N = 50.000$)</div>
-                <p class="card-text" style="font-size: 12px; margin-top: 8px; color: #64748b;">
+                <p class="card-text" style="font-size: 11.5px; margin-top: 6px; color: #64748b;">
                     Redução de <b>416.000.000×</b> no total de ciclos de instrução de CPU processados.
                 </p>
             </div>
 
-            <div class="card" style="padding: 14px;">
+            <div class="card" style="padding: 12px;">
                 <table>
                     <thead>
                         <tr>
@@ -787,15 +915,15 @@ def build_presentation():
         </div>
 
         <div class="grid-50-50">
-            <div class="card card-rose" style="padding: 14px;">
-                <div class="card-title" style="color: #be123c; font-size: 14px;">O Gargalo da Força Bruta</div>
-                <p class="card-text" style="font-size: 12px; margin: 0;">
+            <div class="card card-rose" style="padding: 12px;">
+                <div class="card-title" style="color: #be123c; font-size: 13.5px;">O Gargalo da Força Bruta</div>
+                <p class="card-text" style="font-size: 11.5px; margin: 0;">
                     Com $N = 50.000$, a Força Bruta executa mais de <b>20 trilhões de operações</b>, tornando o sistema inoperante em produção.
                 </p>
             </div>
-            <div class="card card-emerald" style="padding: 14px;">
-                <div class="card-title" style="color: #047857; font-size: 14px;">A Eficiência da Janela Deslizante</div>
-                <p class="card-text" style="font-size: 12px; margin: 0;">
+            <div class="card card-emerald" style="padding: 12px;">
+                <div class="card-title" style="color: #047857; font-size: 13.5px;">A Eficiência da Janela Deslizante</div>
+                <p class="card-text" style="font-size: 11.5px; margin: 0;">
                     A abordagem com Hash Map processa a entrada em passagem única com <b>exatamente 50.000 operações</b> em <b>0,011 segundos</b>.
                 </p>
             </div>
@@ -807,41 +935,20 @@ def build_presentation():
         </div>
     </div>
 
-    <!-- SLIDE 7: ARQUITETURA VISUAL DA JANELA DESLIZANTE -->
+    <!-- SLIDE 7: ARQUITETURA VISUAL DA JANELA DESLIZANTE (DIAGRAMA VETORIAL 100% EM PORTUGUÊS) -->
     <div class="slide">
         <div class="header-bar">
             <div class="header-tag">06 · Arquitetura Visual</div>
-            <div class="header-sub">Mapeamento da Janela Deslizante</div>
+            <div class="header-sub">Mapeamento da Janela Deslizante & Hash Map</div>
         </div>
         <h2 class="slide-title">Dinâmica dos <span>Dois Ponteiros & Hash Map</span></h2>
 
-        <div class="grid-60-40">
-            <div class="img-container">
-                <img src="{img_b64}" alt="Diagrama LeetCode 3">
-            </div>
-
-            <div class="card card-blue">
-                <div class="card-title">Mecânica da Otimização</div>
-                
-                <div style="margin-bottom: 12px;">
-                    <b style="color: #0369a1; font-size: 14.5px;">1. Ponteiro Direito (right):</b>
-                    <p class="card-text" style="font-size: 12.5px;">Avança sequencialmente expandindo a janela e lendo novos caracteres.</p>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <b style="color: #047857; font-size: 14.5px;">2. Tabela Hash (char_map):</b>
-                    <p class="card-text" style="font-size: 12.5px;">Armazena o mapeamento <code>map[char] = ultimo_indice</code> em tempo constante O(1).</p>
-                </div>
-
-                <div>
-                    <b style="color: #b45309; font-size: 14.5px;">3. Salto do Ponteiro Esquerdo (left):</b>
-                    <p class="card-text" style="font-size: 12.5px;">Ao identificar duplicata, salta diretamente para <code>map[char] + 1</code> sem varredura intermediária.</p>
-                </div>
-            </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+            {svg_diagram}
         </div>
 
         <div class="footer-bar">
-            <span>Visualização da Janela Deslizante</span>
+            <span>Visualização da Janela Deslizante · Passo 4 de 8</span>
             <span>IFSP São Carlos</span>
         </div>
     </div>
@@ -856,7 +963,7 @@ def build_presentation():
 
         <div class="grid-50-50">
             <div class="card">
-                <div class="card-title" style="color: #6d28d9; font-size: 14.5px;">Código em C com Vetor ASCII Fixo</div>
+                <div class="card-title" style="color: #6d28d9; font-size: 14px;">Código em C com Vetor ASCII Fixo</div>
                 <pre><code><span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
 
 <span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(<span class="kw">char</span>* s) {{
@@ -903,7 +1010,7 @@ def build_presentation():
         </div>
         <h2 class="slide-title">Análise Rigorosa de <span>Complexidade (Big-O)</span></h2>
 
-        <div class="card card-emerald" style="margin-bottom: 14px;">
+        <div class="card card-emerald" style="margin-bottom: 12px;">
             <table>
                 <thead>
                     <tr>
@@ -939,11 +1046,11 @@ def build_presentation():
         <div class="grid-50-50">
             <div class="card card-blue">
                 <div class="card-title">Justificativa de Tempo: O(N)</div>
-                <p class="card-text" style="font-size: 12.5px;">O ponteiro direito avança de 0 até N-1 exatamente uma vez. Todas as consultas e inserções no Hash Map executam em tempo constante <b>O(1)</b>.</p>
+                <p class="card-text" style="font-size: 12px;">O ponteiro direito avança de 0 até N-1 exatamente uma vez. Todas as consultas e inserções no Hash Map executam em tempo constante <b>O(1)</b>.</p>
             </div>
             <div class="card card-blue">
                 <div class="card-title">Justificativa de Espaço: O(min(N, Σ))</div>
-                <p class="card-text" style="font-size: 12.5px;">O consumo de memória é limitado pelo menor valor entre o comprimento da string <code>N</code> e a cardinalidade do alfabeto <code>Σ</code> (ASCII = 256).</p>
+                <p class="card-text" style="font-size: 12px;">O consumo de memória é limitado pelo menor valor entre o comprimento da string <code>N</code> e a cardinalidade do alfabeto <code>Σ</code> (ASCII = 256).</p>
             </div>
         </div>
 
@@ -964,19 +1071,19 @@ def build_presentation():
         <div class="grid-50-50">
             <div class="card card-amber">
                 <div class="card-title">Casos de Borda Validados</div>
-                <p class="card-text" style="font-size: 12.5px;"><b>• String Vazia <code>""</code>:</b> Retorna <code>0</code> imediatamente.</p>
-                <p class="card-text" style="font-size: 12.5px;"><b>• Caracteres Idênticos <code>"bbbbbb"</code>:</b> A janela se mantém em comprimento <code>1</code>.</p>
-                <p class="card-text" style="font-size: 12.5px;"><b>• Todos Distintos <code>"abcdef"</code>:</b> A janela expande linearmente até o comprimento total <code>N</code>.</p>
-                <p class="card-text" style="font-size: 12.5px;"><b>• Espaços e Símbolos <code>"a b c!"</code>:</b> Indexados nativamente pela tabela ASCII.</p>
+                <p class="card-text" style="font-size: 12px;"><b>• String Vazia <code>""</code>:</b> Retorna <code>0</code> imediatamente.</p>
+                <p class="card-text" style="font-size: 12px;"><b>• Caracteres Idênticos <code>"bbbbbb"</code>:</b> A janela se mantém em comprimento <code>1</code>.</p>
+                <p class="card-text" style="font-size: 12px;"><b>• Todos Distintos <code>"abcdef"</code>:</b> A janela expande linearmente até o comprimento total <code>N</code>.</p>
+                <p class="card-text" style="font-size: 12px;"><b>• Espaços e Símbolos <code>"a b c!"</code>:</b> Indexados nativamente pela tabela ASCII.</p>
             </div>
 
             <div class="card card-emerald" style="justify-content: center; align-items: center; text-align: center;">
-                <div class="card-title" style="font-size: 24px; justify-content: center;">Conclusão</div>
-                <p class="card-text" style="font-size: 14px; color: #64748b; margin-top: 6px;">
+                <div class="card-title" style="font-size: 22px; justify-content: center;">Conclusão</div>
+                <p class="card-text" style="font-size: 13.5px; color: #64748b; margin-top: 6px;">
                     Agradecemos a atenção do Prof. Bianchi e dos colegas.<br>
                     Abrimos para perguntas e considerações da banca.
                 </p>
-                <div class="badge-list" style="justify-content: center; margin-top: 14px;">
+                <div class="badge-list" style="justify-content: center; margin-top: 12px;">
                     <span class="badge badge-success">Repositório no GitHub</span>
                     <span class="badge badge-success">Vault Obsidian Integrado</span>
                 </div>
@@ -998,7 +1105,7 @@ def build_presentation():
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("HTML dos 10 slides (Padrão Editorial Suíço) gerado com sucesso!")
+    print("HTML dos 10 slides (Com Diagrama Vetorial em Português) gerado com sucesso!")
 
     # Invoke Chrome to print to PDF
     chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
@@ -1021,7 +1128,7 @@ def build_presentation():
 
     if os.path.exists(pdf_file):
         size_kb = os.path.getsize(pdf_file) / 1024
-        print(f"PDF Editorial Suíço Gerado com Sucesso: {pdf_file} ({size_kb:.1f} KB)")
+        print(f"PDF Final com Diagrama Traduzido Gerado com Sucesso: {pdf_file} ({size_kb:.1f} KB)")
     else:
         print("Erro ao gerar PDF.")
 
