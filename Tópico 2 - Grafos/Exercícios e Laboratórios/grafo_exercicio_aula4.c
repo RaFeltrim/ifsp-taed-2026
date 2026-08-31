@@ -123,18 +123,18 @@ void liberar_grafo(Grafo* g) {
 int main() {
     printf("--- TAD Grafo Nao Dirigido com Matriz de Adjacencias ---\n\n");
     
-    // Criação de um grafo com 5 vértices (0 a 4)
+    // Criação de um grafo com 5 vértices (0 a 4), equivalentes a 1 a 5 no slide
     int num_vertices = 5;
     Grafo* g = criar_grafo(num_vertices);
     
-    // Adição de arestas com pesos (Grafo ponderado e não dirigido)
-    adicionar_aresta(g, 0, 1, 10);
-    adicionar_aresta(g, 0, 4, 20);
-    adicionar_aresta(g, 1, 2, 30);
-    adicionar_aresta(g, 1, 3, 40);
-    adicionar_aresta(g, 1, 4, 50);
-    adicionar_aresta(g, 2, 3, 60);
-    adicionar_aresta(g, 3, 4, 70);
+    // Adição de arestas exatamente conforme a Matriz de Adjacências do Slide:
+    // Pesos fictícios inseridos para atender ao requisito "Adicione pesos" e "Bônus de Dijkstra".
+    adicionar_aresta(g, 0, 1, 10); // Aresta 1-2
+    adicionar_aresta(g, 0, 4, 15); // Aresta 1-5
+    adicionar_aresta(g, 1, 2, 10); // Aresta 2-3
+    adicionar_aresta(g, 1, 3, 20); // Aresta 2-4
+    adicionar_aresta(g, 2, 3, 30); // Aresta 3-4
+    adicionar_aresta(g, 3, 4, 25); // Aresta 4-5
 
     // Verificação de existência de arestas
     printf("Existe aresta entre (0 e 1)? %s\n", existe_aresta(g, 0, 1) ? "Sim" : "Nao");
