@@ -7,3 +7,6 @@ _Vault - Algoritmos/.obsidian/workspace-mobile.json
 Thumbs.db
 desktop.ini
 *.tmp
+
+# Credentials and environment variables
+.env
