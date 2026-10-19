@@ -10,3 +10,13 @@ desktop.ini
 
 # Credentials and environment variables
 .env
+
+# Dependencies & Build Artefacts
+node_modules/
+package.json
+package-lock.json
+*.exe
+*.o
+*.log
+moodle_*.js
+diagnostico_moodle.js
