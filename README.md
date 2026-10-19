@@ -121,11 +121,11 @@ TAED - IFSP/
 | **Código do Flatten Binary Tree** | Tópico 3 — Seminários | 21/09/2026 | ✅ **Pronto** | [`flatten_binary_tree.c`](./Tópico%203%20-%20Seminários/Entregas/flatten_binary_tree.c) |
 | **Código do Alien Dictionary** | Tópico 3 — Seminários | 28/09/2026 | ✅ **Pronto** | [`alien_dictionary.c`](./Tópico%203%20-%20Seminários/Entregas/alien_dictionary.c) |
 | **Código de Parênteses Balanceados** | Tópico 3 — Seminários | 28/09/2026 | ✅ **Pronto** | [`parenteses_balanceados.c`](./Tópico%203%20-%20Seminários/Entregas/parenteses_balanceados.c) |
-| **Lucro Máximo com a Venda de Vinhos** | Tópico 3 — Seminários | 05/10/2026 | 🚀 **Pronto para Envio** | [`lucro_venda_vinhos.c`](./Tópico%203%20-%20Seminários/Entregas/lucro_venda_vinhos.c) |
-| **Recipiente com Mais Água** | Tópico 3 — Seminários | 12/10/2026 | 🚀 **Pronto para Envio** | [`recipiente_mais_agua.c`](./Tópico%203%20-%20Seminários/Entregas/recipiente_mais_agua.c) |
-| **Inverter Árvore Binária (LeetCode 226)** | Tópico 3 — Seminários | 12/10/2026 | 🚀 **Pronto para Envio** | [`inverter_arvore_binaria.c`](./Tópico%203%20-%20Seminários/Entregas/inverter_arvore_binaria.c) |
-| **Merge K Sorted Lists (LeetCode 23)** | Tópico 3 — Seminários | 12/10/2026 | 🚀 **Pronto para Envio** | [`merge_k_sorted_lists.c`](./Tópico%203%20-%20Seminários/Entregas/merge_k_sorted_lists.c) |
-| **Subarray Contíguo de Soma Máxima (Kadane)** | Tópico 3 — Seminários | 12/10/2026 | 🚀 **Pronto para Envio** | [`subarray_soma_maxima.c`](./Tópico%203%20-%20Seminários/Entregas/subarray_soma_maxima.c) |
+| **Lucro Máximo com a Venda de Vinhos** | Tópico 3 — Seminários | 05/10/2026 | ✅ **Entregue** | [`lucro_venda_vinhos.c`](./Tópico%203%20-%20Seminários/Entregas/lucro_venda_vinhos.c) |
+| **Recipiente com Mais Água** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`recipiente_mais_agua.c`](./Tópico%203%20-%20Seminários/Entregas/recipiente_mais_agua.c) |
+| **Inverter Árvore Binária (LeetCode 226)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`inverter_arvore_binaria.c`](./Tópico%203%20-%20Seminários/Entregas/inverter_arvore_binaria.c) |
+| **Merge K Sorted Lists (LeetCode 23)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`merge_k_sorted_lists.c`](./Tópico%203%20-%20Seminários/Entregas/merge_k_sorted_lists.c) |
+| **Subarray Contíguo de Soma Máxima (Kadane)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`subarray_soma_maxima.c`](./Tópico%203%20-%20Seminários/Entregas/subarray_soma_maxima.c) |
 
 ---
 
