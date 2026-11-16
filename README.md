@@ -103,6 +103,15 @@ TAED - IFSP/
 │       ├── unidade15-abbs.pdf
 │       └── unidade17-arvores-binarias.pdf
 │
+├── 📁 Tópico 4 - Problema das N Rainhas/                     # (Backtracking & C Puro)
+│   ├── README.md                                             # Estratégia 1D, Backtracking e complexidade (LeetCode 51)
+│   ├── 📁 Entregas/
+│   │   └── n_rainhas.c                                       # [ENTREGA MOODLE] Solução em C puro sem <stdbool.h>
+│   ├── 📁 Exercícios e Laboratórios/
+│   │   └── n_rainhas.c                                       # Código-fonte completo com suíte de testes (N=1,2,3,4,8)
+│   └── 📁 Material de Apoio/
+│       └── Roteiro de Laboratório_ N-Queens (C Puro).pdf     # Roteiro oficial da atividade prática
+│
 ├── 📁 _Vault - Algoritmos/                                   # Second Brain no Obsidian (Atas, Mapas Mentais e MOC)
 ├── .gitignore                                                # Filtro de dependências e arquivos de ambiente (.env)
 └── README.md                                                 # Portal central de navegação no padrão Gold
@@ -126,6 +135,7 @@ TAED - IFSP/
 | **Inverter Árvore Binária (LeetCode 226)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`inverter_arvore_binaria.c`](./Tópico%203%20-%20Seminários/Entregas/inverter_arvore_binaria.c) |
 | **Merge K Sorted Lists (LeetCode 23)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`merge_k_sorted_lists.c`](./Tópico%203%20-%20Seminários/Entregas/merge_k_sorted_lists.c) |
 | **Subarray Contíguo de Soma Máxima (Kadane)** | Tópico 3 — Seminários | 12/10/2026 | ✅ **Entregue** | [`subarray_soma_maxima.c`](./Tópico%203%20-%20Seminários/Entregas/subarray_soma_maxima.c) |
+| **Código C do Problema das N-Rainhas (LeetCode 51)** | Tópico 4 — Problema das N Rainhas | 26/10/2026 | 🚀 **Pronto para Envio** | [`n_rainhas.c`](./Tópico%204%20-%20Problema%20das%20N%20Rainhas/Entregas/n_rainhas.c) |
 
 ---
 
