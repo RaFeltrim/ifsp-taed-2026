@@ -139,6 +139,15 @@ TAED - IFSP/
 
 ---
 
+## 🔗 Projeto Colaborativo Externo (Quadtree — Colisão de Partículas)
+
+- **Repositório Principal:** [`gcontiero11/quadtree_ttec`](https://github.com/gcontiero11/quadtree_ttec)
+- **Fork de Desenvolvimento & PR:** [`RaFeltrim/quadtree_ttec`](https://github.com/RaFeltrim/quadtree_ttec) ([PR #1](https://github.com/gcontiero11/quadtree_ttec/pull/1))
+- **Integrantes:** Gustavo ([@gcontiero11](https://github.com/gcontiero11)), Heitor ([@heitorlemescaldas](https://github.com/heitorlemescaldas)), Ian ([@Iofsoft](https://github.com/Iofsoft)) e Rafael ([@RaFeltrim](https://github.com/RaFeltrim))
+- **Escopo:** Simulação interativa comparando detecção de colisão por Força Bruta ($O(N^2)$) e Quadtree ($O(N \log N)$) com modo didático passo a passo.
+
+---
+
 ## 🛠️ Guia Rápido de Compilação das Soluções em C
 
 Todas as soluções foram desenvolvidas segundo os padrões **C99 / C11**, são autocontidas e incluem funções `main()` para testes automáticos no terminal:
