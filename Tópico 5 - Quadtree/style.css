@@ -1,0 +1,240 @@
+:root {
+  --bg-canvas: #111318;
+  --panel-bg: rgba(15, 18, 25, 0.84);
+  --panel-border: rgba(255, 255, 255, 0.14);
+  --control-bg: rgba(255, 255, 255, 0.08);
+  --control-bg-hover: rgba(255, 255, 255, 0.15);
+  --control-border: rgba(255, 255, 255, 0.18);
+  --text-primary: #f3f4f6;
+  --text-muted: #cbd5e1;
+  --accent: #38bdf8;
+  --focus-ring: #7dd3fc;
+  --warning: #fde047;
+  --stats-bg: rgba(0, 0, 0, 0.35);
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+canvas {
+  display: block;
+}
+
+#panel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  width: 308px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  color: var(--text-primary);
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.control-group,
+.control-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-range {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+#countValue {
+  width: 72px;
+  text-align: right;
+  background: var(--control-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+#countValue:hover {
+  background: var(--control-bg-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.field-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.field-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-primary);
+}
+
+#count {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+#panel select,
+#panel button {
+  appearance: none;
+  background: var(--control-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 500;
+  min-height: 36px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+#radius,
+#fps {
+  min-width: 72px;
+  text-align: center;
+}
+
+#panel select option {
+  background: #181c24;
+  color: var(--text-primary);
+}
+
+#panel button {
+  width: 100%;
+  text-align: left;
+}
+
+#panel select:hover,
+#panel button:hover {
+  background: var(--control-bg-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+#panel button:active {
+  transform: translateY(1px);
+}
+
+#showGrid {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+#panel :focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+#notice {
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+#notice:empty {
+  display: none;
+}
+
+#stats {
+  margin: 0;
+  padding: 8px 10px;
+  background: var(--stats-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+#speedChart {
+  width: 100%;
+  height: 148px;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+@media (pointer: coarse), (max-width: 600px) {
+  #panel {
+    top: 8px;
+    left: 8px;
+    width: min(308px, calc(100vw - 16px));
+  }
+
+  #panel select,
+  #panel button,
+  .field-check {
+    min-height: 44px;
+  }
+
+  #showGrid {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #panel select,
+  #panel button {
+    transition: none;
+  }
+
+  #panel button:active {
+    transform: none;
+  }
+}

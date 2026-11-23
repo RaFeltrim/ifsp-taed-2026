@@ -112,6 +112,14 @@ TAED - IFSP/
 │   └── 📁 Material de Apoio/
 │       └── Roteiro de Laboratório_ N-Queens (C Puro).pdf     # Roteiro oficial da atividade prática
 │
+├── 📁 Tópico 5 - Quadtree/                                   # (Cópia local sincronizada de gcontiero11/quadtree_ttec)
+│   ├── index.html                                            # Demonstração web interativa (Força Bruta vs Quadtree)
+│   ├── README.md                                             # Guia de execução, controles, cenários e testes (37/37)
+│   ├── 📁 src/                                               # Módulos JS puros (particle, quadtree, simulation, renderer, main)
+│   ├── 📁 tests/                                             # Suíte unitária nativa (node --test)
+│   ├── 📁 bench/                                             # Benchmark de escala (node bench/benchmark.js)
+│   └── 📁 docs/                                              # Arquitetura e análise de complexidade
+│
 ├── 📁 _Vault - Algoritmos/                                   # Second Brain no Obsidian (Atas, Mapas Mentais e MOC)
 ├── .gitignore                                                # Filtro de dependências e arquivos de ambiente (.env)
 └── README.md                                                 # Portal central de navegação no padrão Gold

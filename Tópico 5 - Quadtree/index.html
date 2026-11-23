@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quadtree: colisão de partículas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="canvas" aria-label="Área da simulação de colisão de partículas"></canvas>
+
+  <aside id="panel" role="region" aria-label="Controles da simulação">
+    <div class="control-group">
+      <div class="field-range">
+        <div class="field-header">
+          <label for="count">Partículas</label>
+          <input id="countValue" type="number" min="10" max="2000" value="200" aria-label="Quantidade numérica de partículas">
+        </div>
+        <input id="count" type="range" min="10" max="2000" value="200" aria-label="Quantidade de partículas">
+      </div>
+
+      <label class="field-inline" for="radius">
+        <span>Raio (px)</span>
+        <select id="radius" aria-label="Raio das partículas em pixels">
+          <option value="2">2</option>
+          <option value="4" selected>4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+          <option value="32">32</option>
+        </select>
+      </label>
+
+      <label class="field-inline" for="distribution">
+        <span>Distribuição</span>
+        <select id="distribution" aria-label="Distribuição espacial das partículas">
+          <option value="uniform" selected>Uniforme</option>
+          <option value="cluster">Aglomerado</option>
+          <option value="clusters">Dois clusters</option>
+        </select>
+      </label>
+
+      <label class="field-inline" for="fps">
+        <span>FPS alvo</span>
+        <select id="fps" aria-label="Taxa de quadros alvo da simulação">
+          <option value="5">5</option>
+          <option value="15">15</option>
+          <option value="30">30</option>
+          <option value="60" selected>60</option>
+          <option value="120">120</option>
+          <option value="0">Máx</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="control-actions">
+      <button id="modeBtn" type="button" title="Alternar entre força bruta e Quadtree (reinicia a distribuição em Aglomerado/Dois clusters)">Modo: força bruta</button>
+      <button id="resetBtn" type="button" title="Reiniciar as posições das partículas com a distribuição atual">Reiniciar simulação</button>
+      <button id="stepBtn" type="button" title="Ativar inspeção passo a passo na próxima colisão (até 200 partículas)">Modo didático: desligado</button>
+    </div>
+
+    <div id="notice" role="status" aria-live="polite"></div>
+
+    <label class="field-check" for="showGrid">
+      <input id="showGrid" type="checkbox">
+      <span>Mostrar grade</span>
+    </label>
+
+    <pre id="stats" aria-label="Estatísticas da simulação"></pre>
+
+    <canvas id="speedChart" width="280" height="148" aria-label="Gráfico comparando tempo por frame entre força bruta e Quadtree"></canvas>
+  </aside>
+
+  <!-- Scripts clássicos (não ES modules): assim a demo funciona abrindo o arquivo direto, sem servidor. -->
+  <script src="src/particle.js"></script>
+  <script src="src/quadtree.js"></script>
+  <script src="src/simulation.js"></script>
+  <script src="src/renderer.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>

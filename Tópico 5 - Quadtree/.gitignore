@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+*.log
+*.swp
+.claude/settings.local.json
+graphify-out/.graphify_*
