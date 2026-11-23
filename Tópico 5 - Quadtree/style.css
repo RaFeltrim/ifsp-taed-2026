@@ -56,6 +56,61 @@ canvas {
   line-height: 1.4;
 }
 
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.panel-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  min-height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.14);
+  color: #bae6fd;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.panel-chip:hover {
+  background: rgba(56, 189, 248, 0.26);
+  border-color: rgba(56, 189, 248, 0.65);
+}
+
+#panelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#panel.collapsed {
+  width: auto;
+  padding: 8px 10px;
+}
+
+#panel.collapsed #panelBody {
+  display: none;
+}
+
 .control-group,
 .control-actions {
   display: flex;
@@ -153,6 +208,16 @@ canvas {
   text-align: left;
 }
 
+#panel button#togglePanelBtn {
+  width: 30px;
+  min-width: 30px;
+  min-height: 28px;
+  padding: 0;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1;
+}
+
 #panel select:hover,
 #panel button:hover {
   background: var(--control-bg-hover);
@@ -220,6 +285,12 @@ canvas {
   #panel button,
   .field-check {
     min-height: 44px;
+  }
+
+  #panel button#togglePanelBtn,
+  .panel-chip {
+    min-height: 36px;
+    min-width: 36px;
   }
 
   #showGrid {

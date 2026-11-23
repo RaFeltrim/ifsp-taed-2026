@@ -43,6 +43,8 @@ node --test
 
 ### Controles
 
+- **Minimizar painel (`−` / `+` ou tecla `H`)**: recolhe ou expande os controles para liberar a área total do canvas.
+- **Benchmarks**: abre o painel interativo [`bench/benchmark.html`](./bench/benchmark.html) direto a partir do simulador.
 - **Partículas (`10–2000`)**: ajuste pelo *slider* (reinicia ao soltar) ou diretamente pelo campo numérico ao lado (`Enter` ou sair do campo aplica o valor entre `10` e `2000` e reinicia).
 - **Raio (`2, 4, 8, 16, 32 px`)**: altera o tamanho das partículas e reinicia a simulação.
 - **Distribuição (`Uniforme`, `Aglomerado`, `Dois clusters`)**: define a posição inicial das partículas para comparar o caso médio (`Uniforme`) com cenários de degradação por alta densidade local (`Aglomerado` no centro ou `Dois clusters` separados).

@@ -10,6 +10,15 @@
   <canvas id="canvas" aria-label="Área da simulação de colisão de partículas"></canvas>
 
   <aside id="panel" role="region" aria-label="Controles da simulação">
+    <div class="panel-header">
+      <span class="panel-title">Controles</span>
+      <div class="panel-header-actions">
+        <a id="benchLink" class="panel-chip" href="bench/benchmark.html" title="Abrir painel interativo de benchmarks">Benchmarks</a>
+        <button id="togglePanelBtn" type="button" aria-expanded="true" aria-controls="panelBody" title="Minimizar ou expandir painel (tecla H)">−</button>
+      </div>
+    </div>
+
+    <div id="panelBody">
     <div class="control-group">
       <div class="field-range">
         <div class="field-header">
@@ -68,6 +77,7 @@
     <pre id="stats" aria-label="Estatísticas da simulação"></pre>
 
     <canvas id="speedChart" width="280" height="148" aria-label="Gráfico comparando tempo por frame entre força bruta e Quadtree"></canvas>
+    </div>
   </aside>
 
   <!-- Scripts clássicos (não ES modules): assim a demo funciona abrindo o arquivo direto, sem servidor. -->

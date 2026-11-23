@@ -2,6 +2,8 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const panel = document.getElementById('panel');
+const togglePanelBtn = document.getElementById('togglePanelBtn');
 const countInput = document.getElementById('count');
 const countValue = document.getElementById('countValue');
 const radiusSelect = document.getElementById('radius');
@@ -62,6 +64,24 @@ radiusSelect.addEventListener('change', restart);
 distributionSelect.addEventListener('change', restart);
 fpsSelect.addEventListener('change', () => { stepAccumulator = 0; });
 resetBtn.addEventListener('click', restart);
+
+function togglePanel() {
+  const collapsed = panel.classList.toggle('collapsed');
+  togglePanelBtn.textContent = collapsed ? '+' : '−';
+  togglePanelBtn.setAttribute('aria-expanded', String(!collapsed));
+  togglePanelBtn.blur();
+}
+togglePanelBtn.addEventListener('click', togglePanel);
+
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+  if (e.key === 'h' || e.key === 'H') {
+    e.preventDefault();
+    togglePanel();
+  }
+});
 
 // O slider mostra o valor enquanto arrasta e só recomeça ao soltar.
 countInput.addEventListener('input', () => {
