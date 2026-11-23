@@ -264,10 +264,119 @@
       outline: 2px solid #7dd3fc;
       outline-offset: 2px;
     }
+
+    .mode-active {
+      border-color: rgba(56, 189, 248, 0.72);
+      background: rgba(56, 189, 248, 0.22);
+      color: #e0f2fe;
+    }
+
+    #stageBanner {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      pointer-events: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(13, 17, 25, 0.86);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #e0f2fe;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    #stageBanner[hidden] {
+      display: none;
+    }
+
+    #stageOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(6, 9, 14, 0.68);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    #stageOverlay[hidden] {
+      display: none;
+    }
+
+    .stage-card {
+      width: 360px;
+      max-width: 100%;
+      padding: 20px 22px;
+      border-radius: var(--radius);
+      background: rgba(13, 17, 25, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.65);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stage-card h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.01em;
+    }
+
+    .stage-card.victory h2 {
+      color: var(--green);
+    }
+
+    .stage-card.defeat h2 {
+      color: var(--red);
+    }
+
+    .stage-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .stage-stats {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(0, 0, 0, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
   <canvas id="arena" aria-label="Arena de combate 2D RTS com Quadtree"></canvas>
+
+  <div id="stageBanner" role="status" aria-live="polite">Fase 1 — Preparando defesa...</div>
+
+  <div id="stageOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+    <div id="stageCard" class="stage-card">
+      <h2 id="overlayTitle">Resultado da Fase</h2>
+      <p id="overlayDesc"></p>
+      <pre id="overlayStats" class="stage-stats"></pre>
+      <div class="row-2">
+        <button id="overlayRetryBtn" class="btn-on" type="button">Jogar Novamente</button>
+        <button id="overlaySandboxBtn" type="button">Ir para Sandbox</button>
+      </div>
+    </div>
+  </div>
 
   <aside id="hud" role="region" aria-label="Controles e benchmark RTS">
     <div class="hud-header">
@@ -280,6 +389,11 @@
     </div>
 
     <div id="hudBody">
+      <div class="row-2" role="group" aria-label="Modo de jogo">
+        <button id="modeStageBtn" class="mode-active" type="button">Fase 1 (5 Ondas)</button>
+        <button id="modeSandboxBtn" type="button">Sandbox (150v150)</button>
+      </div>
+
       <button id="quadtreeToggle" class="btn-on" type="button">Quadtree: ON (Espacial)</button>
 
       <label class="check-row" for="gridToggle">
@@ -485,24 +599,39 @@
     let nextUnitId = 1;
 
     class Unit {
-      constructor(x, y, team) {
+      constructor(x, y, team, variant = 'normal') {
         this.id = nextUnitId++;
         this.x = x;
         this.y = y;
         this.vx = 0;
         this.vy = 0;
-        this.speed = 1.35 + Math.random() * 0.25;
-        this.radius = 4.5;
-        this.hp = 100;
-        this.maxHp = 100;
-        this.visionRange = 135;
-        this.attackRange = 76;
-        this.fireCooldown = 0.45; // segundos entre disparos
+        this.variant = variant; // 'normal' | 'heavy'
+        const isHeavy = variant === 'heavy';
+        this.speed = isHeavy ? (1.02 + Math.random() * 0.14) : (1.35 + Math.random() * 0.25);
+        this.radius = isHeavy ? 8 : 4.5;
+        this.hp = isHeavy ? 420 : 100;
+        this.maxHp = this.hp;
+        this.visionRange = isHeavy ? 160 : 135;
+        this.attackRange = isHeavy ? 86 : 76;
+        this.fireCooldown = isHeavy ? 0.65 : 0.45; // segundos entre disparos
         this.cooldown = Math.random() * 0.25;
-        this.damage = 14;
+        this.damage = isHeavy ? 32 : 14;
         this.team = team; // 'blue' | 'red'
         this.selected = false;
         this.targetPos = null; // { x, y } comandado via botão direito
+      }
+    }
+
+    /**
+     * Obstáculo tático fixo do terreno da Fase 1 (afunila o avanço em 3 rotas).
+     */
+    class Obstacle {
+      constructor(xRatio, yRatio, radius = 34) {
+        this.xRatio = xRatio;
+        this.yRatio = yRatio;
+        this.radius = radius;
+        this.x = 0;
+        this.y = 0;
       }
     }
 
@@ -576,6 +705,8 @@
 
     const hudEl = document.getElementById('hud');
     const toggleHudBtn = document.getElementById('toggleHudBtn');
+    const modeStageBtn = document.getElementById('modeStageBtn');
+    const modeSandboxBtn = document.getElementById('modeSandboxBtn');
     const quadtreeToggle = document.getElementById('quadtreeToggle');
     const gridToggle = document.getElementById('gridToggle');
     const rangesToggle = document.getElementById('rangesToggle');
@@ -588,10 +719,32 @@
     const waveBtn = document.getElementById('waveBtn');
     const resetBtn = document.getElementById('resetBtn');
     const metricsEl = document.getElementById('metrics');
+    const stageBanner = document.getElementById('stageBanner');
+    const stageOverlay = document.getElementById('stageOverlay');
+    const stageCard = document.getElementById('stageCard');
+    const overlayTitle = document.getElementById('overlayTitle');
+    const overlayDesc = document.getElementById('overlayDesc');
+    const overlayStats = document.getElementById('overlayStats');
+    const overlayRetryBtn = document.getElementById('overlayRetryBtn');
+    const overlaySandboxBtn = document.getElementById('overlaySandboxBtn');
+
+    const STAGE_WAVES = [
+      { count: 30, heavy: 0, label: 'Batedores' },
+      { count: 45, heavy: 0, label: 'Avanço' },
+      { count: 65, heavy: 0, label: 'Pressão' },
+      { count: 85, heavy: 0, label: 'Cerco' },
+      { count: 100, heavy: 3, label: 'Assalto Final' }
+    ];
 
     const state = {
       width: window.innerWidth,
       height: window.innerHeight,
+      gameMode: 'stage1', // 'stage1' | 'sandbox'
+      stageStatus: 'playing', // 'playing' | 'victory' | 'defeat'
+      stageWave: 0,
+      nextWaveIn: 1.5,
+      stageElapsed: 0,
+      enemiesDefeated: 0,
       useQuadtree: true,
       showGrid: true,
       showTowerRanges: true,
@@ -604,6 +757,7 @@
       spawnMode: 'off', // 'off' | 'blue' | 'red'
       units: [],
       towers: [],
+      obstacles: [],
       lasers: [],
       sparks: [],
       markers: [],
@@ -615,6 +769,21 @@
       mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
       dragBox: null // { startX, startY, currX, currY }
     };
+
+    function createStageObstacles() {
+      return [
+        new Obstacle(0.56, 0.36, 34),
+        new Obstacle(0.56, 0.64, 34)
+      ];
+    }
+
+    function layoutObstacles() {
+      for (let i = 0; i < state.obstacles.length; i++) {
+        const ob = state.obstacles[i];
+        ob.x = state.width * ob.xRatio;
+        ob.y = state.height * ob.yRatio;
+      }
+    }
 
     function computeTowerPos(laneRatio, xOffset) {
       const baseLineX = state.width >= 760
@@ -654,18 +823,19 @@
       canvas.height = state.height;
       state.quadtree = new Quadtree(new Boundary(0, 0, state.width, state.height), state.capacity);
       layoutTowers();
+      layoutObstacles();
     }
 
-    function spawnSquad(team, count, cx, cy, spreadX = 90, spreadY = 90) {
+    function spawnSquad(team, count, cx, cy, spreadX = 90, spreadY = 90, variant = 'normal') {
       const margin = 12;
       for (let i = 0; i < count; i++) {
         const x = Math.max(margin, Math.min(state.width - margin, cx + (Math.random() - 0.5) * spreadX));
         const y = Math.max(margin, Math.min(state.height - margin, cy + (Math.random() - 0.5) * spreadY));
-        state.units.push(new Unit(x, y, team));
+        state.units.push(new Unit(x, y, team, variant));
       }
     }
 
-    function spawnEnemyWave(count = 40) {
+    function spawnEnemyWave(count = 40, heavyCount = 0) {
       state.waveNumber++;
       const lanes = [0.22, 0.50, 0.78];
       const baseCount = Math.floor(count / lanes.length);
@@ -675,8 +845,69 @@
       for (let i = 0; i < lanes.length; i++) {
         const laneCount = baseCount + (remainder > 0 ? 1 : 0);
         if (remainder > 0) remainder--;
-        spawnSquad('red', laneCount, spawnX, state.height * lanes[i], 44, 75);
+        spawnSquad('red', laneCount, spawnX, state.height * lanes[i], 44, 75, 'normal');
       }
+
+      for (let i = 0; i < heavyCount; i++) {
+        const laneY = state.height * lanes[i % lanes.length];
+        spawnSquad('red', 1, spawnX - 10, laneY, 20, 26, 'heavy');
+      }
+    }
+
+    function startStageWave(waveNumber) {
+      if (waveNumber < 1 || waveNumber > STAGE_WAVES.length) return;
+      const cfg = STAGE_WAVES[waveNumber - 1];
+      state.stageWave = waveNumber;
+      state.nextWaveIn = 0;
+      spawnEnemyWave(cfg.count, cfg.heavy);
+    }
+
+    function grantWaveReward() {
+      for (let i = 0; i < state.towers.length; i++) {
+        const t = state.towers[i];
+        if (t.hp > 0) t.hp = Math.min(t.maxHp, t.hp + 120);
+      }
+      const defendX = Math.min(state.width - 120, Math.max(360, state.width * 0.34));
+      spawnSquad('blue', 15, defendX, state.height * 0.5, 45, state.height * 0.55);
+    }
+
+    function syncModeUi() {
+      const isStage = state.gameMode === 'stage1';
+      modeStageBtn.className = isStage ? 'mode-active' : '';
+      modeSandboxBtn.className = isStage ? '' : 'mode-active';
+      autoWaveToggle.parentElement.style.display = isStage ? 'none' : 'flex';
+      waveBtn.textContent = isStage
+        ? 'Chamar Próxima Onda [W]'
+        : 'Enviar Onda Inimiga (+40) [W]';
+      resetBtn.textContent = isStage
+        ? 'Reiniciar Fase 1 (5 Ondas)'
+        : 'Resetar Batalha (3 Torres + 300)';
+      stageBanner.hidden = !isStage;
+      if (!isStage) stageOverlay.hidden = true;
+    }
+
+    function finishStage(result) {
+      if (state.stageStatus !== 'playing') return;
+      state.stageStatus = result;
+      const towersAlive = state.towers.filter((t) => t.hp > 0).length;
+      const isVictory = result === 'victory';
+
+      stageCard.className = `stage-card ${isVictory ? 'victory' : 'defeat'}`;
+      overlayTitle.textContent = isVictory ? 'Vitória na Fase 1' : 'Base Invadida';
+      overlayDesc.textContent = isVictory
+        ? 'Todas as 5 ondas foram contidas mantendo o perímetro defensivo ativo.'
+        : 'Todas as 3 torres defensivas foram destruídas antes do fim das ondas.';
+      overlayStats.textContent =
+        `Ondas concluídas: ${isVictory ? STAGE_WAVES.length : Math.max(0, state.stageWave - 1)} / ${STAGE_WAVES.length}\n` +
+        `Tempo de defesa:  ${state.stageElapsed.toFixed(1)} s\n` +
+        `Inimigos abatidos:${state.enemiesDefeated}\n` +
+        `Torres vivas:     ${towersAlive} / ${state.towers.length}`;
+      stageOverlay.hidden = false;
+    }
+
+    function setGameMode(mode) {
+      state.gameMode = mode === 'sandbox' ? 'sandbox' : 'stage1';
+      resetBattle();
     }
 
     function resetBattle() {
@@ -688,24 +919,40 @@
       state.waveNumber = 0;
       state.waveTimer = 0;
       state.towerShots = 0;
+      state.stageStatus = 'playing';
+      state.stageWave = 0;
+      state.nextWaveIn = 1.5;
+      state.stageElapsed = 0;
+      state.enemiesDefeated = 0;
       nextUnitId = 1;
+      stageOverlay.hidden = true;
 
-      const marginY = state.height * 0.12;
-      const bandH = state.height - marginY * 2;
-      const blueXMin = Math.max(30, state.width * 0.08);
-      const blueXMax = Math.max(blueXMin + 60, state.width * 0.28);
-      const redXMin = Math.min(state.width - 90, state.width * 0.72);
-      const redXMax = Math.max(redXMin + 60, state.width - Math.max(30, state.width * 0.08));
+      if (state.gameMode === 'stage1') {
+        state.obstacles = createStageObstacles();
+        layoutObstacles();
+        const defendX = Math.min(state.width - 140, Math.max(365, state.width * 0.34));
+        spawnSquad('blue', 80, defendX, state.height * 0.5, 70, state.height * 0.68);
+      } else {
+        state.obstacles = [];
+        const marginY = state.height * 0.12;
+        const bandH = state.height - marginY * 2;
+        const blueXMin = Math.max(30, state.width * 0.08);
+        const blueXMax = Math.max(blueXMin + 60, state.width * 0.28);
+        const redXMin = Math.min(state.width - 90, state.width * 0.72);
+        const redXMax = Math.max(redXMin + 60, state.width - Math.max(30, state.width * 0.08));
 
-      for (let i = 0; i < 150; i++) {
-        const bx = blueXMin + Math.random() * (blueXMax - blueXMin);
-        const by = marginY + Math.random() * bandH;
-        state.units.push(new Unit(bx, by, 'blue'));
+        for (let i = 0; i < 150; i++) {
+          const bx = blueXMin + Math.random() * (blueXMax - blueXMin);
+          const by = marginY + Math.random() * bandH;
+          state.units.push(new Unit(bx, by, 'blue'));
 
-        const rx = redXMin + Math.random() * (redXMax - redXMin);
-        const ry = marginY + Math.random() * bandH;
-        state.units.push(new Unit(rx, ry, 'red'));
+          const rx = redXMin + Math.random() * (redXMax - redXMin);
+          const ry = marginY + Math.random() * bandH;
+          state.units.push(new Unit(rx, ry, 'red'));
+        }
       }
+
+      syncModeUi();
     }
 
     // =========================================================================
@@ -715,7 +962,7 @@
       const t0 = performance.now();
       state.distanceChecks = 0;
 
-      if (state.autoWaves) {
+      if (state.gameMode === 'sandbox' && state.autoWaves) {
         state.waveTimer += dt;
         if (state.waveTimer >= state.waveInterval) {
           state.waveTimer -= state.waveInterval;
@@ -855,6 +1102,7 @@
                     }
                   }
                 } else {
+                  if (nearestEnemy.team === 'red') state.enemiesDefeated++;
                   const sparkColor = nearestEnemy.team === 'blue' ? '#7dd3fc' : '#fda4af';
                   for (let k = 0; k < 5; k++) state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, sparkColor));
                 }
@@ -885,6 +1133,13 @@
             const dist = Math.hypot(targetTower.x - u.x, targetTower.y - u.y) || 1;
             moveX = ((targetTower.x - u.x) / dist) * (u.speed * 0.85);
             moveY = ((targetTower.y - u.y) / dist) * (u.speed * 0.85);
+          } else if (state.gameMode === 'stage1' && u.team === 'blue') {
+            // Na Fase 1, tropas Azuis mantêm linha defensiva à frente das torres
+            const lineX = Math.min(state.width - 140, Math.max(380, state.width * 0.42));
+            if (Math.abs(u.x - lineX) > 36) {
+              const dirX = lineX > u.x ? 1 : -1;
+              moveX = dirX * (u.speed * 0.65);
+            }
           } else {
             const dirX = u.team === 'blue' ? 1 : -1;
             const driftY = (state.height * 0.5 - u.y) * 0.0025;
@@ -900,6 +1155,20 @@
         u.vy = (moveY + sepY * 1.4) * scale;
         u.x += u.vx;
         u.y += u.vy;
+
+        // Colisão suave com obstáculos fixos do terreno (Fase 1)
+        for (let o = 0; o < state.obstacles.length; o++) {
+          const ob = state.obstacles[o];
+          const dx = u.x - ob.x;
+          const dy = u.y - ob.y;
+          const minDist = u.radius + ob.radius + 2;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < minDist * minDist) {
+            const dist = Math.sqrt(dSq) || 0.01;
+            u.x = ob.x + (dx / dist) * minDist;
+            u.y = ob.y + (dy / dist) * minDist;
+          }
+        }
 
         // Mantém unidades dentro dos limites do Canvas
         const pad = u.radius + 4;
@@ -951,6 +1220,7 @@
 
             if (nearestEnemy.hp <= 0) {
               t.kills++;
+              state.enemiesDefeated++;
               for (let k = 0; k < 6; k++) state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, '#fda4af'));
             }
           }
@@ -959,6 +1229,38 @@
 
       // Remove unidades abatidas e atualiza efeitos
       state.units = state.units.filter((u) => u.hp > 0);
+
+      // Progressão da Fase 1 (5 Ondas, Vitória e Derrota)
+      if (state.gameMode === 'stage1' && state.stageStatus === 'playing') {
+        state.stageElapsed += dt;
+
+        let redAlive = 0;
+        for (let i = 0; i < state.units.length; i++) {
+          if (state.units[i].team === 'red') redAlive++;
+        }
+
+        let towersNowAlive = 0;
+        for (let i = 0; i < state.towers.length; i++) {
+          if (state.towers[i].hp > 0) towersNowAlive++;
+        }
+
+        if (towersNowAlive === 0) {
+          finishStage('defeat');
+        } else if (state.stageWave === 0) {
+          state.nextWaveIn -= dt;
+          if (state.nextWaveIn <= 0) startStageWave(1);
+        } else if (redAlive === 0) {
+          if (state.stageWave >= STAGE_WAVES.length) {
+            finishStage('victory');
+          } else if (state.nextWaveIn <= 0) {
+            grantWaveReward();
+            state.nextWaveIn = 4.0;
+          } else {
+            state.nextWaveIn -= dt;
+            if (state.nextWaveIn <= 0) startStageWave(state.stageWave + 1);
+          }
+        }
+      }
 
       for (let i = state.lasers.length - 1; i >= 0; i--) {
         state.lasers[i].life -= dt;
@@ -1100,6 +1402,42 @@
         if (state.towers[i].hp <= 0) renderTower(state.towers[i]);
       }
 
+      // 1c) Obstáculos táticos e pontos de invasão da Fase 1
+      if (state.gameMode === 'stage1') {
+        const lanes = [0.22, 0.50, 0.78];
+        const portalX = Math.max(40, state.width - 26);
+        ctx.save();
+        for (let i = 0; i < lanes.length; i++) {
+          const py = state.height * lanes[i];
+          ctx.strokeStyle = 'rgba(251, 113, 133, 0.42)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(portalX, py, 14, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(251, 113, 133, 0.12)';
+          ctx.fill();
+        }
+        ctx.restore();
+
+        for (let i = 0; i < state.obstacles.length; i++) {
+          const ob = state.obstacles[i];
+          ctx.save();
+          drawOctagon(ob.x, ob.y, ob.radius);
+          ctx.fillStyle = '#151b26';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.42)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          drawOctagon(ob.x, ob.y, ob.radius * 0.62);
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
       // 2) Marcadores de movimento (botão direito)
       for (let i = 0; i < state.markers.length; i++) {
         const m = state.markers[i];
@@ -1155,19 +1493,27 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle = u.team === 'blue' ? '#38bdf8' : '#fb7185';
+        ctx.fillStyle = u.variant === 'heavy'
+          ? '#f97316'
+          : (u.team === 'blue' ? '#38bdf8' : '#fb7185');
         ctx.beginPath();
         ctx.arc(u.x, u.y, u.radius, 0, Math.PI * 2);
         ctx.fill();
 
+        if (u.variant === 'heavy') {
+          ctx.strokeStyle = '#fed7aa';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+
         if (u.hp < u.maxHp) {
-          const bw = 10;
+          const bw = u.variant === 'heavy' ? 18 : 10;
           const bh = 2;
           const bx = u.x - bw / 2;
           const by = u.y - u.radius - 5;
           ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
           ctx.fillRect(bx, by, bw, bh);
-          ctx.fillStyle = u.hp > 40 ? '#4ade80' : '#fbbf24';
+          ctx.fillStyle = u.hp > u.maxHp * 0.4 ? '#4ade80' : '#fbbf24';
           ctx.fillRect(bx, by, bw * Math.max(0, u.hp / u.maxHp), bh);
         }
       }
@@ -1337,7 +1683,22 @@
       spawnSquad('red', 50, state.mouse.x || state.width * 0.7, state.mouse.y || state.height * 0.5);
     });
 
-    waveBtn.addEventListener('click', () => spawnEnemyWave(40));
+    function triggerWaveAction() {
+      if (state.gameMode === 'stage1') {
+        if (state.stageStatus === 'playing' && state.stageWave < STAGE_WAVES.length) {
+          startStageWave(state.stageWave + 1);
+        }
+      } else {
+        spawnEnemyWave(40);
+      }
+    }
+
+    modeStageBtn.addEventListener('click', () => setGameMode('stage1'));
+    modeSandboxBtn.addEventListener('click', () => setGameMode('sandbox'));
+    overlayRetryBtn.addEventListener('click', () => setGameMode('stage1'));
+    overlaySandboxBtn.addEventListener('click', () => setGameMode('sandbox'));
+
+    waveBtn.addEventListener('click', triggerWaveAction);
 
     resetBtn.addEventListener('click', resetBattle);
 
@@ -1364,7 +1725,7 @@
       } else if (e.key === 'r' || e.key === 'R') {
         spawnSquad('red', 50, state.mouse.x, state.mouse.y, 70, 70);
       } else if (e.key === 'w' || e.key === 'W') {
-        spawnEnemyWave(40);
+        triggerWaveAction();
       }
     });
 
@@ -1395,10 +1756,29 @@
         if (state.towers[i].hp > 0) towersAlive++;
       }
 
+      const waveLabel = state.gameMode === 'stage1'
+        ? `${state.stageWave}/${STAGE_WAVES.length}`
+        : String(state.waveNumber);
+
+      if (state.gameMode === 'stage1') {
+        if (state.stageStatus === 'victory') {
+          stageBanner.textContent = `Fase 1 concluída — Vitória (${state.enemiesDefeated} abatidos)`;
+        } else if (state.stageStatus === 'defeat') {
+          stageBanner.textContent = 'Fase 1 — Derrota (todas as torres destruídas)';
+        } else if (state.stageWave === 0) {
+          stageBanner.textContent = `Fase 1: Defesa do Perímetro — Onda 1/5 em ${Math.max(0, state.nextWaveIn).toFixed(1)}s`;
+        } else if (redCount === 0 && state.nextWaveIn > 0 && state.stageWave < STAGE_WAVES.length) {
+          stageBanner.textContent = `Onda ${state.stageWave}/5 contida (+15 reforços) — Onda ${state.stageWave + 1}/5 em ${state.nextWaveIn.toFixed(1)}s`;
+        } else {
+          const cfg = STAGE_WAVES[state.stageWave - 1];
+          stageBanner.textContent = `Fase 1 — Onda ${state.stageWave}/${STAGE_WAVES.length}: ${cfg ? cfg.label : ''} (${redCount} inimigos)`;
+        }
+      }
+
       metricsEl.textContent =
         `FPS:              ${state.fps.toFixed(0)}\n` +
         `Unidades Vivas:   ${state.units.length} (${blueCount} Azuis | ${redCount} Verm.)\n` +
-        `Torres Defens.:   ${towersAlive} / ${state.towers.length} (Onda ${state.waveNumber})\n` +
+        `Torres Defens.:   ${towersAlive} / ${state.towers.length} (Onda ${waveLabel})\n` +
         `Selecionadas:     ${selectedCount}\n` +
         `Testes Distância: ${state.distanceChecks.toLocaleString('pt-BR')} / frame\n` +
         `Tempo Lógica:     ${state.logicMs.toFixed(2)} ms\n` +
@@ -1433,6 +1813,13 @@
           if (t.hp > 0) towersAlive++;
         }
         return {
+          gameMode: state.gameMode,
+          stageStatus: state.stageStatus,
+          stageWave: state.stageWave,
+          stageTotalWaves: STAGE_WAVES.length,
+          nextWaveIn: state.nextWaveIn,
+          enemiesDefeated: state.enemiesDefeated,
+          obstaclesCount: state.obstacles.length,
           total: state.units.length,
           blue,
           red,
