@@ -169,6 +169,17 @@
       color: #fecdd3;
     }
 
+    .btn-wave {
+      border-color: rgba(251, 113, 133, 0.42);
+      background: rgba(251, 113, 133, 0.12);
+      color: #fecdd3;
+    }
+
+    .btn-wave:hover {
+      background: rgba(251, 113, 133, 0.22);
+      border-color: rgba(251, 113, 133, 0.65);
+    }
+
     .row-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -276,6 +287,16 @@
         <span>Mostrar grade da Quadtree</span>
       </label>
 
+      <label class="check-row" for="rangesToggle">
+        <input id="rangesToggle" type="checkbox" checked>
+        <span>Mostrar alcance das torres</span>
+      </label>
+
+      <label class="check-row" for="autoWaveToggle">
+        <input id="autoWaveToggle" type="checkbox">
+        <span>Ondas automáticas (10 s)</span>
+      </label>
+
       <label class="field" for="capacitySlider">
         <span class="field-top">
           <span>Capacidade por nó</span>
@@ -291,7 +312,9 @@
         <button id="spawnRedBtn" type="button" title="Atalho: tecla R no cursor">+50 Vermelho (R)</button>
       </div>
 
-      <button id="resetBtn" type="button">Resetar Batalha (150 vs 150)</button>
+      <button id="waveBtn" class="btn-wave" type="button" title="Atalho: tecla W">Enviar Onda Inimiga (+40) [W]</button>
+
+      <button id="resetBtn" type="button">Resetar Batalha (3 Torres + 300)</button>
 
       <pre id="metrics" aria-label="Métricas em tempo real"></pre>
 
@@ -299,6 +322,7 @@
         <strong>Arrastar Esq.:</strong> Selecionar Azuis<br>
         <strong>Botão Dir.:</strong> Mover selecionadas<br>
         <strong>Teclas B / R:</strong> +50 unidades no cursor<br>
+        <strong>Tecla W:</strong> Enviar onda inimiga (+40 Verm.)<br>
         <strong>Tecla H:</strong> Recolher/abrir HUD
       </div>
     </div>
@@ -482,15 +506,42 @@
       }
     }
 
+    /**
+     * Torre defensiva fixa (bunker) que protege a base usando consultas espaciais.
+     */
+    class Tower {
+      constructor(id, x, y, laneRatio, xOffset) {
+        this.id = id;
+        this.isTower = true;
+        this.team = 'blue';
+        this.x = x;
+        this.y = y;
+        this.laneRatio = laneRatio;
+        this.xOffset = xOffset;
+        this.radius = 15;
+        this.hp = 900;
+        this.maxHp = 900;
+        this.attackRange = 195;
+        this.fireCooldown = 0.28;
+        this.cooldown = 0;
+        this.damage = 26;
+        this.angle = 0;
+        this.kills = 0;
+        this.shotsFired = 0;
+        this.destroyed = false;
+      }
+    }
+
     class Laser {
-      constructor(x1, y1, x2, y2, team) {
+      constructor(x1, y1, x2, y2, team, isTowerShot = false) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.team = team;
-        this.life = 0.14;
-        this.maxLife = 0.14;
+        this.isTowerShot = isTowerShot;
+        this.life = isTowerShot ? 0.18 : 0.14;
+        this.maxLife = this.life;
       }
     }
 
@@ -527,11 +578,14 @@
     const toggleHudBtn = document.getElementById('toggleHudBtn');
     const quadtreeToggle = document.getElementById('quadtreeToggle');
     const gridToggle = document.getElementById('gridToggle');
+    const rangesToggle = document.getElementById('rangesToggle');
+    const autoWaveToggle = document.getElementById('autoWaveToggle');
     const capacitySlider = document.getElementById('capacitySlider');
     const capacityVal = document.getElementById('capacityVal');
     const spawnModeBtn = document.getElementById('spawnModeBtn');
     const spawnBlueBtn = document.getElementById('spawnBlueBtn');
     const spawnRedBtn = document.getElementById('spawnRedBtn');
+    const waveBtn = document.getElementById('waveBtn');
     const resetBtn = document.getElementById('resetBtn');
     const metricsEl = document.getElementById('metrics');
 
@@ -540,9 +594,16 @@
       height: window.innerHeight,
       useQuadtree: true,
       showGrid: true,
+      showTowerRanges: true,
+      autoWaves: false,
+      waveTimer: 0,
+      waveInterval: 10,
+      waveNumber: 0,
+      towerShots: 0,
       capacity: 4,
       spawnMode: 'off', // 'off' | 'blue' | 'red'
       units: [],
+      towers: [],
       lasers: [],
       sparks: [],
       markers: [],
@@ -555,12 +616,44 @@
       dragBox: null // { startX, startY, currX, currY }
     };
 
+    function computeTowerPos(laneRatio, xOffset) {
+      const baseLineX = state.width >= 760
+        ? Math.max(345, state.width * 0.31)
+        : Math.max(96, state.width * 0.26);
+      return {
+        x: Math.max(40, Math.min(state.width - 40, baseLineX + xOffset)),
+        y: Math.max(48, Math.min(state.height - 48, state.height * laneRatio))
+      };
+    }
+
+    function layoutTowers() {
+      for (let i = 0; i < state.towers.length; i++) {
+        const t = state.towers[i];
+        const pos = computeTowerPos(t.laneRatio, t.xOffset);
+        t.x = pos.x;
+        t.y = pos.y;
+      }
+    }
+
+    function createDefenseTowers() {
+      const specs = [
+        { id: 'T1', laneRatio: 0.22, xOffset: -24 },
+        { id: 'T2', laneRatio: 0.50, xOffset: 18 },
+        { id: 'T3', laneRatio: 0.78, xOffset: -24 }
+      ];
+      return specs.map((spec) => {
+        const pos = computeTowerPos(spec.laneRatio, spec.xOffset);
+        return new Tower(spec.id, pos.x, pos.y, spec.laneRatio, spec.xOffset);
+      });
+    }
+
     function resizeArena() {
       state.width = window.innerWidth;
       state.height = window.innerHeight;
       canvas.width = state.width;
       canvas.height = state.height;
       state.quadtree = new Quadtree(new Boundary(0, 0, state.width, state.height), state.capacity);
+      layoutTowers();
     }
 
     function spawnSquad(team, count, cx, cy, spreadX = 90, spreadY = 90) {
@@ -572,11 +665,29 @@
       }
     }
 
+    function spawnEnemyWave(count = 40) {
+      state.waveNumber++;
+      const lanes = [0.22, 0.50, 0.78];
+      const baseCount = Math.floor(count / lanes.length);
+      let remainder = count % lanes.length;
+      const spawnX = Math.max(40, state.width - 36);
+
+      for (let i = 0; i < lanes.length; i++) {
+        const laneCount = baseCount + (remainder > 0 ? 1 : 0);
+        if (remainder > 0) remainder--;
+        spawnSquad('red', laneCount, spawnX, state.height * lanes[i], 44, 75);
+      }
+    }
+
     function resetBattle() {
       state.units = [];
+      state.towers = createDefenseTowers();
       state.lasers = [];
       state.sparks = [];
       state.markers = [];
+      state.waveNumber = 0;
+      state.waveTimer = 0;
+      state.towerShots = 0;
       nextUnitId = 1;
 
       const marginY = state.height * 0.12;
@@ -604,6 +715,14 @@
       const t0 = performance.now();
       state.distanceChecks = 0;
 
+      if (state.autoWaves) {
+        state.waveTimer += dt;
+        if (state.waveTimer >= state.waveInterval) {
+          state.waveTimer -= state.waveInterval;
+          spawnEnemyWave(40);
+        }
+      }
+
       // Reconstroi a Quadtree do zero com a capacidade configurada no HUD
       if (!state.quadtree) {
         state.quadtree = new Quadtree(new Boundary(0, 0, state.width, state.height), state.capacity);
@@ -613,13 +732,23 @@
         state.quadtree.boundary = new Boundary(0, 0, state.width, state.height);
       }
 
+      const aliveTowers = [];
+      for (let i = 0; i < state.towers.length; i++) {
+        if (state.towers[i].hp > 0) aliveTowers.push(state.towers[i]);
+      }
+
+      let bruteEntities = null;
       if (state.useQuadtree) {
         for (let i = 0; i < state.units.length; i++) {
-          state.quadtree.insert(state.units[i]);
+          if (state.units[i].hp > 0) state.quadtree.insert(state.units[i]);
+        }
+        for (let i = 0; i < aliveTowers.length; i++) {
+          state.quadtree.insert(aliveTowers[i]);
         }
         state.nodeCount = state.quadtree.countNodes();
       } else {
         state.nodeCount = 0;
+        bruteEntities = state.units.concat(aliveTowers);
       }
 
       const sepRadiusFactor = 3.2;
@@ -635,28 +764,28 @@
         let visionCandidates;
 
         if (state.useQuadtree) {
-          const sepR = u.radius * sepRadiusFactor;
+          const sepR = u.radius * sepRadiusFactor + 16;
           nearbyAll = state.quadtree.query(new Boundary(u.x - sepR, u.y - sepR, sepR * 2, sepR * 2));
           visionCandidates = state.quadtree.query(
             new Boundary(u.x - u.visionRange, u.y - u.visionRange, u.visionRange * 2, u.visionRange * 2)
           );
         } else {
-          // Força Bruta O(N²): todas as unidades são varridas para cada unidade
-          nearbyAll = state.units;
-          visionCandidates = state.units;
+          // Força Bruta O(N²): todas as entidades vivas são varridas para cada unidade
+          nearbyAll = bruteEntities;
+          visionCandidates = bruteEntities;
         }
 
-        // 2) Separação orgânica (Soft-Collision)
+        // 2) Separação orgânica (Soft-Collision) e contorno de torres fixas
         let sepX = 0;
         let sepY = 0;
-        const minSep = u.radius * 2.35;
-        const minSepSq = minSep * minSep;
 
         for (let j = 0; j < nearbyAll.length; j++) {
           const other = nearbyAll[j];
           if (other === u || other.hp <= 0) continue;
 
           state.distanceChecks++;
+          const minSep = other.isTower ? (u.radius + other.radius + 5) : (u.radius * 2.35);
+          const minSepSq = minSep * minSep;
           const dx = u.x - other.x;
           const dy = u.y - other.y;
           const dSq = dx * dx + dy * dy;
@@ -664,8 +793,9 @@
           if (dSq > 0.0001 && dSq < minSepSq) {
             const dist = Math.sqrt(dSq);
             const push = (minSep - dist) / minSep;
-            sepX += (dx / dist) * push * 1.15;
-            sepY += (dy / dist) * push * 1.15;
+            const weight = other.isTower ? 1.8 : 1.15;
+            sepX += (dx / dist) * push * weight;
+            sepY += (dy / dist) * push * weight;
           } else if (dSq <= 0.0001) {
             // Desempata caso duas unidades nasçam no mesmo pixel
             sepX += (Math.random() - 0.5) * 0.6;
@@ -708,15 +838,26 @@
           }
         } else if (nearestEnemy) {
           const dist = Math.sqrt(nearestDistSq);
-          if (dist <= u.attackRange) {
+          const effectiveRange = nearestEnemy.isTower ? (u.attackRange + nearestEnemy.radius) : u.attackRange;
+          if (dist <= effectiveRange) {
             // Em alcance de tiro: mantém posição e dispara
             if (u.cooldown <= 0) {
               u.cooldown = u.fireCooldown;
               nearestEnemy.hp -= u.damage;
               state.lasers.push(new Laser(u.x, u.y, nearestEnemy.x, nearestEnemy.y, u.team));
               if (nearestEnemy.hp <= 0) {
-                const sparkColor = nearestEnemy.team === 'blue' ? '#7dd3fc' : '#fda4af';
-                for (let k = 0; k < 5; k++) state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, sparkColor));
+                if (nearestEnemy.isTower) {
+                  if (!nearestEnemy.destroyed) {
+                    nearestEnemy.destroyed = true;
+                    const burstColors = ['#38bdf8', '#fbbf24', '#f8fafc'];
+                    for (let k = 0; k < 18; k++) {
+                      state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, burstColors[k % burstColors.length]));
+                    }
+                  }
+                } else {
+                  const sparkColor = nearestEnemy.team === 'blue' ? '#7dd3fc' : '#fda4af';
+                  for (let k = 0; k < 5; k++) state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, sparkColor));
+                }
               }
             }
           } else {
@@ -724,12 +865,33 @@
             moveY = ((nearestEnemy.y - u.y) / dist) * u.speed;
           }
         } else {
-          // Sem inimigos no raio de visão: avança em direção ao campo adversário
-          const dirX = u.team === 'blue' ? 1 : -1;
-          const driftY = (state.height * 0.5 - u.y) * 0.0025;
-          const mag = Math.hypot(dirX, driftY) || 1;
-          moveX = (dirX / mag) * (u.speed * 0.85);
-          moveY = (driftY / mag) * (u.speed * 0.85);
+          // Sem inimigos no raio de visão: Vermelhos priorizam torres vivas; caso contrário avançam no campo
+          let targetTower = null;
+          if (u.team === 'red' && aliveTowers.length > 0) {
+            let bestDistSq = Infinity;
+            for (let tIdx = 0; tIdx < aliveTowers.length; tIdx++) {
+              const tw = aliveTowers[tIdx];
+              const dx = tw.x - u.x;
+              const dy = tw.y - u.y;
+              const dSq = dx * dx + dy * dy;
+              if (dSq < bestDistSq) {
+                bestDistSq = dSq;
+                targetTower = tw;
+              }
+            }
+          }
+
+          if (targetTower) {
+            const dist = Math.hypot(targetTower.x - u.x, targetTower.y - u.y) || 1;
+            moveX = ((targetTower.x - u.x) / dist) * (u.speed * 0.85);
+            moveY = ((targetTower.y - u.y) / dist) * (u.speed * 0.85);
+          } else {
+            const dirX = u.team === 'blue' ? 1 : -1;
+            const driftY = (state.height * 0.5 - u.y) * 0.0025;
+            const mag = Math.hypot(dirX, driftY) || 1;
+            moveX = (dirX / mag) * (u.speed * 0.85);
+            moveY = (driftY / mag) * (u.speed * 0.85);
+          }
         }
 
         // Aplica movimento + força de separação orgânica
@@ -745,6 +907,54 @@
         if (u.x > state.width - pad) u.x = state.width - pad;
         if (u.y < pad) u.y = pad;
         if (u.y > state.height - pad) u.y = state.height - pad;
+      }
+
+      // 5) Torres Defensivas (Bunkers): consulta espacial na Quadtree para travar alvo e disparar
+      for (let i = 0; i < state.towers.length; i++) {
+        const t = state.towers[i];
+        if (t.hp <= 0) continue;
+
+        if (t.cooldown > 0) t.cooldown -= dt;
+
+        const candidates = state.useQuadtree
+          ? state.quadtree.query(new Boundary(t.x - t.attackRange, t.y - t.attackRange, t.attackRange * 2, t.attackRange * 2))
+          : state.units;
+
+        let nearestEnemy = null;
+        let nearestDistSq = t.attackRange * t.attackRange;
+
+        for (let j = 0; j < candidates.length; j++) {
+          const cand = candidates[j];
+          state.distanceChecks++;
+          if (cand.team === t.team || cand.isTower || cand.hp <= 0) continue;
+
+          const dx = cand.x - t.x;
+          const dy = cand.y - t.y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq <= nearestDistSq) {
+            nearestDistSq = dSq;
+            nearestEnemy = cand;
+          }
+        }
+
+        if (nearestEnemy) {
+          t.angle = Math.atan2(nearestEnemy.y - t.y, nearestEnemy.x - t.x);
+          if (t.cooldown <= 0) {
+            t.cooldown = t.fireCooldown;
+            t.shotsFired++;
+            state.towerShots++;
+            nearestEnemy.hp -= t.damage;
+
+            const mx = t.x + Math.cos(t.angle) * (t.radius + 3);
+            const my = t.y + Math.sin(t.angle) * (t.radius + 3);
+            state.lasers.push(new Laser(mx, my, nearestEnemy.x, nearestEnemy.y, 'blue', true));
+
+            if (nearestEnemy.hp <= 0) {
+              t.kills++;
+              for (let k = 0; k < 6; k++) state.sparks.push(new Spark(nearestEnemy.x, nearestEnemy.y, '#fda4af'));
+            }
+          }
+        }
       }
 
       // Remove unidades abatidas e atualiza efeitos
@@ -774,6 +984,88 @@
     // =========================================================================
     // 5. RENDERIZAÇÃO NO CANVAS 2D
     // =========================================================================
+    function drawOctagon(cx, cy, r) {
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI / 4) * i + Math.PI / 8;
+        const px = cx + Math.cos(angle) * r;
+        const py = cy + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+    }
+
+    function renderTower(t) {
+      if (t.hp <= 0) {
+        ctx.save();
+        drawOctagon(t.x, t.y, t.radius);
+        ctx.fillStyle = 'rgba(30, 41, 59, 0.65)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.font = '600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.65)';
+        ctx.fillText(`${t.id} OFF`, t.x, t.y + t.radius + 13);
+        ctx.restore();
+        return;
+      }
+
+      ctx.save();
+      drawOctagon(t.x, t.y, t.radius);
+      ctx.fillStyle = '#1e293b';
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Núcleo interno da torre
+      ctx.beginPath();
+      ctx.arc(t.x, t.y, 8.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.strokeStyle = '#7dd3fc';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      // Canhão rotativo apontado para o alvo
+      const tipX = t.x + Math.cos(t.angle) * (t.radius + 4);
+      const tipY = t.y + Math.sin(t.angle) * (t.radius + 4);
+      ctx.beginPath();
+      ctx.moveTo(t.x, t.y);
+      ctx.lineTo(tipX, tipY);
+      ctx.strokeStyle = '#bae6fd';
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(tipX, tipY, 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fill();
+
+      // Barra de HP fixa acima da torre
+      const ratio = Math.max(0, t.hp / t.maxHp);
+      const bw = 34;
+      const bh = 4;
+      const bx = t.x - bw / 2;
+      const by = t.y - t.radius - 10;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.78)';
+      ctx.fillRect(bx - 1, by - 1, bw + 2, bh + 2);
+      ctx.fillStyle = ratio > 0.55 ? '#4ade80' : ratio > 0.25 ? '#fbbf24' : '#fb7185';
+      ctx.fillRect(bx, by, bw * ratio, bh);
+
+      // Rótulo de identificação (T1, T2, T3)
+      ctx.font = '600 10.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#bae6fd';
+      ctx.fillText(t.id, t.x, t.y + t.radius + 14);
+      ctx.restore();
+    }
+
     function renderArena() {
       ctx.fillStyle = '#0b0e14';
       ctx.fillRect(0, 0, state.width, state.height);
@@ -785,6 +1077,27 @@
         ctx.lineWidth = 1;
         state.quadtree.draw(ctx);
         ctx.restore();
+      }
+
+      // 1b) Alcance das 3 torres defensivas (anel tracejado) e ruínas de torres destruídas
+      if (state.showTowerRanges) {
+        ctx.save();
+        ctx.setLineDash([5, 5]);
+        ctx.lineWidth = 1.2;
+        for (let i = 0; i < state.towers.length; i++) {
+          const t = state.towers[i];
+          if (t.hp <= 0) continue;
+          const activeGlow = t.cooldown > t.fireCooldown * 0.45 ? 0.26 : 0.14;
+          ctx.strokeStyle = `rgba(56, 189, 248, ${activeGlow})`;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, t.attackRange, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      for (let i = 0; i < state.towers.length; i++) {
+        if (state.towers[i].hp <= 0) renderTower(state.towers[i]);
       }
 
       // 2) Marcadores de movimento (botão direito)
@@ -800,18 +1113,34 @@
         ctx.restore();
       }
 
-      // 3) Lasers de combate
-      ctx.lineWidth = 1.6;
+      // 3) Lasers de combate (feixe duplo para disparos de torres)
       for (let i = 0; i < state.lasers.length; i++) {
         const l = state.lasers[i];
         const alpha = Math.max(0, l.life / l.maxLife);
-        ctx.strokeStyle = l.team === 'blue'
-          ? `rgba(125, 211, 252, ${alpha})`
-          : `rgba(251, 146, 60, ${alpha})`;
-        ctx.beginPath();
-        ctx.moveTo(l.x1, l.y1);
-        ctx.lineTo(l.x2, l.y2);
-        ctx.stroke();
+        if (l.isTowerShot) {
+          ctx.lineWidth = 4.5;
+          ctx.strokeStyle = `rgba(56, 189, 248, ${alpha * 0.55})`;
+          ctx.beginPath();
+          ctx.moveTo(l.x1, l.y1);
+          ctx.lineTo(l.x2, l.y2);
+          ctx.stroke();
+
+          ctx.lineWidth = 1.8;
+          ctx.strokeStyle = `rgba(224, 242, 254, ${alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(l.x1, l.y1);
+          ctx.lineTo(l.x2, l.y2);
+          ctx.stroke();
+        } else {
+          ctx.lineWidth = 1.6;
+          ctx.strokeStyle = l.team === 'blue'
+            ? `rgba(125, 211, 252, ${alpha})`
+            : `rgba(251, 146, 60, ${alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(l.x1, l.y1);
+          ctx.lineTo(l.x2, l.y2);
+          ctx.stroke();
+        }
       }
 
       // 4) Unidades (exércitos Azul e Vermelho) + anéis de seleção + barra de HP
@@ -841,6 +1170,11 @@
           ctx.fillStyle = u.hp > 40 ? '#4ade80' : '#fbbf24';
           ctx.fillRect(bx, by, bw * Math.max(0, u.hp / u.maxHp), bh);
         }
+      }
+
+      // 4b) Torres defensivas ativas (bunkers T1, T2, T3)
+      for (let i = 0; i < state.towers.length; i++) {
+        if (state.towers[i].hp > 0) renderTower(state.towers[i]);
       }
 
       // 5) Faíscas de impacto
@@ -938,7 +1272,7 @@
         const candidates = state.useQuadtree && state.quadtree ? state.quadtree.query(box) : state.units;
         for (let i = 0; i < candidates.length; i++) {
           const u = candidates[i];
-          if (u.team === 'blue' && Math.hypot(u.x - x, u.y - y) <= u.radius + 6) {
+          if (!u.isTower && u.team === 'blue' && Math.hypot(u.x - x, u.y - y) <= u.radius + 6) {
             u.selected = true;
             break;
           }
@@ -951,7 +1285,7 @@
           : state.units.filter((u) => selectBox.contains(u));
 
         for (let i = 0; i < found.length; i++) {
-          if (found[i].team === 'blue') found[i].selected = true;
+          if (!found[i].isTower && found[i].team === 'blue') found[i].selected = true;
         }
       }
     });
@@ -969,6 +1303,15 @@
 
     gridToggle.addEventListener('change', () => {
       state.showGrid = gridToggle.checked;
+    });
+
+    rangesToggle.addEventListener('change', () => {
+      state.showTowerRanges = rangesToggle.checked;
+    });
+
+    autoWaveToggle.addEventListener('change', () => {
+      state.autoWaves = autoWaveToggle.checked;
+      state.waveTimer = 0;
     });
 
     capacitySlider.addEventListener('input', () => {
@@ -994,6 +1337,8 @@
       spawnSquad('red', 50, state.mouse.x || state.width * 0.7, state.mouse.y || state.height * 0.5);
     });
 
+    waveBtn.addEventListener('click', () => spawnEnemyWave(40));
+
     resetBtn.addEventListener('click', resetBattle);
 
     function toggleHud() {
@@ -1006,8 +1351,10 @@
 
     window.addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      const tag = document.activeElement ? document.activeElement.tagName : '';
-      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+      const active = document.activeElement;
+      const tag = active ? active.tagName : '';
+      const inputType = active && active.type ? active.type.toLowerCase() : '';
+      if ((tag === 'INPUT' && inputType !== 'checkbox' && inputType !== 'range') || tag === 'SELECT' || tag === 'TEXTAREA') return;
 
       if (e.key === 'h' || e.key === 'H') {
         e.preventDefault();
@@ -1016,6 +1363,8 @@
         spawnSquad('blue', 50, state.mouse.x, state.mouse.y, 70, 70);
       } else if (e.key === 'r' || e.key === 'R') {
         spawnSquad('red', 50, state.mouse.x, state.mouse.y, 70, 70);
+      } else if (e.key === 'w' || e.key === 'W') {
+        spawnEnemyWave(40);
       }
     });
 
@@ -1041,9 +1390,15 @@
         if (u.selected) selectedCount++;
       }
 
+      let towersAlive = 0;
+      for (let i = 0; i < state.towers.length; i++) {
+        if (state.towers[i].hp > 0) towersAlive++;
+      }
+
       metricsEl.textContent =
         `FPS:              ${state.fps.toFixed(0)}\n` +
         `Unidades Vivas:   ${state.units.length} (${blueCount} Azuis | ${redCount} Verm.)\n` +
+        `Torres Defens.:   ${towersAlive} / ${state.towers.length} (Onda ${state.waveNumber})\n` +
         `Selecionadas:     ${selectedCount}\n` +
         `Testes Distância: ${state.distanceChecks.toLocaleString('pt-BR')} / frame\n` +
         `Tempo Lógica:     ${state.logicMs.toFixed(2)} ms\n` +
@@ -1067,12 +1422,15 @@
     // API leve para inspeção em testes automatizados
     window.__RTS_DEBUG__ = {
       getState: () => {
-        let blue = 0, red = 0, selected = 0, withTarget = 0;
+        let blue = 0, red = 0, selected = 0, withTarget = 0, towersAlive = 0;
         for (const u of state.units) {
           if (u.team === 'blue') blue++;
           else red++;
           if (u.selected) selected++;
           if (u.targetPos) withTarget++;
+        }
+        for (const t of state.towers) {
+          if (t.hp > 0) towersAlive++;
         }
         return {
           total: state.units.length,
@@ -1080,6 +1438,21 @@
           red,
           selected,
           withTarget,
+          towersAlive,
+          towersTotal: state.towers.length,
+          towerShots: state.towerShots,
+          waveNumber: state.waveNumber,
+          autoWaves: state.autoWaves,
+          showTowerRanges: state.showTowerRanges,
+          towers: state.towers.map((t) => ({
+            id: t.id,
+            x: Math.round(t.x),
+            y: Math.round(t.y),
+            hp: Math.max(0, Math.round(t.hp)),
+            maxHp: t.maxHp,
+            kills: t.kills,
+            shotsFired: t.shotsFired
+          })),
           useQuadtree: state.useQuadtree,
           showGrid: state.showGrid,
           capacity: state.capacity,
