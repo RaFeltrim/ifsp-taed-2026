@@ -6,6 +6,7 @@
   <title>Benchmarks Interativos — Quadtree vs Força Bruta</title>
   <style>
     :root {
+      color-scheme: dark;
       --bg: #0f1218;
       --surface: rgba(20, 25, 34, 0.92);
       --surface-alt: rgba(255, 255, 255, 0.04);
@@ -22,7 +23,16 @@
       --radius-sm: 6px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.28); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.52); }
 
     body {
       margin: 0;

@@ -1,4 +1,5 @@
 :root {
+  color-scheme: dark;
   --bg-canvas: #111318;
   --panel-bg: rgba(15, 18, 25, 0.84);
   --panel-border: rgba(255, 255, 255, 0.14);
@@ -11,6 +12,9 @@
   --focus-ring: #7dd3fc;
   --warning: #fde047;
   --stats-bg: rgba(0, 0, 0, 0.35);
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(148, 163, 184, 0.28);
+  --scrollbar-thumb-hover: rgba(148, 163, 184, 0.52);
   --radius-md: 10px;
   --radius-sm: 6px;
   --shadow-panel: 0 8px 30px rgba(0, 0, 0, 0.45);
@@ -41,6 +45,9 @@ canvas {
   max-width: calc(100vw - 24px);
   max-height: calc(100vh - 24px);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -54,6 +61,24 @@ canvas {
   color: var(--text-primary);
   font-size: 13.5px;
   line-height: 1.4;
+}
+
+#panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+#panel::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  margin: 6px 0;
+}
+
+#panel::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+
+#panel::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
 .panel-header {
