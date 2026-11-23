@@ -20,12 +20,15 @@ Abra [`index.html`](./index.html) diretamente ou execute pelo terminal:
 ```bash
 # Windows (PowerShell / CMD)
 start index.html
+start rts-demo.html        # Mini-game RTS 2D demonstrativo de Quadtree
 
 # Linux
 xdg-open index.html
+xdg-open rts-demo.html
 
 # macOS
 open index.html
+open rts-demo.html
 ```
 
 *(Opcional, via servidor HTTP local)*:
@@ -131,6 +134,7 @@ Para cada cenário, mede a **mediana** do tempo por frame (em ms) da força brut
 ```text
 quadtree_ttec/
 ├── index.html                           # Ponto de entrada da aplicação web
+├── rts-demo.html                        # Mini-game RTS 2D (300 unidades) com seleção, movimento e HUD Quadtree
 ├── style.css                            # Estilos do canvas e do painel de controles
 ├── src/
 │   ├── particle.js                      # Entidade Particle, bordas e resolveCollision
