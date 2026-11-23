@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-11-23T19:40:14-03:00",
+  "environment": "Node v24.22.1, 1280x720, 10 warmup + 15 frames mediana",
+  "unitTests": {
+    "total": 37,
+    "passed": 37,
+    "failed": 0
+  },
+  "results": [
+    { "distribution": "uniform", "count": 50, "radius": 4, "bruteMs": 0.008, "treeMs": 0.031, "quadDetectMs": 0.072, "quadTotalMs": 0.103, "speedup": 0.1, "bruteTests": 1225, "quadTests": 0 },
+    { "distribution": "uniform", "count": 100, "radius": 4, "bruteMs": 0.032, "treeMs": 0.066, "quadDetectMs": 0.139, "quadTotalMs": 0.204, "speedup": 0.2, "bruteTests": 4950, "quadTests": 0 },
+    { "distribution": "uniform", "count": 200, "radius": 4, "bruteMs": 0.127, "treeMs": 0.259, "quadDetectMs": 0.296, "quadTotalMs": 0.555, "speedup": 0.2, "bruteTests": 19900, "quadTests": 2 },
+    { "distribution": "uniform", "count": 500, "radius": 4, "bruteMs": 0.805, "treeMs": 0.208, "quadDetectMs": 0.688, "quadTotalMs": 0.896, "speedup": 0.9, "bruteTests": 124750, "quadTests": 8 },
+    { "distribution": "uniform", "count": 1000, "radius": 4, "bruteMs": 3.321, "treeMs": 0.536, "quadDetectMs": 1.089, "quadTotalMs": 1.625, "speedup": 2.0, "bruteTests": 499500, "quadTests": 43 },
+    { "distribution": "uniform", "count": 2000, "radius": 4, "bruteMs": 14.577, "treeMs": 0.857, "quadDetectMs": 3.405, "quadTotalMs": 4.262, "speedup": 3.4, "bruteTests": 1999000, "quadTests": 181 },
+    { "distribution": "uniform", "count": 5000, "radius": 4, "bruteMs": 98.712, "treeMs": 4.168, "quadDetectMs": 17.811, "quadTotalMs": 21.979, "speedup": 4.5, "bruteTests": 12497500, "quadTests": 1444 },
+
+    { "distribution": "uniform", "count": 50, "radius": 16, "bruteMs": 0.008, "treeMs": 0.010, "quadDetectMs": 0.012, "quadTotalMs": 0.023, "speedup": 0.4, "bruteTests": 1225, "quadTests": 1 },
+    { "distribution": "uniform", "count": 100, "radius": 16, "bruteMs": 0.031, "treeMs": 0.021, "quadDetectMs": 0.031, "quadTotalMs": 0.051, "speedup": 0.6, "bruteTests": 4950, "quadTests": 3 },
+    { "distribution": "uniform", "count": 200, "radius": 16, "bruteMs": 0.126, "treeMs": 0.082, "quadDetectMs": 0.137, "quadTotalMs": 0.218, "speedup": 0.6, "bruteTests": 19900, "quadTests": 28 },
+    { "distribution": "uniform", "count": 500, "radius": 16, "bruteMs": 0.689, "treeMs": 0.137, "quadDetectMs": 0.380, "quadTotalMs": 0.517, "speedup": 1.3, "bruteTests": 124750, "quadTests": 270 },
+    { "distribution": "uniform", "count": 1000, "radius": 16, "bruteMs": 3.119, "treeMs": 0.337, "quadDetectMs": 1.502, "quadTotalMs": 1.839, "speedup": 1.7, "bruteTests": 499500, "quadTests": 2045 },
+    { "distribution": "uniform", "count": 2000, "radius": 16, "bruteMs": 15.710, "treeMs": 1.138, "quadDetectMs": 10.526, "quadTotalMs": 11.664, "speedup": 1.3, "bruteTests": 1999000, "quadTests": 7678 },
+    { "distribution": "uniform", "count": 5000, "radius": 16, "bruteMs": 122.657, "treeMs": 4.167, "quadDetectMs": 70.123, "quadTotalMs": 74.290, "speedup": 1.7, "bruteTests": 12497500, "quadTests": 52238 },
+
+    { "distribution": "cluster", "count": 50, "radius": 4, "bruteMs": 0.009, "treeMs": 0.065, "quadDetectMs": 0.170, "quadTotalMs": 0.235, "speedup": 0.04, "bruteTests": 1225, "quadTests": 5 },
+    { "distribution": "cluster", "count": 100, "radius": 4, "bruteMs": 0.031, "treeMs": 0.196, "quadDetectMs": 0.144, "quadTotalMs": 0.339, "speedup": 0.1, "bruteTests": 4950, "quadTests": 12 },
+    { "distribution": "cluster", "count": 200, "radius": 4, "bruteMs": 0.094, "treeMs": 0.102, "quadDetectMs": 0.238, "quadTotalMs": 0.340, "speedup": 0.3, "bruteTests": 19900, "quadTests": 60 },
+    { "distribution": "cluster", "count": 500, "radius": 4, "bruteMs": 0.624, "treeMs": 0.292, "quadDetectMs": 1.120, "quadTotalMs": 1.412, "speedup": 0.4, "bruteTests": 124750, "quadTests": 732 },
+    { "distribution": "cluster", "count": 1000, "radius": 4, "bruteMs": 2.847, "treeMs": 0.812, "quadDetectMs": 4.246, "quadTotalMs": 5.058, "speedup": 0.6, "bruteTests": 499500, "quadTests": 2704 },
+    { "distribution": "cluster", "count": 2000, "radius": 4, "bruteMs": 14.036, "treeMs": 1.654, "quadDetectMs": 12.723, "quadTotalMs": 14.377, "speedup": 1.0, "bruteTests": 1999000, "quadTests": 10420 },
+    { "distribution": "cluster", "count": 5000, "radius": 4, "bruteMs": 127.343, "treeMs": 6.300, "quadDetectMs": 122.324, "quadTotalMs": 128.624, "speedup": 1.0, "bruteTests": 12497500, "quadTests": 63945 },
+
+    { "distribution": "cluster", "count": 50, "radius": 16, "bruteMs": 0.011, "treeMs": 0.050, "quadDetectMs": 0.081, "quadTotalMs": 0.131, "speedup": 0.1, "bruteTests": 1225, "quadTests": 28 },
+    { "distribution": "cluster", "count": 100, "radius": 16, "bruteMs": 0.044, "treeMs": 0.098, "quadDetectMs": 0.218, "quadTotalMs": 0.316, "speedup": 0.1, "bruteTests": 4950, "quadTests": 143 },
+    { "distribution": "cluster", "count": 200, "radius": 16, "bruteMs": 0.107, "treeMs": 0.088, "quadDetectMs": 0.318, "quadTotalMs": 0.405, "speedup": 0.3, "bruteTests": 19900, "quadTests": 409 },
+    { "distribution": "cluster", "count": 500, "radius": 16, "bruteMs": 1.047, "treeMs": 0.318, "quadDetectMs": 1.514, "quadTotalMs": 1.832, "speedup": 0.6, "bruteTests": 124750, "quadTests": 1844 },
+    { "distribution": "cluster", "count": 1000, "radius": 16, "bruteMs": 3.259, "treeMs": 0.700, "quadDetectMs": 4.932, "quadTotalMs": 5.631, "speedup": 0.6, "bruteTests": 499500, "quadTests": 6339 },
+    { "distribution": "cluster", "count": 2000, "radius": 16, "bruteMs": 17.631, "treeMs": 2.021, "quadDetectMs": 45.574, "quadTotalMs": 47.595, "speedup": 0.4, "bruteTests": 1999000, "quadTests": 23828 },
+    { "distribution": "cluster", "count": 5000, "radius": 16, "bruteMs": 86.360, "treeMs": 7.359, "quadDetectMs": 308.636, "quadTotalMs": 315.996, "speedup": 0.3, "bruteTests": 12497500, "quadTests": 148549 },
+
+    { "distribution": "clusters", "count": 50, "radius": 4, "bruteMs": 0.009, "treeMs": 0.065, "quadDetectMs": 0.104, "quadTotalMs": 0.169, "speedup": 0.1, "bruteTests": 1225, "quadTests": 1 },
+    { "distribution": "clusters", "count": 100, "radius": 4, "bruteMs": 0.024, "treeMs": 0.206, "quadDetectMs": 0.100, "quadTotalMs": 0.306, "speedup": 0.1, "bruteTests": 4950, "quadTests": 6 },
+    { "distribution": "clusters", "count": 200, "radius": 4, "bruteMs": 0.096, "treeMs": 0.119, "quadDetectMs": 0.226, "quadTotalMs": 0.345, "speedup": 0.3, "bruteTests": 19900, "quadTests": 37 },
+    { "distribution": "clusters", "count": 500, "radius": 4, "bruteMs": 0.654, "treeMs": 0.407, "quadDetectMs": 0.905, "quadTotalMs": 1.312, "speedup": 0.5, "bruteTests": 124750, "quadTests": 237 },
+    { "distribution": "clusters", "count": 1000, "radius": 4, "bruteMs": 2.354, "treeMs": 0.475, "quadDetectMs": 2.145, "quadTotalMs": 2.619, "speedup": 0.9, "bruteTests": 499500, "quadTests": 1444 },
+    { "distribution": "clusters", "count": 2000, "radius": 4, "bruteMs": 15.769, "treeMs": 2.602, "quadDetectMs": 13.147, "quadTotalMs": 15.749, "speedup": 1.0, "bruteTests": 1999000, "quadTests": 5411 },
+    { "distribution": "clusters", "count": 5000, "radius": 4, "bruteMs": 140.092, "treeMs": 5.813, "quadDetectMs": 73.451, "quadTotalMs": 79.263, "speedup": 1.8, "bruteTests": 12497500, "quadTests": 31866 },
+
+    { "distribution": "clusters", "count": 50, "radius": 16, "bruteMs": 0.006, "treeMs": 0.023, "quadDetectMs": 0.034, "quadTotalMs": 0.057, "speedup": 0.1, "bruteTests": 1225, "quadTests": 16 },
+    { "distribution": "clusters", "count": 100, "radius": 16, "bruteMs": 0.033, "treeMs": 0.087, "quadDetectMs": 0.136, "quadTotalMs": 0.222, "speedup": 0.1, "bruteTests": 4950, "quadTests": 58 },
+    { "distribution": "clusters", "count": 200, "radius": 16, "bruteMs": 0.096, "treeMs": 0.097, "quadDetectMs": 0.273, "quadTotalMs": 0.371, "speedup": 0.3, "bruteTests": 19900, "quadTests": 282 },
+    { "distribution": "clusters", "count": 500, "radius": 16, "bruteMs": 0.653, "treeMs": 0.221, "quadDetectMs": 1.014, "quadTotalMs": 1.234, "speedup": 0.5, "bruteTests": 124750, "quadTests": 1165 },
+    { "distribution": "clusters", "count": 1000, "radius": 16, "bruteMs": 2.993, "treeMs": 0.584, "quadDetectMs": 3.883, "quadTotalMs": 4.466, "speedup": 0.7, "bruteTests": 499500, "quadTests": 3651 },
+    { "distribution": "clusters", "count": 2000, "radius": 16, "bruteMs": 13.684, "treeMs": 1.619, "quadDetectMs": 14.083, "quadTotalMs": 15.702, "speedup": 0.9, "bruteTests": 1999000, "quadTests": 12743 },
+    { "distribution": "clusters", "count": 5000, "radius": 16, "bruteMs": 84.826, "treeMs": 6.717, "quadDetectMs": 166.240, "quadTotalMs": 172.957, "speedup": 0.5, "bruteTests": 12497500, "quadTests": 76659 }
+  ]
+}

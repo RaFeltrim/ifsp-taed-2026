@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmarks Interativos — Quadtree vs Força Bruta</title>
+  <style>
+    :root {
+      --bg: #0f1218;
+      --surface: rgba(20, 25, 34, 0.92);
+      --surface-alt: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #f3f4f6;
+      --muted: #94a3b8;
+      --brute: #f97316;
+      --quad: #38bdf8;
+      --quad-tree: #0284c7;
+      --win: #4ade80;
+      --loss: #fb7185;
+      --warn: #fbbf24;
+      --radius: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn, a.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease;
+    }
+
+    .btn:hover, a.btn:hover {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-primary {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.45);
+      color: #bae6fd;
+    }
+
+    .btn-primary:hover {
+      background: rgba(56, 189, 248, 0.28);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+
+    .scenes-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .scene-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      transition: border-color 140ms ease, background 140ms ease;
+    }
+
+    .scene-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .scene-btn.active {
+      border-color: var(--quad);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .scene-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .scene-desc {
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .seg-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .seg-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segmented button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: rgba(56, 189, 248, 0.22);
+      color: var(--text);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .kpi {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+
+    .kpi-label {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-val {
+      font-size: 1.45rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    svg#chart {
+      width: 100%;
+      height: 310px;
+      display: block;
+      overflow: visible;
+    }
+
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      background: rgba(11, 15, 23, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      display: none;
+      min-width: 190px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: right;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    th:first-child, td:first-child { text-align: left; }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    tr.highlight-row td {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.76rem;
+    }
+
+    .badge-win {
+      background: rgba(74, 222, 128, 0.16);
+      color: var(--win);
+    }
+
+    .badge-neutral {
+      background: rgba(251, 191, 36, 0.16);
+      color: var(--warn);
+    }
+
+    .badge-loss {
+      background: rgba(251, 113, 133, 0.16);
+      color: var(--loss);
+    }
+
+    .status-line {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 10px; }
+      header, .card { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Benchmarks Interativos — Quadtree vs. Força Bruta</h1>
+        <p class="subtitle" id="envMeta">
+          37/37 testes unitários aprovados · Mediana de 15 frames (10 warmup) · Área 1280×720 · Node v24.22.1
+        </p>
+      </div>
+      <div class="header-actions">
+        <button id="runLiveBtn" class="btn btn-primary" type="button">Rodar Benchmark ao Vivo no Navegador</button>
+        <button id="restoreBtn" class="btn" type="button" style="display:none;">Restaurar Dados Gravados (Node.js)</button>
+        <a class="btn" href="../index.html">Abrir Simulador Interativo</a>
+      </div>
+    </header>
+
+    <section class="card" aria-label="Cenas do Roteiro de Apresentação">
+      <div class="scenes-row" id="scenes">
+        <button class="scene-btn active" data-scene="1" data-dist="uniform" data-radius="4" data-metric="time" type="button">
+          <span class="scene-title">Cena 1 — Caso Médio (Uniforme, r=4)</span>
+          <span class="scene-desc">Quadtree ganha até 4.5x e reduz 99.99% dos testes</span>
+        </button>
+        <button class="scene-btn" data-scene="2" data-dist="uniform" data-radius="4" data-metric="speedup" type="button">
+          <span class="scene-title">Cena 2 — N Pequeno (50–200)</span>
+          <span class="scene-desc">Overhead da árvore supera o loop simples (0.1x–0.2x)</span>
+        </button>
+        <button class="scene-btn" data-scene="3" data-dist="cluster" data-radius="16" data-metric="time" type="button">
+          <span class="scene-title">Cena 3 — Pior Caso (Aglomerado, r=16)</span>
+          <span class="scene-desc">Degradação até 0.3x com subdivisão maxDepth = 8</span>
+        </button>
+        <button class="scene-btn" data-scene="4" data-dist="clusters" data-radius="16" data-metric="tests" type="button">
+          <span class="scene-title">Cena 4 — Poda Parcial (Dois clusters)</span>
+          <span class="scene-desc">Descarta espaço vazio entre polos, reduzindo pares</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card controls-bar" aria-label="Filtros do gráfico e tabela">
+      <div class="seg-group">
+        <span class="seg-label">Distribuição</span>
+        <div class="segmented" id="distGroup">
+          <button type="button" class="active" data-val="uniform">Uniforme</button>
+          <button type="button" data-val="cluster">Aglomerado</button>
+          <button type="button" data-val="clusters">Dois clusters</button>
+        </div>
+      </div>
+
+      <div class="seg-group">
+        <span class="seg-label">Raio</span>
+        <div class="segmented" id="radiusGroup">
+          <button type="button" class="active" data-val="4">4 px</button>
+          <button type="button" data-val="16">16 px</button>
+        </div>
+      </div>
+
+      <div class="seg-group">
+        <span class="seg-label">Métrica</span>
+        <div class="segmented" id="metricGroup">
+          <button type="button" class="active" data-val="time">Tempo (ms)</button>
+          <button type="button" data-val="speedup">Ganho (x)</button>
+          <button type="button" data-val="tests">Testes (Log10)</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Resumo do cenário selecionado"></section>
+
+    <section class="card chart-wrap">
+      <div class="legend" id="legend"></div>
+      <svg id="chart" role="img" aria-label="Gráfico comparativo de benchmark"></svg>
+      <div class="status-line" id="liveStatus">Fonte ativa: medição gravada em Node.js (bench/results.json)</div>
+    </section>
+
+    <section class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>N (Partículas)</th>
+            <th>Bruta (ms)</th>
+            <th>Árvore (ms)</th>
+            <th>Busca (ms)</th>
+            <th>Quad Total (ms)</th>
+            <th>Ganho</th>
+            <th>Testes Bruta</th>
+            <th>Testes Quad</th>
+            <th>Redução de Testes</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="../src/particle.js"></script>
+  <script src="../src/quadtree.js"></script>
+  <script src="../src/simulation.js"></script>
+  <script>
+    const RECORDED_DATA = [
+      { distribution: "uniform", count: 50, radius: 4, bruteMs: 0.008, treeMs: 0.031, quadDetectMs: 0.072, quadTotalMs: 0.103, speedup: 0.1, bruteTests: 1225, quadTests: 0 },
+      { distribution: "uniform", count: 100, radius: 4, bruteMs: 0.032, treeMs: 0.066, quadDetectMs: 0.139, quadTotalMs: 0.204, speedup: 0.2, bruteTests: 4950, quadTests: 0 },
+      { distribution: "uniform", count: 200, radius: 4, bruteMs: 0.127, treeMs: 0.259, quadDetectMs: 0.296, quadTotalMs: 0.555, speedup: 0.2, bruteTests: 19900, quadTests: 2 },
+      { distribution: "uniform", count: 500, radius: 4, bruteMs: 0.805, treeMs: 0.208, quadDetectMs: 0.688, quadTotalMs: 0.896, speedup: 0.9, bruteTests: 124750, quadTests: 8 },
+      { distribution: "uniform", count: 1000, radius: 4, bruteMs: 3.321, treeMs: 0.536, quadDetectMs: 1.089, quadTotalMs: 1.625, speedup: 2.0, bruteTests: 499500, quadTests: 43 },
+      { distribution: "uniform", count: 2000, radius: 4, bruteMs: 14.577, treeMs: 0.857, quadDetectMs: 3.405, quadTotalMs: 4.262, speedup: 3.4, bruteTests: 1999000, quadTests: 181 },
+      { distribution: "uniform", count: 5000, radius: 4, bruteMs: 98.712, treeMs: 4.168, quadDetectMs: 17.811, quadTotalMs: 21.979, speedup: 4.5, bruteTests: 12497500, quadTests: 1444 },
+
+      { distribution: "uniform", count: 50, radius: 16, bruteMs: 0.008, treeMs: 0.010, quadDetectMs: 0.012, quadTotalMs: 0.023, speedup: 0.4, bruteTests: 1225, quadTests: 1 },
+      { distribution: "uniform", count: 100, radius: 16, bruteMs: 0.031, treeMs: 0.021, quadDetectMs: 0.031, quadTotalMs: 0.051, speedup: 0.6, bruteTests: 4950, quadTests: 3 },
+      { distribution: "uniform", count: 200, radius: 16, bruteMs: 0.126, treeMs: 0.082, quadDetectMs: 0.137, quadTotalMs: 0.218, speedup: 0.6, bruteTests: 19900, quadTests: 28 },
+      { distribution: "uniform", count: 500, radius: 16, bruteMs: 0.689, treeMs: 0.137, quadDetectMs: 0.380, quadTotalMs: 0.517, speedup: 1.3, bruteTests: 124750, quadTests: 270 },
+      { distribution: "uniform", count: 1000, radius: 16, bruteMs: 3.119, treeMs: 0.337, quadDetectMs: 1.502, quadTotalMs: 1.839, speedup: 1.7, bruteTests: 499500, quadTests: 2045 },
+      { distribution: "uniform", count: 2000, radius: 16, bruteMs: 15.710, treeMs: 1.138, quadDetectMs: 10.526, quadTotalMs: 11.664, speedup: 1.3, bruteTests: 1999000, quadTests: 7678 },
+      { distribution: "uniform", count: 5000, radius: 16, bruteMs: 122.657, treeMs: 4.167, quadDetectMs: 70.123, quadTotalMs: 74.290, speedup: 1.7, bruteTests: 12497500, quadTests: 52238 },
+
+      { distribution: "cluster", count: 50, radius: 4, bruteMs: 0.009, treeMs: 0.065, quadDetectMs: 0.170, quadTotalMs: 0.235, speedup: 0.04, bruteTests: 1225, quadTests: 5 },
+      { distribution: "cluster", count: 100, radius: 4, bruteMs: 0.031, treeMs: 0.196, quadDetectMs: 0.144, quadTotalMs: 0.339, speedup: 0.1, bruteTests: 4950, quadTests: 12 },
+      { distribution: "cluster", count: 200, radius: 4, bruteMs: 0.094, treeMs: 0.102, quadDetectMs: 0.238, quadTotalMs: 0.340, speedup: 0.3, bruteTests: 19900, quadTests: 60 },
+      { distribution: "cluster", count: 500, radius: 4, bruteMs: 0.624, treeMs: 0.292, quadDetectMs: 1.120, quadTotalMs: 1.412, speedup: 0.4, bruteTests: 124750, quadTests: 732 },
+      { distribution: "cluster", count: 1000, radius: 4, bruteMs: 2.847, treeMs: 0.812, quadDetectMs: 4.246, quadTotalMs: 5.058, speedup: 0.6, bruteTests: 499500, quadTests: 2704 },
+      { distribution: "cluster", count: 2000, radius: 4, bruteMs: 14.036, treeMs: 1.654, quadDetectMs: 12.723, quadTotalMs: 14.377, speedup: 1.0, bruteTests: 1999000, quadTests: 10420 },
+      { distribution: "cluster", count: 5000, radius: 4, bruteMs: 127.343, treeMs: 6.300, quadDetectMs: 122.324, quadTotalMs: 128.624, speedup: 1.0, bruteTests: 12497500, quadTests: 63945 },
+
+      { distribution: "cluster", count: 50, radius: 16, bruteMs: 0.011, treeMs: 0.050, quadDetectMs: 0.081, quadTotalMs: 0.131, speedup: 0.1, bruteTests: 1225, quadTests: 28 },
+      { distribution: "cluster", count: 100, radius: 16, bruteMs: 0.044, treeMs: 0.098, quadDetectMs: 0.218, quadTotalMs: 0.316, speedup: 0.1, bruteTests: 4950, quadTests: 143 },
+      { distribution: "cluster", count: 200, radius: 16, bruteMs: 0.107, treeMs: 0.088, quadDetectMs: 0.318, quadTotalMs: 0.405, speedup: 0.3, bruteTests: 19900, quadTests: 409 },
+      { distribution: "cluster", count: 500, radius: 16, bruteMs: 1.047, treeMs: 0.318, quadDetectMs: 1.514, quadTotalMs: 1.832, speedup: 0.6, bruteTests: 124750, quadTests: 1844 },
+      { distribution: "cluster", count: 1000, radius: 16, bruteMs: 3.259, treeMs: 0.700, quadDetectMs: 4.932, quadTotalMs: 5.631, speedup: 0.6, bruteTests: 499500, quadTests: 6339 },
+      { distribution: "cluster", count: 2000, radius: 16, bruteMs: 17.631, treeMs: 2.021, quadDetectMs: 45.574, quadTotalMs: 47.595, speedup: 0.4, bruteTests: 1999000, quadTests: 23828 },
+      { distribution: "cluster", count: 5000, radius: 16, bruteMs: 86.360, treeMs: 7.359, quadDetectMs: 308.636, quadTotalMs: 315.996, speedup: 0.3, bruteTests: 12497500, quadTests: 148549 },
+
+      { distribution: "clusters", count: 50, radius: 4, bruteMs: 0.009, treeMs: 0.065, quadDetectMs: 0.104, quadTotalMs: 0.169, speedup: 0.1, bruteTests: 1225, quadTests: 1 },
+      { distribution: "clusters", count: 100, radius: 4, bruteMs: 0.024, treeMs: 0.206, quadDetectMs: 0.100, quadTotalMs: 0.306, speedup: 0.1, bruteTests: 4950, quadTests: 6 },
+      { distribution: "clusters", count: 200, radius: 4, bruteMs: 0.096, treeMs: 0.119, quadDetectMs: 0.226, quadTotalMs: 0.345, speedup: 0.3, bruteTests: 19900, quadTests: 37 },
+      { distribution: "clusters", count: 500, radius: 4, bruteMs: 0.654, treeMs: 0.407, quadDetectMs: 0.905, quadTotalMs: 1.312, speedup: 0.5, bruteTests: 124750, quadTests: 237 },
+      { distribution: "clusters", count: 1000, radius: 4, bruteMs: 2.354, treeMs: 0.475, quadDetectMs: 2.145, quadTotalMs: 2.619, speedup: 0.9, bruteTests: 499500, quadTests: 1444 },
+      { distribution: "clusters", count: 2000, radius: 4, bruteMs: 15.769, treeMs: 2.602, quadDetectMs: 13.147, quadTotalMs: 15.749, speedup: 1.0, bruteTests: 1999000, quadTests: 5411 },
+      { distribution: "clusters", count: 5000, radius: 4, bruteMs: 140.092, treeMs: 5.813, quadDetectMs: 73.451, quadTotalMs: 79.263, speedup: 1.8, bruteTests: 12497500, quadTests: 31866 },
+
+      { distribution: "clusters", count: 50, radius: 16, bruteMs: 0.006, treeMs: 0.023, quadDetectMs: 0.034, quadTotalMs: 0.057, speedup: 0.1, bruteTests: 1225, quadTests: 16 },
+      { distribution: "clusters", count: 100, radius: 16, bruteMs: 0.033, treeMs: 0.087, quadDetectMs: 0.136, quadTotalMs: 0.222, speedup: 0.1, bruteTests: 4950, quadTests: 58 },
+      { distribution: "clusters", count: 200, radius: 16, bruteMs: 0.096, treeMs: 0.097, quadDetectMs: 0.273, quadTotalMs: 0.371, speedup: 0.3, bruteTests: 19900, quadTests: 282 },
+      { distribution: "clusters", count: 500, radius: 16, bruteMs: 0.653, treeMs: 0.221, quadDetectMs: 1.014, quadTotalMs: 1.234, speedup: 0.5, bruteTests: 124750, quadTests: 1165 },
+      { distribution: "clusters", count: 1000, radius: 16, bruteMs: 2.993, treeMs: 0.584, quadDetectMs: 3.883, quadTotalMs: 4.466, speedup: 0.7, bruteTests: 499500, quadTests: 3651 },
+      { distribution: "clusters", count: 2000, radius: 16, bruteMs: 13.684, treeMs: 1.619, quadDetectMs: 14.083, quadTotalMs: 15.702, speedup: 0.9, bruteTests: 1999000, quadTests: 12743 },
+      { distribution: "clusters", count: 5000, radius: 16, bruteMs: 84.826, treeMs: 6.717, quadDetectMs: 166.240, quadTotalMs: 172.957, speedup: 0.5, bruteTests: 12497500, quadTests: 76659 }
+    ];
+
+    let activeData = RECORDED_DATA;
+    let state = { dist: 'uniform', radius: 4, metric: 'time', scene: '1' };
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const chartEl = document.getElementById('chart');
+    const tbodyEl = document.getElementById('tbody');
+    const kpisEl = document.getElementById('kpis');
+    const legendEl = document.getElementById('legend');
+    const tooltipEl = document.getElementById('tooltip');
+    const liveStatusEl = document.getElementById('liveStatus');
+    const runLiveBtn = document.getElementById('runLiveBtn');
+    const restoreBtn = document.getElementById('restoreBtn');
+
+    function setGroupActive(groupId, val) {
+      const btns = document.querySelectorAll(`#${groupId} button`);
+      btns.forEach(b => b.classList.toggle('active', String(b.dataset.val) === String(val)));
+    }
+
+    function wireSegmented(groupId, key, parseFn = (v) => v) {
+      document.getElementById(groupId).addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        state[key] = parseFn(btn.dataset.val);
+        state.scene = null;
+        document.querySelectorAll('.scene-btn').forEach(s => s.classList.remove('active'));
+        setGroupActive(groupId, state[key]);
+        render();
+      });
+    }
+
+    wireSegmented('distGroup', 'dist');
+    wireSegmented('radiusGroup', 'radius', Number);
+    wireSegmented('metricGroup', 'metric');
+
+    document.getElementById('scenes').addEventListener('click', (e) => {
+      const btn = e.target.closest('.scene-btn');
+      if (!btn) return;
+      state.scene = btn.dataset.scene;
+      state.dist = btn.dataset.dist;
+      state.radius = Number(btn.dataset.radius);
+      state.metric = btn.dataset.metric;
+      document.querySelectorAll('.scene-btn').forEach(s => s.classList.toggle('active', s === btn));
+      setGroupActive('distGroup', state.dist);
+      setGroupActive('radiusGroup', state.radius);
+      setGroupActive('metricGroup', state.metric);
+      render();
+    });
+
+    function fmtNum(n) {
+      return n.toLocaleString('pt-BR');
+    }
+
+    function render() {
+      const rows = activeData
+        .filter(r => r.distribution === state.dist && r.radius === state.radius)
+        .sort((a, b) => a.count - b.count);
+
+      if (!rows.length) return;
+      const peak = rows[rows.length - 1];
+      const bestSpeedup = rows.reduce((best, r) => (r.speedup > best.speedup ? r : best), rows[0]);
+      const reductionPct = peak.bruteTests > 0
+        ? ((1 - peak.quadTests / peak.bruteTests) * 100).toFixed(peak.quadTests / peak.bruteTests < 0.001 ? 3 : 2)
+        : '0';
+
+      const distLabel = { uniform: 'Uniforme', cluster: 'Aglomerado', clusters: 'Dois clusters' }[state.dist];
+      const speedupColor = bestSpeedup.speedup >= 1.2 ? 'var(--win)' : bestSpeedup.speedup >= 0.9 ? 'var(--warn)' : 'var(--loss)';
+
+      kpisEl.innerHTML = `
+        <div class="kpi">
+          <div class="kpi-label">Melhor Ganho (${distLabel}, r=${state.radius}px)</div>
+          <div class="kpi-val" style="color:${speedupColor}">${bestSpeedup.speedup.toFixed(1)}x</div>
+          <div class="kpi-sub">em N = ${fmtNum(bestSpeedup.count)} (${bestSpeedup.bruteMs.toFixed(3)} ms vs ${bestSpeedup.quadTotalMs.toFixed(3)} ms)</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Maior Redução de Testes (N = ${fmtNum(peak.count)})</div>
+          <div class="kpi-val" style="color:var(--quad)">${reductionPct}%</div>
+          <div class="kpi-sub">${fmtNum(peak.bruteTests)} bruta vs ${fmtNum(peak.quadTests)} Quadtree</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Custo em N = ${fmtNum(peak.count)} (Mediana)</div>
+          <div class="kpi-val">${peak.quadTotalMs.toFixed(2)} ms</div>
+          <div class="kpi-sub">Árvore: ${peak.treeMs.toFixed(2)} ms · Busca: ${peak.quadDetectMs.toFixed(2)} ms</div>
+        </div>
+      `;
+
+      renderChart(rows);
+      renderTable(rows);
+    }
+
+    function el(tag, attrs = {}) {
+      const node = document.createElementNS(svgNS, tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+      return node;
+    }
+
+    function showTooltip(evt, row) {
+      const red = row.bruteTests > 0 ? ((1 - row.quadTests / row.bruteTests) * 100).toFixed(2) : '0';
+      tooltipEl.innerHTML = `
+        <div style="font-weight:700;margin-bottom:4px;color:#fff;">N = ${fmtNum(row.count)} · Raio = ${row.radius}px</div>
+        <div>Força Bruta: <strong style="color:var(--brute)">${row.bruteMs.toFixed(3)} ms</strong></div>
+        <div>Quadtree Total: <strong style="color:var(--quad)">${row.quadTotalMs.toFixed(3)} ms</strong></div>
+        <div style="color:var(--muted);padding-left:8px;">↳ Árvore: ${row.treeMs.toFixed(3)} ms · Busca: ${row.quadDetectMs.toFixed(3)} ms</div>
+        <div style="margin-top:4px;">Ganho: <strong>${row.speedup.toFixed(2)}x</strong></div>
+        <div>Testes: ${fmtNum(row.bruteTests)} → <strong>${fmtNum(row.quadTests)}</strong> (-${red}%)</div>
+      `;
+      tooltipEl.style.display = 'block';
+      const x = Math.min(window.innerWidth - 230, evt.clientX + 14);
+      const y = Math.min(window.innerHeight - 150, evt.clientY + 14);
+      tooltipEl.style.left = `${x}px`;
+      tooltipEl.style.top = `${y}px`;
+    }
+
+    function hideTooltip() {
+      tooltipEl.style.display = 'none';
+    }
+
+    function renderChart(rows) {
+      chartEl.innerHTML = '';
+      const W = 960;
+      const H = 310;
+      const pad = { top: 20, right: 20, bottom: 38, left: 66 };
+      const plotW = W - pad.left - pad.right;
+      const plotH = H - pad.top - pad.bottom;
+      chartEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+      if (state.metric === 'time') {
+        legendEl.innerHTML = `
+          <span class="legend-item"><span class="swatch" style="background:var(--brute)"></span>Força Bruta (ms)</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--quad-tree)"></span>Quadtree — Construção da Árvore (ms)</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--quad)"></span>Quadtree — Busca de Pares (ms)</span>
+        `;
+      } else if (state.metric === 'speedup') {
+        legendEl.innerHTML = `
+          <span class="legend-item"><span class="swatch" style="background:var(--win)"></span>Quadtree mais rápida (&ge; 1.0x)</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--loss)"></span>Força Bruta mais rápida (&lt; 1.0x)</span>
+        `;
+      } else {
+        legendEl.innerHTML = `
+          <span class="legend-item"><span class="swatch" style="background:var(--brute)"></span>Testes Força Bruta (escala log10)</span>
+          <span class="legend-item"><span class="swatch" style="background:var(--quad)"></span>Testes Quadtree (escala log10)</span>
+        `;
+      }
+
+      let maxVal = 1;
+      if (state.metric === 'time') {
+        maxVal = Math.max(...rows.map(r => Math.max(r.bruteMs, r.quadTotalMs)), 0.1);
+      } else if (state.metric === 'speedup') {
+        maxVal = Math.max(...rows.map(r => r.speedup), 1.5);
+      } else {
+        maxVal = Math.max(...rows.map(r => Math.log10(Math.max(1, r.bruteTests))), 2);
+      }
+
+      // Grid horizontal
+      const ticks = 5;
+      for (let i = 0; i <= ticks; i++) {
+        const frac = i / ticks;
+        const y = pad.top + plotH - frac * plotH;
+        const val = maxVal * frac;
+        chartEl.appendChild(el('line', {
+          x1: pad.left, y1: y, x2: W - pad.right, y2: y,
+          stroke: 'rgba(255,255,255,0.08)', 'stroke-width': 1
+        }));
+        const lbl = el('text', {
+          x: pad.left - 8, y: y + 4, 'text-anchor': 'end',
+          fill: '#94a3b8', 'font-size': '11'
+        });
+        lbl.textContent = state.metric === 'speedup' ? `${val.toFixed(1)}x`
+          : state.metric === 'tests' ? (val === 0 ? '0' : `10^${val.toFixed(1)}`)
+          : val >= 10 ? val.toFixed(0) : val.toFixed(2);
+        chartEl.appendChild(lbl);
+      }
+
+      if (state.metric === 'speedup') {
+        const y1 = pad.top + plotH - (1 / maxVal) * plotH;
+        chartEl.appendChild(el('line', {
+          x1: pad.left, y1, x2: W - pad.right, y2: y1,
+          stroke: '#fbbf24', 'stroke-dasharray': '5 4', 'stroke-width': 1.5
+        }));
+      }
+
+      const groupW = plotW / rows.length;
+      rows.forEach((row, idx) => {
+        const cx = pad.left + idx * groupW + groupW / 2;
+        const barW = Math.min(34, groupW * 0.34);
+
+        const g = el('g', { style: 'cursor:pointer;' });
+
+        if (state.metric === 'time') {
+          const hBrute = (row.bruteMs / maxVal) * plotH;
+          const hTree = (row.treeMs / maxVal) * plotH;
+          const hSearch = (row.quadDetectMs / maxVal) * plotH;
+
+          g.appendChild(el('rect', {
+            x: cx - barW - 2, y: pad.top + plotH - hBrute,
+            width: barW, height: Math.max(1, hBrute), rx: 3, fill: 'var(--brute)'
+          }));
+          // Empilhado: busca + árvore
+          g.appendChild(el('rect', {
+            x: cx + 2, y: pad.top + plotH - hTree,
+            width: barW, height: Math.max(1, hTree), rx: 2, fill: 'var(--quad-tree)'
+          }));
+          g.appendChild(el('rect', {
+            x: cx + 2, y: pad.top + plotH - hTree - hSearch,
+            width: barW, height: Math.max(1, hSearch), rx: 3, fill: 'var(--quad)'
+          }));
+        } else if (state.metric === 'speedup') {
+          const w = Math.min(48, groupW * 0.52);
+          const h = (row.speedup / maxVal) * plotH;
+          const color = row.speedup >= 1.0 ? 'var(--win)' : 'var(--loss)';
+          g.appendChild(el('rect', {
+            x: cx - w / 2, y: pad.top + plotH - h,
+            width: w, height: Math.max(2, h), rx: 4, fill: color
+          }));
+          const t = el('text', {
+            x: cx, y: pad.top + plotH - h - 6, 'text-anchor': 'middle',
+            fill: '#e2e8f0', 'font-size': '11', 'font-weight': '700'
+          });
+          t.textContent = `${row.speedup.toFixed(1)}x`;
+          g.appendChild(t);
+        } else {
+          const lBrute = Math.log10(Math.max(1, row.bruteTests));
+          const lQuad = row.quadTests > 0 ? Math.log10(row.quadTests) : 0;
+          const hB = (lBrute / maxVal) * plotH;
+          const hQ = (lQuad / maxVal) * plotH;
+          g.appendChild(el('rect', {
+            x: cx - barW - 2, y: pad.top + plotH - hB,
+            width: barW, height: Math.max(2, hB), rx: 3, fill: 'var(--brute)'
+          }));
+          g.appendChild(el('rect', {
+            x: cx + 2, y: pad.top + plotH - hQ,
+            width: barW, height: Math.max(row.quadTests > 0 ? 2 : 0, hQ), rx: 3, fill: 'var(--quad)'
+          }));
+        }
+
+        // Hitbox transparente para hover confortável
+        g.appendChild(el('rect', {
+          x: pad.left + idx * groupW, y: pad.top,
+          width: groupW, height: plotH, fill: 'transparent'
+        }));
+
+        g.addEventListener('mousemove', (ev) => showTooltip(ev, row));
+        g.addEventListener('mouseleave', hideTooltip);
+        chartEl.appendChild(g);
+
+        const xLbl = el('text', {
+          x: cx, y: H - 12, 'text-anchor': 'middle',
+          fill: '#cbd5e1', 'font-size': '12', 'font-weight': '600'
+        });
+        xLbl.textContent = `N=${fmtNum(row.count)}`;
+        chartEl.appendChild(xLbl);
+      });
+    }
+
+    function renderTable(rows) {
+      tbodyEl.innerHTML = rows.map((r) => {
+        const red = r.bruteTests > 0 ? ((1 - r.quadTests / r.bruteTests) * 100).toFixed(2) : '0.00';
+        const badgeCls = r.speedup >= 1.2 ? 'badge-win' : r.speedup >= 0.85 ? 'badge-neutral' : 'badge-loss';
+        const highlight = (state.scene === '1' && r.count >= 2000) ||
+                          (state.scene === '2' && r.count <= 200) ||
+                          (state.scene === '3' && r.count >= 1000) ||
+                          (state.scene === '4' && r.count >= 1000);
+        return `
+          <tr class="${highlight ? 'highlight-row' : ''}">
+            <td><strong>${fmtNum(r.count)}</strong></td>
+            <td>${r.bruteMs.toFixed(3)}</td>
+            <td>${r.treeMs.toFixed(3)}</td>
+            <td>${r.quadDetectMs.toFixed(3)}</td>
+            <td><strong>${r.quadTotalMs.toFixed(3)}</strong></td>
+            <td><span class="badge ${badgeCls}">${r.speedup.toFixed(2)}x</span></td>
+            <td>${fmtNum(r.bruteTests)}</td>
+            <td>${fmtNum(r.quadTests)}</td>
+            <td>-${red}%</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function median(vals) {
+      const s = [...vals].sort((a, b) => a - b);
+      return s[Math.floor(s.length / 2)];
+    }
+
+    function measureBrowser(count, radius, distribution) {
+      const W = 1280, H = 720, warmup = 5, frames = 10;
+      const sim = new Simulation(W, H);
+      sim.reset(count, radius, W, H, distribution);
+      const brute = [], build = [], detect = [];
+      let bruteTests = 0, quadTests = 0;
+
+      for (let f = 0; f < warmup + frames; f++) {
+        for (const p of sim.particles) p.move(W, H);
+        let t = performance.now();
+        const tree = new Quadtree(new Rect(0, 0, W, H));
+        for (const p of sim.particles) tree.insert(p);
+        const treeMs = performance.now() - t;
+
+        t = performance.now();
+        const bRes = findPairsBruteForce(sim.particles);
+        const bMs = performance.now() - t;
+
+        t = performance.now();
+        const qRes = findPairsQuadtree(sim.particles, tree);
+        const qMs = performance.now() - t;
+
+        if (f >= warmup) {
+          brute.push(bMs);
+          build.push(treeMs);
+          detect.push(qMs);
+          bruteTests = bRes.tests;
+          quadTests = qRes.tests;
+        }
+        sim.resolve(bRes.pairs);
+      }
+
+      const bruteMs = median(brute);
+      const treeMs = median(build);
+      const quadDetectMs = median(detect);
+      const quadTotalMs = treeMs + quadDetectMs;
+      return {
+        distribution, count, radius,
+        bruteMs, treeMs, quadDetectMs, quadTotalMs,
+        speedup: quadTotalMs > 0 ? bruteMs / quadTotalMs : 1,
+        bruteTests, quadTests
+      };
+    }
+
+    runLiveBtn.addEventListener('click', () => {
+      if (typeof Simulation === 'undefined') {
+        alert('Os scripts em ../src/ não foram carregados.');
+        return;
+      }
+      runLiveBtn.disabled = true;
+      runLiveBtn.textContent = 'Executando no navegador...';
+      liveStatusEl.textContent = 'Rodando benchmark ao vivo (N = 100, 500, 1000, 2000; 10 frames por cenário)...';
+
+      setTimeout(() => {
+        const liveRows = [];
+        for (const dist of ['uniform', 'cluster', 'clusters']) {
+          for (const radius of [4, 16]) {
+            for (const count of [100, 500, 1000, 2000]) {
+              liveRows.push(measureBrowser(count, radius, dist));
+            }
+          }
+        }
+        activeData = liveRows;
+        restoreBtn.style.display = 'inline-flex';
+        runLiveBtn.disabled = false;
+        runLiveBtn.textContent = 'Rodar Benchmark ao Vivo no Navegador';
+        liveStatusEl.textContent = `Fonte ativa: execução ao vivo neste navegador (${new Date().toLocaleTimeString('pt-BR')})`;
+        render();
+      }, 40);
+    });
+
+    restoreBtn.addEventListener('click', () => {
+      activeData = RECORDED_DATA;
+      restoreBtn.style.display = 'none';
+      liveStatusEl.textContent = 'Fonte ativa: medição gravada em Node.js (bench/results.json)';
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
